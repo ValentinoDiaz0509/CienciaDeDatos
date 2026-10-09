@@ -1,0 +1,62 @@
+{
+  "cajeros": {
+    "ok": true,
+    "detalle": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/secretaria-de-desarrollo-urbano/cajeros-automaticos/cajeros-automaticos.csv"
+  },
+  "barrios": {
+    "ok": true,
+    "detalle": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/innovacion-transformacion-digital/barrios/barrios.geojson"
+  },
+  "bocas_subte": {
+    "ok": false,
+    "detalle": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/transporte-y-obras-publicas/bocas-subte/bocas-subte.geojson -> HTTP 404"
+  },
+  "usos_suelo_doc": {
+    "ok": true,
+    "detalle": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/secretaria-de-desarrollo-urbano/relevamiento-usos-suelo/documentacion-relevamiento-usos-suelo-2022-2024.pdf"
+  },
+  "usos_suelo": {
+    "ok": true,
+    "detalle": "https://data.buenosaires.gob.ar/dataset/relevamiento-usos-suelo/resource/3c7e5f10-577a-44ea-b614-82cc05f842aa/download"
+  },
+  "usos_suelo_shp": {
+    "ok": true,
+    "detalle": "https://data.buenosaires.gob.ar/dataset/relevamiento-usos-suelo/resource/613ef164-131b-422a-b9e2-257cee4b46b4/download"
+  },
+  "molinetes_2025": {
+    "ok": true,
+    "detalle": "https://data.buenosaires.gob.ar/dataset/subte-viajes-molinetes/resource/0d689701-9efd-4644-85d0-f6a1504509f1/download"
+  },
+  "molinetes_2026": {
+    "ok": true,
+    "detalle": "https://data.buenosaires.gob.ar/dataset/subte-viajes-molinetes/resource/f4689712-8698-43ab-9e02-559d03245cb0/download"
+  },
+  "censo": {
+    "ok": true,
+    "detalle": "3,820 radios censales"
+  },
+  "censo_radios": {
+    "ok": true,
+    "detalle": "3,820 polígonos, 3,820 con población"
+  },
+  "osm": {
+    "ok": true,
+    "detalle": "29,156 puntos (área CABA) {'comercio': 18262, 'gastronomia': 5715, 'educacion': 2255, 'farmacia': 856, 'banco': 714, 'salud': 393, 'boca_subte': 359, 'estacion_servicio': 231, 'cajero': 206, 'estacion_subte': 126, 'estacion_tren': 39}"
+  },
+  "molinetes_2025_resumen": {
+    "ok": true,
+    "detalle": "101 estaciones, 335 días (01/01/2025 a 31/12/2025)"
+  },
+  "molinetes_2026_resumen": {
+    "ok": true,
+    "detalle": "100 estaciones, 181 días (01/01/2026 a 30/06/2026)"
+  },
+  "usos_suelo_puntos": {
+    "ok": true,
+    "detalle": "417,737 filas con coordenadas (CRS original: Argentina_GKBsAs)"
+  },
+  "usos_suelo_parquet": {
+    "ok": true,
+    "detalle": "417,764 parcelas, columnas: ['OBJECTID', 'SMP', 'BARRIO', 'TIPO1', 'TIPO2', 'ESTADO', 'PISOS', 'GP_Q', 'OBS', 'CALLE', 'PUERTA', 'UNIFICADO', 'SMP_IDEM', 'AÑO']"
+  }
+}

@@ -433,6 +433,48 @@ def descargar_osm() -> None:
 
 
 # --------------------------------------------------------------------------
+# Red peatonal (OpenStreetMap vía osmnx): para medir distancias caminando
+# --------------------------------------------------------------------------
+def descargar_red_peatonal(margen_m: float = 800) -> None:
+    """
+    Baja la red de calles y senderos caminables de CABA (más un margen para no cortar
+    caminos en el borde) y la guarda como dos tablas livianas:
+      red-peatonal-nodos.parquet   osmid, lon, lat
+      red-peatonal-aristas.parquet u, v, largo_m   (sin dirección: se camina en ambos sentidos)
+    """
+    out_nodos = DIR_RAW / "red-peatonal-nodos.parquet"
+    out_aristas = DIR_RAW / "red-peatonal-aristas.parquet"
+    if out_nodos.exists() and out_aristas.exists():
+        ESTADO["red_peatonal"] = (True, "ya estaba descargada")
+        print("   OK: ya estaba descargada")
+        return
+    print("→ OpenStreetMap: red peatonal de CABA (tarda 3-6 minutos)")
+    try:
+        import geopandas as gpd
+        import osmnx as ox
+
+        ox.settings.requests_timeout = 600
+        barrios = DIR_RAW / "barrios.geojson"
+        if not barrios.exists():
+            barrios = RAIZ / "data" / "base" / "barrios.geojson"
+        caba = gpd.read_file(barrios).to_crs("EPSG:5347").union_all().buffer(margen_m)
+        caba = gpd.GeoSeries([caba], crs="EPSG:5347").to_crs("EPSG:4326").iloc[0]
+        G = ox.graph_from_polygon(caba, network_type="walk", simplify=True)
+        nodos, aristas = ox.graph_to_gdfs(G, nodes=True, edges=True, node_geometry=False, fill_edge_geometry=False)
+        nodos = nodos.reset_index()[["osmid", "x", "y"]].rename(columns={"x": "lon", "y": "lat"})
+        aristas = aristas.reset_index()[["u", "v", "length"]].rename(columns={"length": "largo_m"})
+        # sin dirección: nos quedamos con el tramo más corto de cada par de esquinas
+        a, b = aristas[["u", "v"]].min(axis=1), aristas[["u", "v"]].max(axis=1)
+        aristas = (aristas.assign(u=a, v=b).groupby(["u", "v"], as_index=False)["largo_m"].min())
+        nodos.to_parquet(out_nodos, index=False)
+        aristas.to_parquet(out_aristas, index=False)
+        ESTADO["red_peatonal"] = (True, f"{len(nodos):,} esquinas y {len(aristas):,} tramos ({aristas['largo_m'].sum() / 1000:,.0f} km)")
+    except Exception as e:
+        ESTADO["red_peatonal"] = (False, f"{type(e).__name__}: {e}")
+    print(f"   {'OK' if ESTADO['red_peatonal'][0] else 'FALLÓ'}: {ESTADO['red_peatonal'][1]}")
+
+
+# --------------------------------------------------------------------------
 # Procesamiento de los archivos pesados (para que el zip final sea liviano)
 # --------------------------------------------------------------------------
 def _sin_tildes(texto: str) -> str:
