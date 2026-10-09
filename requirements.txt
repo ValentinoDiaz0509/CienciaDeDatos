@@ -1,8 +1,25 @@
+# Datos y geografía
 pandas>=2.0
 numpy>=1.24
 geopandas>=0.14
+shapely>=2.0
+pyproj>=3.6
 pyarrow>=14
+scipy>=1.11
+h3>=4.0
+
+# Modelos
+scikit-learn>=1.4
+
+# Visualización y app
+matplotlib>=3.8
+pydeck>=0.9
+streamlit>=1.45
+
+# Descarga de fuentes (solo para notebooks/00_descarga_datos.ipynb)
 requests>=2.31
 duckdb>=0.10
 censoargentino[geo]>=0.1.10
+
+# Notebooks
 jupyterlab>=4.0

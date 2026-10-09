@@ -213,6 +213,8 @@ VARIABLES_CENSO = [
 # Polígonos de todos los radios del país (~58 MB). Lo bajamos entero y filtramos CABA
 # nosotros, porque el `geometry=True` de censoargentino falla con la versión actual del archivo.
 RADIOS_URL = "https://huggingface.co/datasets/pedroorden/censoargentino/resolve/main/radios-2022.parquet"
+# Copia del mismo archivo publicada por el proyecto original (ciut-redatam), por si falla Hugging Face
+RADIOS_URL_S3 = "https://arg-fulbright-data.s3.us-east-2.amazonaws.com/censo-argentino-2022/radios-2022.parquet"
 
 
 def descargar_censo() -> None:
@@ -240,7 +242,7 @@ def descargar_censo() -> None:
     if not out_radios.exists():
         print("→ Censo 2022: polígonos de radios censales (CABA)")
         try:
-            ok, det = descargar([RADIOS_URL], DIR_RAW / "radios-2022-pais.parquet")
+            ok, det = descargar([RADIOS_URL, RADIOS_URL_S3], DIR_RAW / "radios-2022-pais.parquet")
             if not ok:
                 raise RuntimeError(f"no se pudo bajar radios-2022.parquet: {det}")
             radios = radios_caba(DIR_RAW / "radios-2022-pais.parquet")
