@@ -1,0 +1,10 @@
+osm_tipo,osm_id,lat,lon,categoria,nombre,operador,red,marca,amenity,shop,railway,station,linea,consulta,dist_cajero_2017_m
+node,2009726369,-34.5639466,-58.4964874,cajero,,Santander,Banelco,,atm,,,,,área CABA,951.6737465270958
+node,2025877316,-34.5755998,-58.4591105,cajero,,,,,atm,,,,,área CABA,302.3071947880267
+node,2976750733,-34.5870574,-58.4411661,cajero,,Banco Ciudad,Link,Banco Ciudad,atm,,,,,área CABA,404.4481039734684
+node,3343100950,-34.6460062,-58.5289535,cajero,,,Banelco,,atm,,,,,área CABA,596.7683462646329
+node,7254673517,-34.6317789,-58.4689285,cajero,,,,,atm,,,,,área CABA,209.01612353611824
+node,10671774475,-34.6281805,-58.3801146,cajero,,,Banelco,,atm,,,,,área CABA,160.9519548256654
+node,10971408505,-34.5556692,-58.4158073,cajero,,,,,atm,,,,,área CABA,225.88576537250432
+node,11375212386,-34.5507192,-58.4992116,cajero,Cajero Express,,Banelco;Link,,atm,,,,,área CABA,760.9607982723164
+node,11999292619,-34.6235984,-58.4547765,cajero,,,,,atm,,,,,área CABA,233.77058093853242

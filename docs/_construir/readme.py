@@ -1,4 +1,17 @@
-# ¿Dónde faltan cajeros Link en CABA?
+"""Genera README.md a partir de los resultados (python docs/_construir/readme.py)."""
+import json
+import sys
+from pathlib import Path
+
+RAIZ = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(RAIZ))
+from src.estilo import num_es as n  # noqa: E402
+
+R = json.loads((RAIZ / "data/processed/resumen.json").read_text(encoding="utf-8"))
+cam = R["metodo_distancia"] == "caminando"
+COLAB = "https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks"
+
+texto = f"""# ¿Dónde faltan cajeros Link en CABA?
 
 **TPO de Ciencia de Datos · UADE · 2º cuatrimestre 2026**
 
@@ -9,11 +22,11 @@ Cruzamos dónde vive y circula la gente con dónde están los cajeros automátic
 
 | | |
 |---|---|
-| Vecinos con un **Link** a menos de 500 m (en línea recta) | **68 %** |
-| Vecinos con un **Banelco** a menos de 500 m | **79 %** |
-| Vecinos sin un Link a distancia caminable | **976.441** |
-| Con **20 cajeros** en las ubicaciones óptimas | Link pasa al **76,7 %** (+257.165 vecinos) |
-| Modelo elegido (validación espacial) | Regresión de Poisson (GLM), D² = 0,62 |
+| Vecinos con un **Link** a menos de 500 m ({"caminando" if cam else "en línea recta"}) | **{n(100 * R["cobertura_link"])} %** |
+| Vecinos con un **Banelco** a menos de 500 m | **{n(100 * R["cobertura_banelco"])} %** |
+| Vecinos sin un Link a distancia caminable | **{n(R["residentes_sin_link"])}** |
+| Con **20 cajeros** en las ubicaciones óptimas | Link pasa al **{n(100 * R["cobertura_link_con_20"], 1)} %** (+{n(R["nuevos_20_exacto"])} vecinos) |
+| Modelo elegido (validación espacial) | {R["modelo_elegido"]}, D² = {n(R["d2_espacial"], 2)} |
 
 Los cajeros **siguen al comercio, no a los vecinos**. Hay dos oportunidades: **competir** en los corredores comerciales del
 norte y el centro, donde la demanda justifica más terminales Link de las que hay, y **cubrir** los barrios residenciales del
@@ -29,7 +42,7 @@ Necesitás [Python 3.10 o superior](https://www.python.org/downloads/) y [Git](h
 git clone https://github.com/ValentinoDiaz0509/CienciaDeDatos.git
 cd CienciaDeDatos
 python -m venv .venv
-# Windows:      .venv\Scripts\activate
+# Windows:      .venv\\Scripts\\activate
 # macOS/Linux:  source .venv/bin/activate
 pip install -r requirements.txt
 streamlit run app/app.py
@@ -66,8 +79,8 @@ preguntas probables.
 
 1. **Datos:** seis fuentes públicas: BA Data (GCBA), Censo 2022 (INDEC), molinetes del subte (SBASE) y OpenStreetMap.
    Calidad medida con las seis dimensiones de DAMA.
-2. **Preparación:** grilla de 2.793 hexágonos H3 (≈3 × 3 manzanas), interpolación areal del censo y áreas de
-   influencia de ≈400 m. Distancias en línea recta.
+2. **Preparación:** grilla de {n(R["hexagonos"])} hexágonos H3 (≈3 × 3 manzanas), interpolación areal del censo y áreas de
+   influencia de ≈400 m. {"Distancias caminando por la red peatonal de OpenStreetMap (Dijkstra)." if cam else "Distancias en línea recta."}
 3. **Modelos:**
    - regresión de conteos con validación cruzada espacial (seis modelos y un ensamble), para medir la brecha;
    - K-Means, para los tipos de zona y de estación de subte;
@@ -107,7 +120,7 @@ for f in notebooks/_construir/nb0*.py; do python "$f"; done   # regenera los not
 python docs/_construir/informe.py && python docs/_construir/readme.py
 ```
 
-Para volver a bajar las fuentes: [00 · Descarga](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00_descarga_datos.ipynb) y [00b · Red peatonal](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00b_red_peatonal.ipynb)
+Para volver a bajar las fuentes: [00 · Descarga]({COLAB}/00_descarga_datos.ipynb) y [00b · Red peatonal]({COLAB}/00b_red_peatonal.ipynb)
 en Colab (*Entorno de ejecución → Ejecutar todo*).
 
 ## Fuentes y licencias
@@ -119,3 +132,6 @@ en Colab (*Entorno de ejecución → Ejecutar todo*).
 
 **Aviso:** el listado público de cajeros corresponde a un relevamiento de alrededor de 2017. Solo se usan datos públicos;
 ningún dato interno de Red Link.
+"""
+(RAIZ / "README.md").write_text(texto, encoding="utf-8")
+print("ok README.md")

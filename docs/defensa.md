@@ -32,17 +32,17 @@ documento *Ciencia de Datos – Trabajo Práctico Obligatorio* (docente: Santiag
 | 1 | Dominio y problema | Red Link, el problema de la cobertura, la hipótesis y el valor | `docs/informe.md` §1, diapositivas 1-3 |
 | 2 | Arquitectura de la solución | Diagrama de la tubería: fuentes → descarga → variables por hexágono → modelos → app | `docs/informe.md` §2, `docs/figuras/arquitectura.svg` |
 | 3 | Análisis exploratorio | Calidad de datos (DAMA) y los cinco tipos de EDA; qué hay, qué falta, qué llamó la atención | `notebooks/01_calidad_y_eda.ipynb` |
-| 4 | Técnica de minería | Regresión de conteos (6 modelos comparados), K-Means y cobertura máxima; por qué esos y no otros | `notebooks/02_modelos.ipynb` |
+| 4 | Técnica de minería | Regresión de conteos (6 modelos + ensamble, validación espacial), K-Means de zonas y de estaciones, cobertura máxima exacta (MILP) y golosa; por qué esos y no otros | `notebooks/02_modelos.ipynb`, `notebooks/03_demanda_por_hora.ipynb` |
 | 5 | Conclusión | Mapas y curva de cobertura que responden la hipótesis | `notebooks/02_modelos.ipynb` §8, diapositivas finales |
-| 6 | Aplicación funcional | App con mapa 3D, simulador de cajeros nuevos y carga del listado propio | `app/app.py` |
+| 6 | Aplicación funcional | App con mapa 3D, simulador de cajeros nuevos (exacto o goloso, caminando o en línea recta), demanda por hora y carga del listado propio | `app/app.py` |
 
 ### Condiciones para superar las expectativas mínimas
 
 | Aspecto | Qué hicimos |
 |---|---|
 | **Datos** · dominio propio y múltiples orígenes | Dominio cercano (Red Link) y seis fuentes cruzadas: GCBA, INDEC, SBASE y OpenStreetMap |
-| **Técnicas** · combinar modelos y justificar qué aporta cada uno | Supervisado (brecha) + no supervisado (tipos de zona) + optimización (dónde poner cajeros), más un ensamble evaluado contra los modelos individuales |
-| **Visualización** · librerías modernas y navegación novedosa | Mapa 3D de hexágonos H3 con deck.gl, simulador interactivo y carga de datos propios |
+| **Técnicas** · combinar modelos y justificar qué aporta cada uno | Supervisado (brecha) + no supervisado (tipos de zona y de estación) + optimización exacta (dónde poner cajeros), más un ensamble evaluado contra los modelos individuales y una validación temporal con datos que el modelo no vio |
+| **Visualización** · librerías modernas y navegación novedosa | Mapa 3D de hexágonos H3 con deck.gl, columnas 3D de pasajeros por hora, simulador interactivo y carga de datos propios |
 
 ### Material de soporte
 
@@ -71,7 +71,7 @@ documento *Ciencia de Datos – Trabajo Práctico Obligatorio* (docente: Santiag
 | **Ingeniería de datos** | Fuentes, descarga y arquitectura | Fuentes y diagrama |
 | **Análisis exploratorio** | Calidad de datos y EDA | Hallazgos |
 | **Modelado supervisado** | Variables, comparación de modelos, validación, brecha | Técnica y por qué |
-| **Segmentación y optimización** | K-Means, cobertura máxima, validación temporal | Tipos de zona y dónde sumar cajeros |
+| **Segmentación y optimización** | K-Means, cobertura máxima (exacta y golosa), demanda por hora, validación temporal | Tipos de zona y dónde sumar cajeros |
 | **Producto** | App y visualizaciones | Demo en vivo |
 
 - **Con 5 integrantes:** se unen *Modelado supervisado* y *Segmentación y optimización*.
@@ -143,13 +143,18 @@ todos el mismo tamaño y los mismos vecinos, y su escala (≈3 × 3 manzanas) es
 Con el método del codo y la silueta promedio, entre 3 y 7 grupos, y verificando que cada grupo tenga una lectura de negocio.
 
 **¿El algoritmo goloso da la mejor solución?**
-No necesariamente la óptima, pero garantiza al menos el 63 % del óptimo porque la cobertura es submodular, y en la práctica
-suele quedar muy cerca. Para pocas decenas de sitios se podría resolver el óptimo exacto con programación lineal entera.
+No necesariamente: garantiza al menos el 63 % del óptimo porque la cobertura es submodular. Por eso también resolvimos el
+problema de forma exacta como programa lineal entera (HiGHS, menos de un segundo): el goloso quedó a menos del 1 % del
+óptimo en todos los casos. La app usa el exacto por defecto.
 
 **El uso de efectivo está cayendo. ¿Tiene sentido sumar cajeros?**
 Las extracciones en cajeros cayeron fuerte en el último año (BCRA, julio 2025). Justamente por eso conviene priorizar con
 datos: las zonas que más dependen del efectivo (más NBI, menos acceso a internet) y las que hoy no tienen un Link cerca.
 
+**¿Por qué la demanda por hora no cambió las recomendaciones?**
+Porque casi todas las estaciones de subte ya tienen un Link a menos de 500 m: la gente que viaja ya pasa cerca de un cajero.
+El faltante está en los barrios. Que el resultado no cambie al sumar pasajeros es una prueba de robustez.
+
 **¿Qué harían con más tiempo?**
-Distancias caminando por la red de calles en vez de en línea recta; demanda por hora del día; datos de transacciones;
-optimización exacta con restricciones de costo por sitio; y actualizar el listado de cajeros.
+Transacciones reales por terminal y por hora; restricciones de costo y de seguridad por sitio en la optimización; el
+listado actual de cajeros; y un modelo de competencia (cuántas operaciones le saca un Link nuevo a un Banelco cercano).

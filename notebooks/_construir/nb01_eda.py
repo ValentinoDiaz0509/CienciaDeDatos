@@ -7,7 +7,9 @@ import nbformat as nbf
 md, code = nbf.v4.new_markdown_cell, nbf.v4.new_code_cell
 SALIDA = Path(__file__).resolve().parents[1] / "01_calidad_y_eda.ipynb"
 TEXTOS = Path(__file__).resolve().parent / "textos_nb01.py"
-T = {}
+RAIZ = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(RAIZ))
+T = {"RAIZ": RAIZ}
 if TEXTOS.exists():
     exec(TEXTOS.read_text(encoding="utf-8"), T)
 
@@ -50,7 +52,7 @@ barrios = f.cargar_barrios()
 censo = pd.read_parquet(BASE / "censo2022-caba-largo.parquet")
 radios = gpd.read_file(BASE / "censo2022-caba-radios.geojson")
 osm = pd.read_csv(BASE / "osm-caba-puntos.csv")
-molinetes = pd.read_csv(BASE / "molinetes-2026-estacion-hora.csv")
+molinetes = pd.read_csv(BASE / "molinetes-2025-estacion-hora.csv")
 usos = pd.read_parquet(BASE / "usos-suelo-2022-2024.parquet")
 hexes = pd.read_parquet(PROC / "resultados_hex.parquet")
 print("Listo")"""),
@@ -59,7 +61,7 @@ print("Listo")"""),
     ["Cajeros automáticos", "GCBA · BA Data", "≈2017 (ver oportunidad)", len(cajeros), "punto (cajero)", "Oferta: banco, red, terminales"],
     ["Censo 2022 por radio", "INDEC", "2022", censo["id_geo"].nunique(), "radio censal", "Residentes y perfil socioeconómico"],
     ["Polígonos de radios censales", "INDEC / CONICET", "2022", len(radios), "polígono", "Ubicar a los residentes"],
-    ["Molinetes del subte", "SBASE · BA Data", "ene–jun 2026", molinetes[["linea", "estacion"]].drop_duplicates().shape[0], "estación × hora", "Flujo de pasajeros"],
+    ["Molinetes del subte", "SBASE · BA Data", "2025 (335 días)", molinetes[["linea", "estacion"]].drop_duplicates().shape[0], "estación × hora × tipo de día", "Flujo de pasajeros"],
     ["Usos del suelo", "GCBA · BA Data", "2022–2024", len(usos), "parcela", "Comercio, oficinas, vivienda"],
     ["OpenStreetMap", "Colaboradores de OSM", "2026", len(osm), "punto", "Comercios, estaciones, bancos"],
     ["Barrios", "GCBA · BA Data", "vigente", len(barrios), "polígono", "Límites y nombres"],
@@ -137,7 +139,7 @@ otras = pd.DataFrame([
     ["Censo", "Completitud", (variables == variables.max()).mean(), "radios con las 9 variables"],
     ["Censo", "Exactitud", pob_radio.sum() / POB_OFICIAL_CABA_2022, f"{pob_radio.sum():,.0f} habitantes vs. {POB_OFICIAL_CABA_2022:,} oficiales"],
     ["Censo", "Consistencia", len(radios_ids & set(pob_radio.index)) / len(pob_radio), "radios con datos que tienen polígono"],
-    ["Molinetes", "Completitud", molinetes.groupby("tipo_dia")["dias"].first().sum() / 181, "días con datos entre el 1/1 y el 30/6/2026"],
+    ["Molinetes", "Completitud", molinetes.groupby("tipo_dia")["dias"].first().sum() / 365, "días de 2025 con datos"],
     ["Molinetes", "Validez", 1 - molinetes_ruido.mean(), f"{molinetes_ruido.sum()} filas de prueba o sin estación (#N/D)"],
     ["Usos del suelo", "Completitud", usos["TIPO1"].notna().mean(), "parcelas con uso informado"],
     ["Usos del suelo", "Validez", usos["ESTADO"].isin(["ACTIVO", "INACTIVO"]).mean(), "estado ACTIVO/INACTIVO o no aplica"],
@@ -185,20 +187,22 @@ spearman.round(2)"""),
                       cuota_link=lambda d: d["link"] / (d["link"] + d["banelco"])))
 por_comuna.sort_values("link_10mil")"""),
     md(texto("tipo3", "")),
-    md("### Tipo 4 · Multivariante gráfico (y la paradoja de Simpson)"),
-    code("""rho = lambda d: d[["poblacion_k1", "term_total_k1"]].corr(method="spearman").iloc[0, 1]
+    md("### Tipo 4 · Multivariante gráfico"),
+    code("""rho = lambda d, x: d[[x, "term_total_k1"]].corr(method="spearman").iloc[0, 1]
 centro = modelables["dist_centro_km"] < 3
-fig, ax = plt.subplots(1, 2, figsize=(14, 5), sharey=True)
-ax[0].scatter(modelables["poblacion_k1"], modelables["term_total_k1"], s=10, color=e.TINTA_SUAVE, alpha=0.5, linewidths=0)
-ax[0].set_title(f"Toda la ciudad: ρ = {rho(modelables):.2f}")
-for sub, c, nombre in [(modelables[~centro], e.LINK, "Resto de la ciudad"),
-                       (modelables[centro], e.BANELCO, "Centro (< 3 km de Plaza de Mayo)")]:
-    ax[1].scatter(sub["poblacion_k1"], sub["term_total_k1"], s=10, color=c, alpha=0.55, linewidths=0,
-                  label=f"{nombre}: ρ = {rho(sub):.2f}")
-ax[1].legend(loc="upper right"); ax[1].set_title("Separando el centro del resto")
-for a in ax: a.set_xlabel("residentes en el área de influencia")
-ax[0].set_ylabel("terminales en el área de influencia")
-fig.tight_layout(); fig.savefig(FIG / "eda_simpson.png"); plt.show()"""),
+fig, ax = plt.subplots(1, 2, figsize=(14, 5.2), sharey=True)
+for a, x, etiqueta in [(ax[0], "poblacion_k1", "residentes en el área de influencia"),
+                       (ax[1], "actividad_osm_k1", "comercios y servicios en el área de influencia (OSM)")]:
+    for sub, c, nombre in [(modelables[~centro], e.LINK, "Resto de la ciudad"),
+                           (modelables[centro], e.BANELCO, "Centro (< 3 km de Plaza de Mayo)")]:
+        a.scatter(sub[x], sub["term_total_k1"] + 1, s=9, color=c, alpha=0.5, linewidths=0,
+                  label=f"{nombre}: ρ = {e.num_es(rho(sub, x), 2)}")
+    a.set_yscale("log"); a.set_xlabel(etiqueta)
+    a.set_title(f"ρ de Spearman en toda la ciudad = {e.num_es(rho(modelables, x), 2)}")
+    a.legend(loc="upper left", fontsize=8.5); e.ejes_es(a, x=0)
+ax[0].set_ylabel("terminales en el área de influencia + 1 (escala log)")
+fig.suptitle("Los cajeros siguen al comercio más que a los vecinos", x=0.01, ha="left", fontweight="bold", fontsize=14)
+fig.tight_layout(); fig.savefig(FIG / "eda_comercio_vs_vecinos.png"); plt.show()"""),
     md(texto("tipo4", "")),
     code("""fig, ax = plt.subplots(1, 2, figsize=(15, 7.5))
 g = gpd.GeoDataFrame(hexes, geometry=[f.poligono_hex(h) for h in hexes["h3"]], crs="EPSG:4326")
@@ -210,7 +214,7 @@ barrios.boundary.plot(ax=ax[1], color=e.TINTA_SUAVE, linewidth=0.4)
 for red, c in [("BANELCO", e.BANELCO), ("LINK", e.LINK)]:
     sub = cajeros[cajeros["red"] == red]
     ax[1].scatter(sub["lon"], sub["lat"], s=sub["terminales"] * 6, color=c, alpha=0.7, linewidths=0.4, edgecolors=e.FONDO,
-                  label=f"{red.title()}: {sub['terminales'].sum():,} terminales")
+                  label=f"{red.title()}: {e.num_es(sub['terminales'].sum())} terminales")
 ax[1].legend(loc="lower left"); ax[1].set_title("Dónde están los cajeros (relevamiento ≈2017)")
 for a in ax: a.set_axis_off()
 fig.tight_layout(); fig.savefig(FIG / "mapa_poblacion_cajeros.png"); plt.show()"""),
@@ -230,15 +234,31 @@ for (i, j), v in np.ndenumerate(calor.values):
 ax.grid(False); ax.set_title("Terminales cada 10.000 vecinos")
 fig.colorbar(im, ax=ax, shrink=0.6); fig.tight_layout(); fig.savefig(FIG / "eda_calor_comunas.png"); plt.show()"""),
     code("""fig, ax = plt.subplots(figsize=(12, 6.5))
-pb = por_barrio[por_barrio["residentes"] > 0]
-ax.scatter(pb["residentes"], pb["link_10mil"], s=20 + pb["pax"] / 150, color=e.LINK, alpha=0.55, edgecolors=e.FONDO, linewidths=1)
+pb = por_barrio[por_barrio["residentes"] > 0].copy()
+TOPE = 16
+tam = lambda pax: 20 + pax / 150
+ax.scatter(pb["residentes"], pb["link_10mil"].clip(upper=TOPE), s=tam(pb["pax"]), color=e.LINK, alpha=0.55,
+           edgecolors=e.FONDO, linewidths=1)
 mediana = pb["link_10mil"].median()
 ax.axhline(mediana, color=e.EJE, linewidth=1)
-ax.text(pb["residentes"].max(), mediana, " mediana", va="bottom", ha="right", color=e.TINTA_2, fontsize=9)
-for _, r in pd.concat([pb.nlargest(6, "residentes"), pb.nsmallest(5, "link_10mil"), pb.nlargest(3, "link_10mil")]).drop_duplicates("barrio").iterrows():
-    ax.annotate(r["barrio"], (r["residentes"], r["link_10mil"]), fontsize=8, color=e.TINTA_2, xytext=(4, 4), textcoords="offset points")
-ax.set(title="Barrios: vecinos vs. terminales Link cada 10.000 vecinos (tamaño = pasajeros de subte)",
-       xlabel="residentes", ylabel="terminales Link cada 10.000 vecinos", yscale="symlog")
+ax.text(5_000, mediana, f"mediana: {e.num_es(mediana, 1)}", va="bottom", color=e.TINTA_2, fontsize=9)
+etiquetas = ["Palermo", "Caballito", "Flores", "Balvanera", "Recoleta", "Almagro", "Villa Lugano", "Monserrat", "Retiro", "Belgrano"]
+for _, r in pb[pb["barrio"].isin(etiquetas)].iterrows():
+    ax.annotate(r["barrio"], (r["residentes"], min(r["link_10mil"], TOPE)), fontsize=8.5, color=e.TINTA_2,
+                xytext=(6, 4), textcoords="offset points")
+fuera = pb[pb["link_10mil"] > TOPE]
+for _, r in fuera.iterrows():
+    ax.annotate(f"{r['barrio']}: {e.num_es(r['link_10mil'], 0)} (fuera de escala ↑)", (r["residentes"], TOPE),
+                fontsize=8.5, color=e.TINTA_2, xytext=(8, -4), textcoords="offset points")
+ceros = pb[pb["link_10mil"] == 0]["barrio"].tolist()
+if ceros:
+    ax.text(pb["residentes"].max(), 0.4, "Sin ninguna terminal Link: " + ", ".join(ceros), ha="right", fontsize=8.5, color=e.TINTA_2)
+for pax, nombre in [(10_000, "10 mil"), (50_000, "50 mil")]:
+    ax.scatter([], [], s=tam(pax), color=e.LINK, alpha=0.55, label=f"{nombre} pasajeros de subte por día")
+ax.legend(loc="upper right", labelspacing=1.4, borderpad=1)
+ax.set(title="Barrios: residentes y terminales Link cada 10.000 vecinos", xlabel="residentes", ylabel="terminales Link cada 10.000 vecinos",
+       ylim=(-0.5, TOPE + 1))
+e.ejes_es(ax, x=0, y=0)
 fig.tight_layout(); fig.savefig(FIG / "eda_burbujas_barrios.png"); plt.show()"""),
     md(texto("tipo5", "")),
     md("## 4. Hallazgos que condicionan el modelado\n\n" + texto("hallazgos", "")),

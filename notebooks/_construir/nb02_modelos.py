@@ -1,4 +1,5 @@
 """Genera notebooks/02_modelos.ipynb (correr: python notebooks/_construir/nb02_modelos.py)."""
+import sys
 from pathlib import Path
 
 import nbformat as nbf
@@ -6,7 +7,9 @@ import nbformat as nbf
 md, code = nbf.v4.new_markdown_cell, nbf.v4.new_code_cell
 SALIDA = Path(__file__).resolve().parents[1] / "02_modelos.ipynb"
 TEXTOS = Path(__file__).resolve().parent / "textos_nb02.py"
-T = {}
+RAIZ = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(RAIZ))
+T = {"RAIZ": RAIZ}
 if TEXTOS.exists():
     exec(TEXTOS.read_text(encoding="utf-8"), T)
 
@@ -42,15 +45,22 @@ from sklearn.inspection import PartialDependenceDisplay, permutation_importance
 
 RAIZ = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
 sys.path.insert(0, str(RAIZ))
-from src import estilo as e, features as f, modelos as m
+from src import estilo as e, features as f, modelos as m, red as rp
 
 e.mpl_estilo()
 pd.set_option("display.float_format", lambda v: f"{v:,.3f}")
 FIG = RAIZ / "docs/figuras"; FIG.mkdir(parents=True, exist_ok=True)
 
 tabla = f.construir()  # variables por hexágono, a partir de data/base
+cajeros = f.cargar_cajeros()
+HAY_RED = rp.hay_red()
+if HAY_RED:  # distancias caminando por la red peatonal de OpenStreetMap
+    red = rp.RedPeatonal.desde_archivos()
+    tabla = rp.agregar_distancias_red(tabla, cajeros, red)
+SUF = "_red" if HAY_RED else ""
+print("Distancias:", "caminando por las calles" if HAY_RED else "en línea recta")
 barrios = f.cargar_barrios()
-print(f"{len(tabla):,} hexágonos · {tabla['poblacion'].sum():,.0f} residentes · {tabla['term_total'].sum():,.0f} terminales")"""),
+print(f"{e.num_es(len(tabla))} hexágonos · {e.num_es(tabla['poblacion'].sum())} residentes · {e.num_es(tabla['term_total'].sum())} terminales")"""),
     md("""## 1. Planteo del modelo
 
 - **Unidad:** hexágono H3 (resolución 9). Variables y objetivo se miden en el **área de influencia** (hexágono + 6 vecinos, ≈400 m).
@@ -60,7 +70,7 @@ print(f"{len(tabla):,} hexágonos · {tabla['poblacion'].sum():,.0f} residentes 
   Dejamos afuera las sucursales bancarias: son oferta, y el modelo terminaría explicando cajeros con cajeros.
 - **Filas:** hexágonos con algo de demanda (se excluyen río, reservas y playones vacíos)."""),
     code("""X, y, grupos, mascara = m.preparar(tabla)
-print(f"{len(X):,} hexágonos para modelar · {X.shape[1]} variables")
+print(f"{e.num_es(len(X))} hexágonos para modelar · {X.shape[1]} variables")
 pd.DataFrame({"variable": X.columns, "descripción": [m.NOMBRES.get(c, c) for c in X.columns],
               "mediana": X.median().values, "máximo": X.max().values})"""),
     md("""## 2. Comparación de modelos con validación cruzada espacial
@@ -84,10 +94,10 @@ yy = np.arange(len(orden))
 ax.barh(yy - 0.2, ale["D² Poisson"], height=0.38, color=e.EJE, label="Validación aleatoria (optimista)")
 ax.barh(yy + 0.2, esp["D² Poisson"], height=0.38, color=e.LINK, label="Validación espacial (por comuna)")
 for i, v in enumerate(esp["D² Poisson"]):
-    ax.text(max(v, 0) + 0.01, i + 0.2, f"{v:.2f}", va="center", fontsize=9, color=e.TINTA)
+    ax.text(max(v, 0) + 0.01, i + 0.2, e.num_es(v, 2), va="center", fontsize=9, color=e.TINTA)
 ax.set_yticks(yy, orden); ax.invert_yaxis(); ax.set_xlim(left=min(0, esp["D² Poisson"].min() - 0.05))
 ax.set(title="¿Cuánto de la variación en terminales explica cada modelo? (D² de Poisson)", xlabel="D² de Poisson")
-ax.legend(loc="lower right"); fig.tight_layout(); fig.savefig(FIG / "modelos_comparacion.png"); plt.show()"""),
+ax.legend(loc="lower right"); e.ejes_es(ax, x=1); fig.tight_layout(); fig.savefig(FIG / "modelos_comparacion.png"); plt.show()"""),
     md(texto("comparacion", "")),
     md("## 3. Modelo elegido: qué aprendió"),
     code("""ganador = orden.iloc[0]
@@ -98,7 +108,7 @@ importancia = (pd.DataFrame({"variable": X.columns, "importancia": imp.importanc
 fig, ax = plt.subplots(figsize=(10, 5))
 ax.barh(importancia["nombre"], importancia["importancia"], xerr=importancia["desvío"], color=e.LINK,
         error_kw={"ecolor": e.TINTA_SUAVE, "linewidth": 1})
-ax.set(title=f"Importancia por permutación · {ganador}", xlabel="aumento del error absoluto medio al desordenar la variable (terminales)")
+ax.set(title=f"Importancia por permutación · {ganador}", xlabel="aumento del error absoluto medio al desordenar la variable (terminales)"); e.ejes_es(ax, x=1)
 fig.tight_layout(); fig.savefig(FIG / "modelo_importancia.png"); plt.show()
 print("Modelo elegido:", ganador)"""),
     code("""top = importancia.sort_values("importancia", ascending=False)["variable"].head(3).tolist()
@@ -108,6 +118,16 @@ for a, v in zip(ax, top):
     a.set_xlabel(m.NOMBRES.get(v, v)); a.set_ylabel("terminales esperadas")
 fig.suptitle("Dependencia parcial: cómo cambia lo esperado al mover una variable (las demás fijas)", x=0.01, ha="left", fontweight="bold")
 fig.tight_layout(); fig.savefig(FIG / "modelo_dependencia_parcial.png"); plt.show()"""),
+    code("""glm = clone(m.candidatos()["Regresión de Poisson (GLM)"]).fit(X, y)
+coef = m.coeficientes_glm(glm, list(X.columns))
+fig, ax = plt.subplots(figsize=(10, 5))
+colores = [e.DIVERGENTE[-2] if c > 0 else e.DIVERGENTE[1] for c in coef["coeficiente"]]
+ax.barh(coef["nombre"], coef["efecto"] - 1, left=1, color=colores)
+ax.axvline(1, color=e.TINTA_SUAVE, linewidth=1)
+ax.set(title="Regresión de Poisson: cuánto se multiplican las terminales esperadas al subir 1 desvío cada variable",
+       xlabel="efecto multiplicativo (1 = sin efecto)")
+e.ejes_es(ax, x=1); fig.tight_layout(); fig.savefig(FIG / "modelo_coeficientes.png"); plt.show()
+coef[["nombre", "coeficiente", "efecto"]].round(3)"""),
     md(texto("interpretacion", "")),
     md("""## 4. La brecha
 
@@ -117,7 +137,7 @@ propios cajeros.
 
 **Brecha Link** = lo que Link tendría con su participación promedio en la ciudad − lo que tiene. Positivo = faltan terminales Link."""),
     code("""res = m.calcular_brechas(tabla, mascara, oof[ganador])
-print(f"Participación de Link en las terminales de la ciudad: {res.attrs['cuota_link']:.1%}")
+print(f"Participación de Link en las terminales de la ciudad: {e.num_es(100 * res.attrs['cuota_link'], 1)} %")
 g = gpd.GeoDataFrame(res, geometry=[f.poligono_hex(h) for h in res["h3"]], crs="EPSG:4326")
 lim = np.nanquantile(np.abs(g["brecha_link"]), 0.95)
 fig, ax = plt.subplots(figsize=(10, 9))
@@ -172,42 +192,62 @@ fig.tight_layout(); fig.savefig(FIG / "mapa_tipos_zona.png"); plt.show()"""),
     md(texto("clusters", "")),
     md("""## 6. Dónde sumar cajeros: cobertura máxima
 
-¿Qué porcentaje de los vecinos tiene un cajero de cada red a menos de 500 m (unas 5 cuadras)?"""),
-    code("""cob = m.resumen_cobertura(res, f.RADIO_COBERTURA_M)
-cob.style.format({"residentes_cubiertos": "{:,.0f}", "pct_residentes": "{:.1%}"})"""),
+¿Qué porcentaje de los vecinos tiene un cajero de cada red a menos de 500 m (unas 5 cuadras)? Si está disponible la red
+peatonal, la distancia se mide **caminando por las calles** (algoritmo de Dijkstra sobre OpenStreetMap); si no, en línea recta."""),
+    code("""cob = m.resumen_cobertura(res, f.RADIO_COBERTURA_M, sufijo=SUF)
+if HAY_RED:
+    recta = m.resumen_cobertura(res, f.RADIO_COBERTURA_M).set_index("red")["pct_residentes"]
+    cob["pct_en_linea_recta"] = cob["red"].map(recta)
+    ok = np.isfinite(res["dist_link_m_red"]) & (res["dist_link_m"] > 50)
+    print(f"Caminar es, en la mediana, {e.num_es(np.median(res.loc[ok, 'dist_link_m_red'] / res.loc[ok, 'dist_link_m']), 2)} veces la distancia en línea recta")
+cob.style.format({"residentes_cubiertos": "{:,.0f}", "pct_residentes": "{:.1%}", "pct_en_linea_recta": "{:.1%}"})"""),
     md("""Planteamos el **problema de cobertura máxima** (MCLP, Church y ReVelle, 1974): elegir N ubicaciones que maximicen las
-personas que pasan a tener un Link a menos de 500 m. Lo resolvemos con un **algoritmo goloso**: en cada paso agrega el sitio
-con mayor ganancia marginal. Como la cobertura es una función submodular, el goloso garantiza al menos el 63 % (1 − 1/e)
-del óptimo (Nemhauser, Wolsey y Fisher, 1978). Solo se consideran sitios con comercio o servicios, porque un cajero necesita un local."""),
-    code("""recs = m.cobertura_golosa(res, 50, radio_m=f.RADIO_COBERTURA_M)
+personas que pasan a tener un Link a menos de 500 m. Solo se consideran sitios con comercio o servicios, porque un cajero
+necesita un local. Lo resolvemos de dos formas:
+
+- **Algoritmo goloso:** agrega en cada paso el sitio con mayor ganancia marginal. Como la cobertura es submodular, garantiza
+  al menos el 63 % (1 − 1/e) del óptimo (Nemhauser, Wolsey y Fisher, 1978). Sirve para la curva de "cuántos cajeros".
+- **Óptimo exacto:** el mismo problema como **programa lineal entero**, resuelto con HiGHS (el solver que trae SciPy)."""),
+    code("""conj = rp.conjuntos_red(res, red, f.RADIO_COBERTURA_M) if HAY_RED else m.conjuntos_recta(res, f.RADIO_COBERTURA_M)
+w = m.demanda(res)
+recs = m.resolver_goloso(res, 50, conj, w)
 recs["tipo_zona"] = recs["h3"].map(res.set_index("h3")["tipo_zona"])
 recs["brecha_link"] = recs["h3"].map(res.set_index("h3")["brecha_link"])
-total = res["poblacion"].sum(); base = cob.set_index("red").loc["Link", "residentes_cubiertos"]
+total = res["poblacion"].sum()
+base = cob.set_index("red").loc["Link", "residentes_cubiertos"]
+banelco = cob.set_index("red").loc["Banelco", "pct_residentes"] * 100
 fig, ax = plt.subplots(figsize=(11, 4.5))
 ax.plot(recs["orden"], (base + recs["personas_acumuladas"]) / total * 100, color=e.LINK, linewidth=2, marker="o", markersize=4)
 ax.axhline(base / total * 100, color=e.EJE, linewidth=1)
-ax.axhline(cob.set_index("red").loc["Banelco", "pct_residentes"] * 100, color=e.BANELCO, linewidth=1.2)
+ax.axhline(banelco, color=e.BANELCO, linewidth=1.2)
 ax.text(50, base / total * 100, " Link hoy", va="bottom", ha="right", color=e.TINTA_2, fontsize=9)
-ax.text(50, cob.set_index("red").loc["Banelco", "pct_residentes"] * 100, " Banelco hoy", va="bottom", ha="right", color=e.BANELCO, fontsize=9)
+ax.text(50, banelco, " Banelco hoy", va="bottom", ha="right", color=e.BANELCO, fontsize=9)
 for n_ in (10, 20):
     v = (base + recs["personas_acumuladas"].iloc[n_ - 1]) / total * 100
-    ax.annotate(f"{n_} cajeros: {v:.1f} %", (n_, v), xytext=(8, -14), textcoords="offset points", fontsize=9, color=e.TINTA)
+    ax.annotate(f"{n_} cajeros: {e.num_es(v, 1)} %", (n_, v), xytext=(8, -14), textcoords="offset points", fontsize=9, color=e.TINTA)
 ax.set(title="Vecinos con un Link a menos de 500 m según cuántos cajeros se suman", xlabel="cajeros nuevos", ylabel="% de vecinos")
-fig.tight_layout(); fig.savefig(FIG / "cobertura_curva.png"); plt.show()
-recs.head(20)[["orden", "barrio", "comuna", "tipo_zona", "personas_nuevas", "personas_acumuladas", "brecha_link"]].round(1)"""),
-    code("""cajeros = f.cargar_cajeros()
+e.ejes_es(ax, y=0)
+fig.tight_layout(); fig.savefig(FIG / "cobertura_curva.png"); plt.show()"""),
+    code("""comp = m.comparar_goloso_exacto(res, conj, w)
+comp[["cajeros", "goloso", "exacto", "diferencia_pct", "sitios_en_comun", "seg_exacto"]].round(2)"""),
+    code("""exacto = m.resolver_exacto(res, 20, conj, w)
+exacto["tipo_zona"] = exacto["h3"].map(res.set_index("h3")["tipo_zona"])
+print(f"Óptimo exacto con 20 cajeros: +{e.num_es(exacto.attrs['objetivo'])} vecinos · Link pasa de "
+      f"{e.num_es(100 * base / total, 1)} % a {e.num_es(100 * (base + exacto.attrs['objetivo']) / total, 1)} %")
+exacto[["orden", "barrio", "comuna", "tipo_zona", "personas_nuevas", "personas_acumuladas"]].round(0)"""),
+    code("""col = "dist_link_m" + SUF
 fig, ax = plt.subplots(figsize=(10, 9))
 barrios.boundary.plot(ax=ax, color=e.TINTA_SUAVE, linewidth=0.4)
-sin = gpd.GeoDataFrame(res[res["dist_link_m"] > f.RADIO_COBERTURA_M], geometry=[f.poligono_hex(h) for h in res.loc[res["dist_link_m"] > f.RADIO_COBERTURA_M, "h3"]], crs="EPSG:4326")
-sin.plot(ax=ax, column="poblacion", cmap=e.cmap_secuencial(e.SECUENCIAL_NARANJA), linewidth=0, alpha=0.8, vmax=res["poblacion"].quantile(0.98))
+sin = res[res[col] > f.RADIO_COBERTURA_M]
+gpd.GeoDataFrame(sin, geometry=[f.poligono_hex(h) for h in sin["h3"]], crs="EPSG:4326").plot(
+    ax=ax, column="poblacion", cmap=e.cmap_secuencial(e.SECUENCIAL_NARANJA), linewidth=0, alpha=0.8, vmax=res["poblacion"].quantile(0.98))
 lk = cajeros[cajeros["red"] == "LINK"]
 ax.scatter(lk["lon"], lk["lat"], s=6, color=e.LINK, label="Cajero Link actual")
-top20 = recs.head(20)
-ax.scatter(top20["lon"], top20["lat"], s=120, facecolor="none", edgecolor=e.SUGERIDO, linewidth=2, label="Ubicación sugerida (top 20)")
-for _, r in top20.iterrows():
+ax.scatter(exacto["lon"], exacto["lat"], s=140, facecolor="none", edgecolor=e.SUGERIDO, linewidth=2.2, label="Ubicación sugerida (óptimo con 20)")
+for _, r in exacto.iterrows():
     ax.text(r["lon"], r["lat"], str(r["orden"]), fontsize=7, ha="center", va="center", color=e.TINTA, fontweight="bold")
 ax.legend(loc="lower left"); ax.set_axis_off()
-ax.set_title("Vecinos sin un Link a 500 m (naranja) y las 20 ubicaciones sugeridas")
+ax.set_title("Vecinos sin un Link cerca (naranja) y las 20 ubicaciones óptimas")
 fig.tight_layout(); fig.savefig(FIG / "mapa_recomendaciones.png"); plt.show()"""),
     md(texto("optimizacion", "")),
     md("""## 7. Validación temporal con datos que el modelo no vio
@@ -229,7 +269,10 @@ validacion = pd.DataFrame([
 ])
 print(f"Cajeros en OSM 2026: {(osm['categoria'] == 'cajero').sum()} · nuevos (a > 150 m del listado 2017): {len(nuevos)} · "
       f"hexágonos en su área: {cerca_de_nuevo.sum()}")
-validacion.round(3)"""),
+display(validacion.round(3))
+perc = m.percentil_cajeros_nuevos(res, mascara, nuevos)
+print(f"Los {perc['n']} cajeros nuevos cayeron, en promedio, en el percentil {e.num_es(100 * perc['percentil_promedio'])} "
+      f"de la brecha 2017 · p = {e.num_es(perc['p_valor'], 3)} (Monte Carlo, 20.000 sorteos de zonas al azar)")"""),
     md(texto("validacion", "")),
     md("## 8. Conclusión\n\n" + texto("conclusion", "")),
 ]

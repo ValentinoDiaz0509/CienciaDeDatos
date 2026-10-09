@@ -1,0 +1,15 @@
+variable,coeficiente,efecto,nombre
+parcelas_residencial_k1,-0.824733337689571,0.4383518688031154,Parcelas residenciales
+dist_centro_km,-0.25205934480942555,0.7771986139967141,Distancia a Plaza de Mayo (km)
+pct_univ_k1,-0.19091869079634255,0.8261997630649842,% con nivel universitario
+poblacion_k1,-0.17881610212148127,0.8362596716369126,Residentes en el área
+pct_nbi_k1,-0.1433434076366903,0.8664564700308839,% hogares con NBI
+tasa_empleo_k1,-0.01885496393601616,0.9813216789558463,Tasa de empleo
+dist_subte_m,-0.009223666557767463,0.9908187409701612,Distancia al subte (m)
+pct_sin_internet_k1,0.01363457200887808,1.0137279466777414,% hogares sin internet
+estaciones_tren_k1,0.03991656796457796,1.0407239408533997,Estaciones de tren
+parcelas_oficinas_k1,0.1835503065214979,1.2014754059397412,Parcelas de oficinas
+pax_subte_habil_k1,0.19690631245890824,1.2176299586051746,Pasajeros de subte por día hábil
+pct_65_k1,0.3376994704447159,1.4017191820563162,% de 65 años o más
+actividad_osm_k1,0.7159410797396298,2.0461113304108984,Comercios y servicios (OSM)
+parcelas_comercio_k1,0.7660709305691316,2.1512970311964956,Parcelas comerciales

@@ -84,3 +84,18 @@ def cmap_secuencial(paradas=SECUENCIAL):
     from matplotlib.colors import LinearSegmentedColormap
 
     return LinearSegmentedColormap.from_list("magnitud", paradas)
+
+
+def num_es(v: float, decimales: int = 0) -> str:
+    """1234.5 -> '1.234,5' (formato argentino)."""
+    return f"{v:,.{decimales}f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+def ejes_es(ax, x: int | None = None, y: int | None = None) -> None:
+    """Marcas de los ejes con coma decimal y punto de miles."""
+    from matplotlib.ticker import FuncFormatter
+
+    if x is not None:
+        ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: num_es(v, x)))
+    if y is not None:
+        ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: num_es(v, y)))

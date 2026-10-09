@@ -1,0 +1,12 @@
+# Dependencias mínimas para publicar la app (Streamlit Community Cloud)
+pandas>=2.0
+numpy>=1.24
+geopandas>=0.14
+shapely>=2.0
+pyproj>=3.6
+pyarrow>=14
+scipy>=1.11
+h3>=4.0
+scikit-learn>=1.4
+pydeck>=0.9
+streamlit>=1.45

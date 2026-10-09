@@ -178,13 +178,24 @@ def _base_osm(nombre: str) -> tuple[str, str | None]:
     return normalizar(base), (letra.group(1) if letra else None)
 
 
-def estaciones_subte(base: Path = DIR_BASE) -> pd.DataFrame:
-    """Pasajeros por día (hábil y fin de semana) de cada estación, con coordenadas de OSM."""
-    mol = pd.read_csv(base / "molinetes-2026-estacion-hora.csv")
-    mol = mol[~mol["linea"].isin(["PRUEBA"]) & ~mol["estacion"].isin(["#N/D", "Prueba", "CochePM"])]
+ANIO_MOLINETES = 2025  # año completo más reciente (2026 tiene solo el primer semestre)
+
+
+def molinetes(base: Path = DIR_BASE, anio: int = ANIO_MOLINETES) -> pd.DataFrame:
+    """Pasajeros promedio por día, por estación, hora y tipo de día, sin filas de prueba."""
+    mol = pd.read_csv(base / f"molinetes-{anio}-estacion-hora.csv")
+    mol = mol[~mol["linea"].isin(["PRUEBA"]) & ~mol["estacion"].isin(["#N/D", "Prueba", "CochePM"])].copy()
     mol["letra"] = mol["linea"].str.replace("LINEA", "", regex=False).str[0]
     # "Callao.B" -> "callao" (el sufijo es la línea), sin romper "Leandro N. Alem"
     mol["base"] = mol["estacion"].str.replace(r"\.[A-H]$", "", regex=True).map(normalizar).replace(_ALIAS_ESTACIONES)
+    # registros espurios: una estación cargada en una línea que no le corresponde, con ~0 pasajeros
+    total = mol.groupby(["letra", "base"])["pasajeros_promedio_dia"].transform("sum")
+    return mol[total >= 50]
+
+
+def estaciones_subte(base: Path = DIR_BASE, anio: int = ANIO_MOLINETES) -> pd.DataFrame:
+    """Pasajeros por día (hábil y fin de semana) de cada estación, con coordenadas de OSM."""
+    mol = molinetes(base, anio)
     pax = (mol.pivot_table(index=["letra", "base"], columns="tipo_dia", values="pasajeros_promedio_dia", aggfunc="sum")
               .fillna(0).reset_index())
 
@@ -201,7 +212,7 @@ def estaciones_subte(base: Path = DIR_BASE) -> pd.DataFrame:
         if cands.empty:
             continue
         c = cands.iloc[0]
-        filas.append({"linea": est["letra"], "estacion": c["nombre"], "lat": c["lat"], "lon": c["lon"],
+        filas.append({"linea": est["letra"], "estacion": c["nombre"], "base": est["base"], "lat": c["lat"], "lon": c["lon"],
                       "pax_habil": est.get("habil", 0.0), "pax_finde": est.get("fin_de_semana", 0.0)})
     return pd.DataFrame(filas)
 
@@ -291,9 +302,15 @@ def construir(base: Path = DIR_BASE, radios_path: Path | None = None) -> gpd.Geo
     if usos is not None:
         hexes = hexes.join(usos)
 
-    # --- Demanda: flujo de pasajeros (subte 2026) y estaciones de tren
+    # --- Demanda: flujo de pasajeros (subte 2025) y estaciones de tren
     hexes = hexes.join(contar_por_hex(estaciones, peso="pax_habil").rename(columns={"_v": "pax_subte_habil"}))
     hexes = hexes.join(contar_por_hex(estaciones, peso="pax_finde").rename(columns={"_v": "pax_subte_finde"}))
+    from .horario import pasajeros_por_franja, perfiles_estaciones
+
+    franjas = pasajeros_por_franja(perfiles_estaciones(base)).merge(estaciones[["linea", "estacion", "lat", "lon"]],
+                                                                    on=["linea", "estacion"])
+    hexes = hexes.join(contar_por_hex(franjas, peso="pax_manana").rename(columns={"_v": "pax_subte_manana"}))
+    hexes = hexes.join(contar_por_hex(franjas, peso="pax_tarde").rename(columns={"_v": "pax_subte_tarde"}))
     tren = osm[osm["categoria"] == "estacion_tren"]
     hexes = hexes.join(contar_por_hex(tren).rename(columns={"_v": "estaciones_tren"}))
 

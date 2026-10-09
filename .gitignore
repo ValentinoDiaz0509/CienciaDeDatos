@@ -1,6 +1,5 @@
 # Datos: se bajan con notebooks/00_descarga_datos.ipynb (no se suben al repo)
 data/raw/
-data/processed/
 data/*.zip
 *.part
 

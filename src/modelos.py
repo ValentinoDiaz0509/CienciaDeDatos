@@ -212,10 +212,12 @@ def nombrar_clusters(tabla: pd.DataFrame, columna: str = "cluster") -> dict:
     med = tabla[VARIABLES_CLUSTER].median()
     nombres = {}
     for c, p in perfil.iterrows():
-        if p["dist_centro_km"] < 2.5 and p["actividad_osm_k1"] > 2 * med["actividad_osm_k1"]:
+        if p["poblacion_k1"] < 0.1 * med["poblacion_k1"]:
+            nombres[c] = "Zonas sin vecinos (parques, puerto, playones)"
+        elif p["dist_centro_km"] < 2.5 and p["actividad_osm_k1"] > 2 * med["actividad_osm_k1"]:
             nombres[c] = "Centro de negocios"
         elif p["pct_nbi_k1"] > 2 * med["pct_nbi_k1"]:
-            nombres[c] = "Barrios vulnerables"
+            nombres[c] = "Mayor vulnerabilidad social"
         elif p["pax_subte_habil_k1"] > 0 and p["actividad_osm_k1"] > med["actividad_osm_k1"]:
             nombres[c] = "Corredores comerciales con subte"
         elif p["poblacion_k1"] > med["poblacion_k1"]:
@@ -232,7 +234,7 @@ def nombrar_clusters(tabla: pd.DataFrame, columna: str = "cluster") -> dict:
 
 
 # --------------------------------------------------------------------------
-# 3. Optimización: problema de cobertura máxima (MCLP), algoritmo goloso
+# 3. Optimización: problema de cobertura máxima (MCLP)
 # --------------------------------------------------------------------------
 def _xy(tabla: pd.DataFrame) -> np.ndarray:
     import geopandas as gpd
@@ -241,9 +243,9 @@ def _xy(tabla: pd.DataFrame) -> np.ndarray:
     return np.column_stack([p.x, p.y])
 
 
-def demanda(tabla: pd.DataFrame, peso_pasajeros: float = 0.0) -> np.ndarray:
+def demanda(tabla: pd.DataFrame, peso_pasajeros: float = 0.0, columna_pasajeros: str = "pax_subte_habil") -> np.ndarray:
     """Personas a cubrir por hexágono: residentes + (opcional) pasajeros de subte de un día hábil."""
-    return tabla["poblacion"].to_numpy(float) + peso_pasajeros * tabla["pax_subte_habil"].to_numpy(float)
+    return tabla["poblacion"].to_numpy(float) + peso_pasajeros * tabla[columna_pasajeros].to_numpy(float)
 
 
 def es_candidato(tabla: pd.DataFrame) -> np.ndarray:
@@ -252,48 +254,133 @@ def es_candidato(tabla: pd.DataFrame) -> np.ndarray:
     return ((tabla["actividad_osm"] + comercio) > 0).to_numpy() & (tabla["frac_en_caba"] >= 0.5).to_numpy()
 
 
-def cobertura_golosa(tabla: pd.DataFrame, n_nuevos: int, radio_m: float = 500, peso_pasajeros: float = 0.0,
-                     cubiertos_iniciales: np.ndarray | None = None) -> pd.DataFrame:
+def conjuntos_recta(tabla: pd.DataFrame, radio_m: float = 500) -> dict:
     """
-    Elige `n_nuevos` ubicaciones que maximizan las personas que pasan a tener un cajero Link
-    a menos de `radio_m` metros (Maximal Covering Location Problem, Church & ReVelle 1974).
-    El algoritmo goloso agrega en cada paso el sitio con mayor ganancia marginal; como la
-    cobertura es submodular, garantiza al menos el 63 % (1 - 1/e) del óptimo.
+    Estructura de cobertura en línea recta: para cada sitio candidato, qué hexágonos quedan
+    a menos de `radio_m`; y qué hexágonos ya tienen un Link a esa distancia.
     """
     xy = _xy(tabla)
-    w = demanda(tabla, peso_pasajeros)
-    cubierto = (tabla["dist_link_m"].to_numpy() <= radio_m) if cubiertos_iniciales is None else cubiertos_iniciales.copy()
-    arbol = cKDTree(xy)
     cand = np.flatnonzero(es_candidato(tabla))
-    vecinos = arbol.query_ball_point(xy[cand], r=radio_m)
+    vecinos = [np.asarray(v, dtype=int) for v in cKDTree(xy).query_ball_point(xy[cand], r=radio_m)]
+    return {"candidatos": cand, "vecinos": vecinos, "cubierto": tabla["dist_link_m"].to_numpy() <= radio_m,
+            "metodo": "línea recta", "radio_m": radio_m}
+
+
+def _fila_sitio(tabla: pd.DataFrame, h: int, orden: int, personas: float, nuevos: np.ndarray) -> dict:
+    fila = tabla.iloc[h]
+    return {"orden": orden, "h3": fila["h3"], "lat": fila["lat"], "lon": fila["lon"], "barrio": fila["barrio"],
+            "comuna": fila["comuna"], "personas_nuevas": float(personas),
+            "residentes_nuevos": float(tabla["poblacion"].to_numpy()[nuevos].sum())}
+
+
+def resolver_goloso(tabla: pd.DataFrame, n_nuevos: int, conj: dict, w: np.ndarray) -> pd.DataFrame:
+    """
+    Algoritmo goloso: en cada paso agrega el sitio con mayor ganancia marginal. Como la cobertura
+    es submodular, garantiza al menos el 63 % (1 - 1/e) del óptimo (Nemhauser, Wolsey y Fisher, 1978).
+    """
+    cubierto = conj["cubierto"].copy()
     elegidos = []
     for paso in range(n_nuevos):
-        ganancias = np.array([w[v][~cubierto[v]].sum() for v in vecinos])
+        ganancias = np.array([w[v][~cubierto[v]].sum() for v in conj["vecinos"]])
         i = int(np.argmax(ganancias))
         if ganancias[i] <= 0:
             break
-        nuevos = np.array(vecinos[i])[~cubierto[vecinos[i]]]
+        nuevos = conj["vecinos"][i][~cubierto[conj["vecinos"][i]]]
         cubierto[nuevos] = True
-        h = cand[i]
-        elegidos.append({
-            "orden": paso + 1, "h3": tabla.iloc[h]["h3"], "lat": tabla.iloc[h]["lat"], "lon": tabla.iloc[h]["lon"],
-            "barrio": tabla.iloc[h]["barrio"], "comuna": tabla.iloc[h]["comuna"],
-            "personas_nuevas": float(ganancias[i]),
-            "residentes_nuevos": float(tabla["poblacion"].to_numpy()[nuevos].sum()),
-        })
+        elegidos.append(_fila_sitio(tabla, conj["candidatos"][i], paso + 1, ganancias[i], nuevos))
     res = pd.DataFrame(elegidos)
     if not res.empty:
         res["personas_acumuladas"] = res["personas_nuevas"].cumsum()
-    res.attrs["cubierto_final"] = cubierto
+    res.attrs.update(cubierto_final=cubierto, objetivo=float(res["personas_nuevas"].sum()) if not res.empty else 0.0)
     return res
 
 
-def resumen_cobertura(tabla: pd.DataFrame, radio_m: float = 500) -> pd.DataFrame:
+def resolver_exacto(tabla: pd.DataFrame, n_nuevos: int, conj: dict, w: np.ndarray, tiempo_max: float = 120) -> pd.DataFrame:
+    """
+    MCLP como programa lineal entero (Church y ReVelle, 1974), resuelto con HiGHS:
+
+        max  sum_i w_i y_i
+        s.a. y_i <= sum_{j cubre i} x_j     para cada zona i sin Link cerca
+             sum_j x_j <= N
+             x_j en {0, 1},  0 <= y_i <= 1
+
+    Los sitios elegidos se ordenan después por ganancia marginal para presentarlos.
+    """
+    from scipy.optimize import Bounds, LinearConstraint, milp
+    from scipy.sparse import coo_matrix
+
+    pendiente = (~conj["cubierto"]) & (w > 0)
+    # zonas que algún candidato puede cubrir
+    filas_i = {}
+    pares = []
+    for jj, v in enumerate(conj["vecinos"]):
+        for i in v[pendiente[v]]:
+            filas_i.setdefault(int(i), len(filas_i))
+            pares.append((filas_i[int(i)], jj))
+    if not pares:
+        return pd.DataFrame()
+    usados = sorted({jj for _, jj in pares})
+    col_j = {jj: k for k, jj in enumerate(usados)}
+    nJ, nI = len(usados), len(filas_i)
+    zonas = np.array(sorted(filas_i, key=filas_i.get))
+    c = np.concatenate([np.zeros(nJ), -w[zonas]])
+    r = np.array([p[0] for p in pares] + list(range(nI)))
+    q = np.array([col_j[p[1]] for p in pares] + [nJ + i for i in range(nI)])
+    val = np.array([-1.0] * len(pares) + [1.0] * nI)
+    A = coo_matrix((val, (r, q)), shape=(nI, nJ + nI)).tocsr()
+    restricciones = [LinearConstraint(A, -np.inf, 0),
+                     LinearConstraint(np.concatenate([np.ones(nJ), np.zeros(nI)])[None, :], 0, n_nuevos)]
+    integralidad = np.concatenate([np.ones(nJ), np.zeros(nI)])
+    sol = milp(c, constraints=restricciones, integrality=integralidad, bounds=Bounds(0, 1),
+               options={"time_limit": tiempo_max, "mip_rel_gap": 1e-6, "disp": False})
+    if sol.x is None:
+        raise RuntimeError(f"HiGHS no encontró solución: {sol.message}")
+    elegidos_j = [usados[k] for k in np.flatnonzero(sol.x[:nJ] > 0.5)]
+    # ordenar por ganancia marginal (como si se instalaran de a uno)
+    cubierto = conj["cubierto"].copy()
+    restantes, filas = list(elegidos_j), []
+    while restantes:
+        gan = [w[conj["vecinos"][jj]][~cubierto[conj["vecinos"][jj]]].sum() for jj in restantes]
+        k = int(np.argmax(gan))
+        jj = restantes.pop(k)
+        nuevos = conj["vecinos"][jj][~cubierto[conj["vecinos"][jj]]]
+        cubierto[nuevos] = True
+        filas.append(_fila_sitio(tabla, conj["candidatos"][jj], len(filas) + 1, gan[k], nuevos))
+    res = pd.DataFrame(filas)
+    res["personas_acumuladas"] = res["personas_nuevas"].cumsum()
+    cota = -getattr(sol, "mip_dual_bound", np.nan) if getattr(sol, "mip_dual_bound", None) is not None else np.nan
+    res.attrs.update(cubierto_final=cubierto, objetivo=float(-sol.fun), estado=sol.message,
+                     gap=float(getattr(sol, "mip_gap", np.nan) or 0.0), cota=cota)
+    return res
+
+
+def cobertura_golosa(tabla: pd.DataFrame, n_nuevos: int, radio_m: float = 500, peso_pasajeros: float = 0.0,
+                     conj: dict | None = None) -> pd.DataFrame:
+    """Atajo: goloso con cobertura en línea recta (o con los conjuntos que se le pasen)."""
+    conj = conj or conjuntos_recta(tabla, radio_m)
+    return resolver_goloso(tabla, n_nuevos, conj, demanda(tabla, peso_pasajeros))
+
+
+def comparar_goloso_exacto(tabla: pd.DataFrame, conj: dict, w: np.ndarray, ns=(5, 10, 20, 30, 50)) -> pd.DataFrame:
+    import time
+
+    filas = []
+    for n in ns:
+        t0 = time.time(); g = resolver_goloso(tabla, n, conj, w); tg = time.time() - t0
+        t0 = time.time(); x = resolver_exacto(tabla, n, conj, w); tx = time.time() - t0
+        filas.append({"cajeros": n, "goloso": g.attrs["objetivo"], "exacto": x.attrs["objetivo"],
+                      "diferencia_pct": 100 * (x.attrs["objetivo"] - g.attrs["objetivo"]) / x.attrs["objetivo"],
+                      "sitios_en_comun": len(set(g["h3"]) & set(x["h3"])),
+                      "seg_goloso": tg, "seg_exacto": tx, "estado": x.attrs["estado"]})
+    return pd.DataFrame(filas)
+
+
+def resumen_cobertura(tabla: pd.DataFrame, radio_m: float = 500, sufijo: str = "") -> pd.DataFrame:
     pob = tabla["poblacion"]
     total = pob.sum()
     filas = []
     for red, col in [("Link", "dist_link_m"), ("Banelco", "dist_banelco_m"), ("Cualquier red", "dist_cajero_m")]:
-        cub = pob[tabla[col] <= radio_m].sum()
+        cub = pob[tabla[col + sufijo] <= radio_m].sum()
         filas.append({"red": red, "residentes_cubiertos": cub, "pct_residentes": cub / total})
     return pd.DataFrame(filas)
 
@@ -322,3 +409,33 @@ def auc(puntaje: np.ndarray, etiqueta: np.ndarray) -> float:
         return float("nan")
     r = rankdata(puntaje)
     return float((r[pos].sum() - pos.sum() * (pos.sum() + 1) / 2) / (pos.sum() * neg.sum()))
+
+
+def percentil_cajeros_nuevos(res: pd.DataFrame, mascara: pd.Series, nuevos: pd.DataFrame, columna: str = "brecha_total",
+                             simulaciones: int = 20000) -> dict:
+    """
+    ¿En qué percentil de la brecha 2017 cayeron los cajeros que aparecieron después?
+    Compara el promedio observado con el de la misma cantidad de zonas elegidas al azar (Monte Carlo).
+    """
+    from .features import hex_de
+
+    val = res.loc[mascara, ["h3", columna]].dropna()
+    pct = val[columna].rank(pct=True)
+    pct.index = val["h3"].values
+    hexes = [h for h in hex_de(nuevos["lat"], nuevos["lon"]) if h in pct.index]
+    if not hexes:
+        return {"n": 0}
+    obs = float(pct.loc[hexes].mean())
+    rng = np.random.default_rng(SEMILLA)
+    azar = rng.choice(pct.to_numpy(), size=(simulaciones, len(hexes)), replace=True).mean(axis=1)
+    return {"n": len(hexes), "percentil_promedio": obs, "p_valor": float((azar >= obs).mean()),
+            "percentiles": pct.loc[hexes].round(3).tolist()}
+
+
+def coeficientes_glm(modelo, columnas: list[str]) -> pd.DataFrame:
+    """Efecto multiplicativo de subir 1 desvío estándar (en escala log) cada variable, con lo demás fijo."""
+    glm = modelo[-1] if hasattr(modelo, "__getitem__") else modelo
+    coef = glm.coef_
+    return (pd.DataFrame({"variable": columnas, "coeficiente": coef, "efecto": np.exp(coef)})
+            .assign(nombre=lambda d: d["variable"].map(NOMBRES))
+            .sort_values("coeficiente"))
