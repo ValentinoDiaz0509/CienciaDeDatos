@@ -103,8 +103,8 @@ La consigna es explícita: *si no abre, no se presentó.*
 - [ ] Video de respaldo de la demo (2 minutos, grabado con la app real).
 
 **El día**
-- [ ] Notebook con el repo clonado y el entorno instalado (`pip install -r requirements.txt`).
-- [ ] App abierta antes de empezar: `streamlit run app/app.py`.
+- [ ] Notebook con el repo clonado y la app abierta al menos una vez antes (doble clic en `abrir_app.bat`: la primera vez instala todo).
+- [ ] App abierta antes de empezar (`abrir_app.bat`, o `streamlit run app/app.py` con el entorno activado).
 - [ ] Presentación descargada en PDF y en PowerPoint, en la notebook y en un pendrive.
 - [ ] Cargador y adaptador HDMI.
 - [ ] Notebook de modelos abierto en la sección de comparación, por si piden correr código en vivo.

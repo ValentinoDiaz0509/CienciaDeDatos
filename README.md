@@ -25,19 +25,50 @@ norte y el centro, donde la demanda justifica más terminales Link de las que ha
 
 ### Opción 1 · En tu computadora (la que hay que usar en la defensa: funciona sin internet)
 
-Necesitás [Python 3.10 o superior](https://www.python.org/downloads/) y [Git](https://git-scm.com/downloads).
+**1. Instalar Python (una sola vez).** Hace falta Python 3.10 o superior; recomendamos **3.12**. En Windows, lo más simple es
+abrir una terminal y escribir:
+
+```bat
+winget install -e --id Python.Python.3.12
+```
+
+También se puede bajar de [python.org](https://www.python.org/downloads/windows/): en el instalador hay que marcar
+**"Add python.exe to PATH"**. Después de instalarlo, cerrar la terminal y abrir una nueva.
+
+**2. Bajar el repositorio.** Con [Git](https://git-scm.com/downloads):
+`git clone https://github.com/ValentinoDiaz0509/CienciaDeDatos.git`, o desde GitHub con *Code → Download ZIP*.
+
+**3. Abrir la app.**
+- **Windows:** doble clic en **`abrir_app.bat`**.
+- **macOS / Linux:** en una terminal, dentro de la carpeta, `./abrir_app.sh`.
+
+La primera vez crea el entorno e instala lo necesario (tarda unos minutos); las siguientes abre en segundos. La app queda en
+`http://localhost:8501` y el navegador se abre solo. Para cerrarla, cerrar la ventana de la terminal.
+
+<details>
+<summary>Paso a paso a mano (si el archivo no funciona)</summary>
+
+En Windows (cmd), dentro de la carpeta del repositorio:
+
+```bat
+py -3.12 -m venv .venv
+.venv\Scripts\activate
+pip install -r app\requirements.txt
+streamlit run app\app.py
+```
+
+En macOS / Linux:
 
 ```bash
-git clone https://github.com/ValentinoDiaz0509/CienciaDeDatos.git
-cd CienciaDeDatos
-python -m venv .venv
-# Windows:      .venv\Scripts\activate
-# macOS/Linux:  source .venv/bin/activate
-pip install -r requirements.txt
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r app/requirements.txt
 streamlit run app/app.py
 ```
 
-Se abre sola en el navegador, en `http://localhost:8501`. Para cerrarla, `Ctrl + C` en la terminal.
+Después, abrir `http://localhost:8501` en el navegador. Para correr también los notebooks, instalar el archivo completo:
+`pip install -r requirements.txt`.
+</details>
 
 ### Opción 2 · Publicada en internet (para compartirla con el grupo o el profe)
 
