@@ -231,9 +231,11 @@ ax.axhline(banelco, color=e.BANELCO, linewidth=1.2)
 ax.text(50, base / total * 100, " Link hoy", va="bottom", ha="right", color=e.TINTA_2, fontsize=9)
 ax.text(50, banelco, " Banelco hoy", va="bottom", ha="right", color=e.BANELCO, fontsize=9)
 pct = (base + recs["personas_acumuladas"]) / total * 100
-for n_ in (10, 20):
-    v = pct.iloc[n_ - 1]
-    ax.annotate(f"{n_} cajeros: {e.num_es(v, 1)} %", (n_, v), xytext=(8, -14), textcoords="offset points", fontsize=9, color=e.TINTA)
+exactos = pd.read_csv(RAIZ / "data/processed/goloso_vs_exacto.csv").set_index("cajeros")["exacto"]
+for n_ in (10, 20):  # la curva es la del goloso; los valores anotados, los del óptimo exacto
+    v = (base + exactos.loc[n_]) / total * 100
+    ax.annotate(f"{n_} cajeros (óptimo): {e.num_es(v, 1)} %", (n_, pct.iloc[n_ - 1]), xytext=(8, -14), textcoords="offset points",
+                fontsize=9, color=e.TINTA)
 # cuántos cajeros hacen falta para igualar a Banelco, con el óptimo exacto (lo calcula el pipeline)
 n_c = json.loads((RAIZ / "data/processed/resumen.json").read_text(encoding="utf-8")).get("cajeros_para_igualar_banelco")
 if n_c:
@@ -243,7 +245,7 @@ if n_c:
 from matplotlib.ticker import MultipleLocator
 ax.yaxis.set_major_locator(MultipleLocator(2))
 ax.set(title="Vecinos con un Link a menos de 500 m " + ("caminando " if HAY_RED else "") + "según cuántos cajeros se suman",
-       xlabel="cajeros nuevos", ylabel="% de vecinos")
+       xlabel="cajeros nuevos (curva: algoritmo goloso)", ylabel="% de vecinos")
 e.ejes_es(ax, y=0)
 fig.tight_layout(); fig.savefig(FIG / "cobertura_curva.png"); plt.show()"""),
     code("""comp = m.comparar_goloso_exacto(res, conj, w)
