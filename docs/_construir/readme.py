@@ -59,6 +59,12 @@ Se abre sola en el navegador, en `http://localhost:8501`. Para cerrarla, `Ctrl +
 La app tiene seis secciones: panorama (mapa 3D de la brecha), simulador de cajeros nuevos, demanda por hora, tipos de zona,
 "usá tus datos" (cargar el listado actual de cajeros) y cómo funciona.
 
+![Simulador de expansión: elegís cuántos cajeros sumar y a qué distancia, y la app devuelve dónde ponerlos](docs/figuras/app_simulador.png)
+
+| Panorama | Demanda por hora |
+|---|---|
+| ![Mapa 3D de la brecha Link por hexágono](docs/figuras/app_panorama.png) | ![Pasajeros del subte por hora y tipo de estación](docs/figuras/app_demanda_hora.png) |
+
 ## Entregables de la consigna
 
 | # | Entregable | Dónde está |

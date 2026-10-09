@@ -29,6 +29,20 @@ SECUENCIAL_NARANJA = ["#fde3d6", "#f8bfa4", "#f39a72", "#eb6834", "#c2501f", "#9
 DIVERGENTE = ["#184f95", "#3987e5", "#9ec5f4", "#f0efec", "#f3a9a8", "#e34948", "#a32524"]
 # Tipos de zona (hasta 5): orden fijo de la paleta categórica validada
 CATEGORICO = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4"]
+# Tipos de zona: colores propios para no confundirlos con Link (azul) y Banelco (naranja).
+# Validados para daltonismo en todos los pares; la zona sin vecinos va en gris porque es fondo.
+COLORES_ZONA = {
+    "Corredores comerciales con subte": "#4a3aa7",
+    "Residencial denso": "#1baf7a",
+    "Mayor vulnerabilidad social": "#eda100",
+}
+GRIS_FONDO = "#c3c2b7"
+
+
+def color_zona(nombre: str) -> str:
+    if not isinstance(nombre, str) or nombre.startswith("Zonas sin vecinos"):
+        return GRIS_FONDO
+    return COLORES_ZONA.get(nombre, CATEGORICO[4])
 
 
 def hex_a_rgb(h: str, alfa: int = 255) -> list[int]:

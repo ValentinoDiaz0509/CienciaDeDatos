@@ -179,7 +179,7 @@ perfil = (res.loc[mascara].groupby("tipo_zona")
           .sort_values("residentes", ascending=False))
 perfil.round(2)"""),
     code("""zonas = list(perfil.index)
-colores = {z: e.CATEGORICO[i] for i, z in enumerate(zonas)}
+colores = {z: e.color_zona(z) for z in zonas}
 g = gpd.GeoDataFrame(res[res["tipo_zona"].notna()], geometry=[f.poligono_hex(h) for h in res.loc[res["tipo_zona"].notna(), "h3"]], crs="EPSG:4326")
 fig, ax = plt.subplots(figsize=(10, 9))
 for z in zonas:

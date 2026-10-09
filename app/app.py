@@ -358,13 +358,7 @@ elif pagina == "Tipos de zona":
                 "**dónde** está la brecha: no es lo mismo faltar en el centro que en un barrio residencial.")
     perfil = D["perfil"].set_index("tipo_zona")
     zonas = list(perfil.index)
-    colores = {}
-    i = 0
-    for z in zonas:  # la zona sin vecinos va en gris: es fondo, no un segmento de negocio
-        if z.startswith("Zonas sin vecinos"):
-            colores[z] = "#c3c2b7"
-        else:
-            colores[z] = e.CATEGORICO[i]; i += 1
+    colores = {z: e.color_zona(z) for z in zonas}  # la zona sin vecinos va en gris: es fondo
     elegidas = st.multiselect("Tipos de zona a mostrar", zonas, default=zonas)
     d = con_tips(res[res["tipo_zona"].isin(elegidas)], COL_DIST)
     d["color"] = d["tipo_zona"].map(lambda z: e.hex_a_rgb(colores[z], 190))

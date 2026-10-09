@@ -38,7 +38,8 @@ actualización reciente porque se actualizan los metadatos, no el relevamiento.
 
 **Qué hacemos con esto:** (1) leemos la oferta como una foto de ≈2017 y lo decimos en la defensa; (2) validamos contra los
 cajeros mapeados en OpenStreetMap en 2026 (notebook 02, §7); (3) la app permite cargar el listado actual, que Red Link sí
-tiene. El resto de las dimensiones del listado da bien: está completo, es válido y no tiene duplicados."""
+tiene. Las otras cinco dimensiones dan bien (ver la tabla de arriba): los problemas de completitud, unicidad y
+consistencia son menores y no cambian el análisis."""
 
 calidad_otras = f"""
 **Lectura.**
