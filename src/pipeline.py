@@ -61,6 +61,18 @@ def _guardar_conjuntos(ruta: Path, conjuntos: dict) -> None:
     np.savez_compressed(ruta, **datos)
 
 
+def _cajeros_para_igualar(res, conj, w, recs, cob, total) -> int | None:
+    """Menor cantidad de cajeros nuevos con la que Link alcanza la cobertura actual de Banelco (óptimo exacto)."""
+    falta = cob.loc["Banelco", "residentes_cubiertos"] - cob.loc["Link", "residentes_cubiertos"]
+    alcanza = recs.loc[recs["personas_acumuladas"] >= falta, "orden"]
+    if alcanza.empty:
+        return None
+    n = int(alcanza.iloc[0])  # el goloso da una cota superior; el exacto puede necesitar menos
+    while n > 1 and m.resolver_exacto(res, n - 1, conj, w).attrs["objetivo"] >= falta:
+        n -= 1
+    return n
+
+
 def correr(salida: Path = DIR_PROC) -> dict:
     t0 = time.time()
     salida.mkdir(parents=True, exist_ok=True)
@@ -141,6 +153,9 @@ def correr(salida: Path = DIR_PROC) -> dict:
     exacto.to_csv(salida / "recomendaciones_exactas_20.csv", index=False)
     comp = m.comparar_goloso_exacto(res, conj, w)
     comp.to_csv(salida / "goloso_vs_exacto.csv", index=False)
+    # ¿Cambian los 20 sitios si los pasajeros de la mañana (6-10 h) cuentan igual que un vecino?
+    con_manana = m.resolver_exacto(res, N_PRINCIPAL, conj, m.demanda(res, 1.0, "pax_subte_manana"))
+    sitios_comunes_manana = len(set(exacto["h3"]) & set(con_manana["h3"]))
 
     # 5. Demanda por hora
     largo = ho.perfiles_estaciones()
@@ -212,6 +227,7 @@ def correr(salida: Path = DIR_PROC) -> dict:
         "nuevos_50": float(recs["personas_nuevas"].sum()),
         "nuevos_20_exacto": float(exacto.attrs["objetivo"]),
         "cobertura_link_con_20": float((c_usada.loc["Link", "residentes_cubiertos"] + exacto.attrs["objetivo"]) / total),
+        "cajeros_para_igualar_banelco": _cajeros_para_igualar(res, conj, w, recs, c_usada, total),
         "goloso_max_diferencia_pct": float(comp["diferencia_pct"].max()),
         "segundos_exacto_max": float(comp["seg_exacto"].max()),
         "pax_subte_habil": float(curva["habil"].sum()),
@@ -220,6 +236,7 @@ def correr(salida: Path = DIR_PROC) -> dict:
         "estaciones": int(len(est)),
         "estaciones_sin_link": int(len(sin_link)),
         "pax_estaciones_sin_link": float(sin_link["pax_habil"].sum()),
+        "sitios_comunes_con_pax_manana": int(sitios_comunes_manana),
         "estaciones_por_perfil": est["perfil"].value_counts().to_dict(),
         "cajeros_osm_2026": int((osm["categoria"] == "cajero").sum()),
         "cajeros_nuevos_osm": int(len(nuevos)),

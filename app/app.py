@@ -171,7 +171,8 @@ pagina = st.sidebar.radio("Sección", ["Panorama", "Simulador de expansión", "D
                                       "Usá tus datos", "Cómo funciona"], label_visibility="collapsed")
 st.sidebar.divider()
 metodo = st.sidebar.radio("Distancia", ["Caminando por las calles", "En línea recta"] if HAY_RED else ["En línea recta"],
-                          help="Caminando usa la red peatonal de OpenStreetMap (algoritmo de Dijkstra).")
+                          help="Caminando usa la red peatonal de OpenStreetMap (algoritmo de Dijkstra). "
+                               "La línea recta ignora manzanas, vías y parques, así que sobreestima la cobertura.")
 CAMINANDO = metodo.startswith("Caminando")
 COL_DIST = "dist_link_m_red" if CAMINANDO else "dist_link_m"
 COL_DIST_B = "dist_banelco_m_red" if CAMINANDO else "dist_banelco_m"
@@ -208,7 +209,7 @@ if pagina == "Panorama":
     c1.metric("Vecinos con un Link a < 500 m", pct(cl), f"{fmt(100 * (cl - cb), 0)} puntos vs. Banelco")
     c2.metric("Vecinos con un Banelco a < 500 m", pct(cb))
     c3.metric("Vecinos sin un Link cerca", fmt(res["poblacion"].sum() * (1 - cl)))
-    c4.metric("Link con 20 cajeros nuevos", pct(cl + optimo(CLAVE_METODO, COL_DIST, 500, 20) / res["poblacion"].sum()),
+    c4.metric("Link con 20 cajeros nuevos", pct(cl + optimo(CLAVE_METODO, COL_DIST, 500, 20) / res["poblacion"].sum(), 1),
               help="Óptimo exacto: las 20 ubicaciones que suman más vecinos (ver Simulador).")
     st.caption(f"Distancia {'caminando por las calles' if CAMINANDO else 'en línea recta'}.")
 
@@ -437,6 +438,14 @@ elif pagina == "Usá tus datos":
 # --------------------------------------------------------------------------
 else:
     st.title("Cómo funciona")
+    if HAY_RED and "red_km" in resumen:
+        texto_distancias = (
+            f"Caminando por la red peatonal de OpenStreetMap ({fmt(resumen['red_km'])} km, {fmt(resumen['red_nodos'])} esquinas): "
+            "cada punto se proyecta sobre la cuadra más cercana y el camino más corto se calcula con Dijkstra. Caminar es, en la "
+            f"mediana, {fmt(resumen['factor_desvio_red'], 2)} veces la distancia en línea recta; por eso la cobertura de Link "
+            f"caminando ({pct(resumen['cobertura_link'])}) es menor que en línea recta ({pct(resumen['cobertura_link_recta'])})")
+    else:
+        texto_distancias = "En línea recta"
     st.markdown(f"""
 **Pregunta.** ¿En qué zonas de CABA hay más demanda que cajeros Link, y dónde conviene sumar terminales?
 
@@ -454,7 +463,7 @@ Un cajero sirve a quien está a pocas cuadras, así que las variables se miden s
 3. **Cobertura máxima (optimización).** Programa lineal entero resuelto con HiGHS en menos de un segundo; el algoritmo goloso
    queda a menos del {fmt(resumen['goloso_max_diferencia_pct'], 1)} % del óptimo.
 
-**Distancias.** {"Caminando por la red peatonal de OpenStreetMap (Dijkstra)" if HAY_RED else "En línea recta"}.
+**Distancias.** {texto_distancias}.
 """)
     c1, c2 = st.columns(2)
     with c1:

@@ -16,7 +16,7 @@ Versiones livianas de las fuentes, listas para el análisis. Las generan `notebo
 | `usos-suelo-2022-2024.parquet` | Uso de cada parcela (CSV oficial, sin coordenadas) | 417.764 | BA Data |
 | `usos-suelo-2022-2024-puntos.parquet` | Ídem, con un punto (lon, lat) por parcela tomado del shapefile | 417.737 | BA Data |
 | `usos-suelo-2022-2024-documentacion.pdf` | Glosario de los campos de usos del suelo | | BA Data |
-| `red-peatonal-nodos.parquet`, `red-peatonal-aristas.parquet` | Red de calles y sendas caminables (si ya se bajó con el notebook 00b) | | © colaboradores de OpenStreetMap (ODbL) |
+| `red-peatonal-nodos.parquet`, `red-peatonal-aristas.parquet` | Red de calles y sendas caminables (esquinas y cuadras con su largo en metros), bajada con OSMnx | 52.090 esquinas, 79.657 cuadras (4.817 km) | © colaboradores de OpenStreetMap (ODbL) |
 
 ## Cuidado con los cajeros
 

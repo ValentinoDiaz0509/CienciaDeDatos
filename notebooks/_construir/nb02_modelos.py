@@ -222,10 +222,20 @@ ax.axhline(base / total * 100, color=e.EJE, linewidth=1)
 ax.axhline(banelco, color=e.BANELCO, linewidth=1.2)
 ax.text(50, base / total * 100, " Link hoy", va="bottom", ha="right", color=e.TINTA_2, fontsize=9)
 ax.text(50, banelco, " Banelco hoy", va="bottom", ha="right", color=e.BANELCO, fontsize=9)
+pct = (base + recs["personas_acumuladas"]) / total * 100
 for n_ in (10, 20):
-    v = (base + recs["personas_acumuladas"].iloc[n_ - 1]) / total * 100
+    v = pct.iloc[n_ - 1]
     ax.annotate(f"{n_} cajeros: {e.num_es(v, 1)} %", (n_, v), xytext=(8, -14), textcoords="offset points", fontsize=9, color=e.TINTA)
-ax.set(title="Vecinos con un Link a menos de 500 m según cuántos cajeros se suman", xlabel="cajeros nuevos", ylabel="% de vecinos")
+cruce = recs.loc[pct >= banelco, "orden"]
+if len(cruce):
+    n_c = int(cruce.iloc[0])
+    ax.scatter([n_c], [pct.iloc[n_c - 1]], s=60, color=e.BANELCO, zorder=3)
+    ax.annotate(f"con {n_c} cajeros iguala a Banelco", (n_c, pct.iloc[n_c - 1]), xytext=(-10, 12), textcoords="offset points",
+                ha="right", fontsize=9, color=e.BANELCO)
+from matplotlib.ticker import MultipleLocator
+ax.yaxis.set_major_locator(MultipleLocator(2))
+ax.set(title="Vecinos con un Link a menos de 500 m " + ("caminando " if HAY_RED else "") + "según cuántos cajeros se suman",
+       xlabel="cajeros nuevos", ylabel="% de vecinos")
 e.ejes_es(ax, y=0)
 fig.tight_layout(); fig.savefig(FIG / "cobertura_curva.png"); plt.show()"""),
     code("""comp = m.comparar_goloso_exacto(res, conj, w)

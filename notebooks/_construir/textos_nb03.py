@@ -20,6 +20,11 @@ _perf = _est["perfil"].value_counts()
 _orig = _est[_est["perfil"].str.startswith("Origen", na=False)]
 _dest = _est[_est["perfil"].str.startswith("Destino", na=False)]
 _sin = _est[~_est["link_cerca"]]
+_sin_orig = int(_sin["perfil"].str.startswith("Origen", na=False).sum())
+_sin_lin = _sin["linea"].value_counts()
+_con = len(_est) - len(_sin)
+_casi = "Casi todas" if _con / len(_est) >= 0.95 else "La gran mayoría de"
+_comunes = _R.get("sitios_comunes_con_pax_manana")
 _cam = _R["metodo_distancia"] == "caminando"
 
 curva = f"""
@@ -42,20 +47,24 @@ Es la misma división de la ciudad que aparece en los tipos de zona del notebook
 técnica: un buen chequeo de consistencia."""
 
 cobertura = f"""
-**Lectura.** Casi todas las estaciones ya tienen un Link a menos de 500 m (medido {"caminando" if _cam else "en línea recta"}):
-{len(_est) - len(_sin)} de {len(_est)}. Las que no lo tienen son estaciones de **origen**, con {_n(_sin["pax_habil"].sum())}
-entradas por día hábil en total ({", ".join(_sin["estacion"].head(4))}). El subte, entonces, **no** es donde falta Link: la
-gente que viaja ya pasa cerca de un cajero. El faltante está en los barrios, lejos de las estaciones."""
+**Lectura.** {_casi} las estaciones ya tienen un Link a menos de 500 m (medido {"caminando" if _cam else "en línea recta"}):
+{_con} de {len(_est)}. De las {len(_sin)} que no, {_sin_orig} son estaciones de **origen** (barrios), y
+{_sin_lin.iloc[0]} están sobre la línea {_sin_lin.index[0]}. Suman {_n(_sin["pax_habil"].sum())} entradas por día hábil,
+el {_n(100 * _sin["pax_habil"].sum() / _est["pax_habil"].sum(), 1)} % del subte. El subte, entonces, **no** es donde más
+falta Link: la mayoría de la gente que viaja ya pasa cerca de un cajero. El faltante grande está en los barrios."""
 
-optimizacion = """
-**Lectura.** Sumar a los pasajeros de la hora pico de la mañana **no cambia** las ubicaciones óptimas (o las cambia muy
-poco): las estaciones ya están cubiertas, así que lo que define dónde poner cajeros son los vecinos sin un Link cerca. Es
-una conclusión robusta: no depende de cuánto pesemos a los pasajeros."""
+_cambian = 20 - (_comunes or 0)
+optimizacion = f"""
+**Lectura.** Sumar a los pasajeros de la hora pico de la mañana deja **{_comunes} de los 20 sitios** iguales: lo que
+define dónde poner cajeros son los vecinos sin un Link cerca, porque la mayoría de las estaciones ya está cubierta.
+{"El sitio que cambia está" if _cambian == 1 else "Los sitios que cambian están"} en la tabla de arriba. La recomendación
+es robusta: no depende de cuánto pesemos a los pasajeros."""
 
 conclusion = f"""
 - La demanda de paso tiene horario: **{_pm}:00** y **{_pt}:00** en día hábil. Un cajero cerca de una estación de origen ve
   su demanda a primera hora; uno en el centro, al final de la tarde. Es un dato útil para la **Gerencia Técnica**:
   programar la carga de efectivo y el mantenimiento **antes** de esos picos (hipótesis a validar con las transacciones
   por hora que Red Link sí tiene).
-- Las estaciones de subte ya tienen Link cerca: la oportunidad de cobertura está en los **barrios**, no en el transporte.
+- {_casi} las estaciones de subte ya tienen un Link cerca ({_con} de {len(_est)}): la oportunidad grande de cobertura está
+  en los **barrios**, no en el transporte.
 - La división origen/destino del subte confirma, con otra fuente, la ciudad de dos velocidades del análisis de zonas."""

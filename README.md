@@ -9,15 +9,17 @@ Cruzamos dónde vive y circula la gente con dónde están los cajeros automátic
 
 | | |
 |---|---|
-| Vecinos con un **Link** a menos de 500 m (en línea recta) | **68 %** |
-| Vecinos con un **Banelco** a menos de 500 m | **79 %** |
-| Vecinos sin un Link a distancia caminable | **976.441** |
-| Con **20 cajeros** en las ubicaciones óptimas | Link pasa al **76,7 %** (+257.165 vecinos) |
+| Vecinos con un **Link** a menos de 500 m (caminando) | **51 %** |
+| Vecinos con un **Banelco** a menos de 500 m | **64 %** |
+| Link con la misma regla, medida en línea recta | 68 % (la línea recta sobreestima la cobertura) |
+| Vecinos sin un Link a distancia caminable | **1.507.883** |
+| Con **20 cajeros** en las ubicaciones óptimas | Link pasa al **59,6 %** (+260.452 vecinos) |
+| Cajeros nuevos para igualar la cobertura de Banelco | **36** |
 | Modelo elegido (validación espacial) | Regresión de Poisson (GLM), D² = 0,62 |
 
 Los cajeros **siguen al comercio, no a los vecinos**. Hay dos oportunidades: **competir** en los corredores comerciales del
-norte y el centro, donde la demanda justifica más terminales Link de las que hay, y **cubrir** los barrios residenciales del
-oeste y el sur, donde no hay ningún Link cerca. El detalle está en el [informe técnico](docs/informe.md).
+norte y el centro, donde la demanda justifica más terminales Link de las que hay, y **cubrir** los barrios residenciales
+(Belgrano, Villa Urquiza, Almagro) y el sur (Villa Lugano, Barracas, Villa Soldati), donde no hay un Link a distancia caminable. El detalle está en el [informe técnico](docs/informe.md).
 
 ## Cómo ver la app
 
@@ -73,7 +75,7 @@ preguntas probables.
 1. **Datos:** seis fuentes públicas: BA Data (GCBA), Censo 2022 (INDEC), molinetes del subte (SBASE) y OpenStreetMap.
    Calidad medida con las seis dimensiones de DAMA.
 2. **Preparación:** grilla de 2.793 hexágonos H3 (≈3 × 3 manzanas), interpolación areal del censo y áreas de
-   influencia de ≈400 m. Distancias en línea recta.
+   influencia de ≈400 m. Distancias caminando por la red peatonal de OpenStreetMap (Dijkstra).
 3. **Modelos:**
    - regresión de conteos con validación cruzada espacial (seis modelos y un ensamble), para medir la brecha;
    - K-Means, para los tipos de zona y de estación de subte;

@@ -8,8 +8,18 @@ sys.path.insert(0, str(RAIZ))
 from src.estilo import num_es as n  # noqa: E402
 
 R = json.loads((RAIZ / "data/processed/resumen.json").read_text(encoding="utf-8"))
+import pandas as pd  # noqa: E402
+
+EX = pd.read_csv(RAIZ / "data/processed/recomendaciones_exactas_20.csv")
+bar_tipo = lambda z: ", ".join(EX[EX["tipo_zona"] == z]["barrio"].value_counts().index[:3])  # noqa: E731
 cam = R["metodo_distancia"] == "caminando"
 COLAB = "https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks"
+
+fila_recta = (f"\n| Link con la misma regla, medida en línea recta | {n(100 * R['cobertura_link_recta'])} % "
+              "(la línea recta sobreestima la cobertura) |" if cam else "")
+
+fila_igualar = (f"\n| Cajeros nuevos para igualar la cobertura de Banelco | **{R['cajeros_para_igualar_banelco']}** |"
+                if R.get("cajeros_para_igualar_banelco") else "")
 
 texto = f"""# ¿Dónde faltan cajeros Link en CABA?
 
@@ -23,14 +33,14 @@ Cruzamos dónde vive y circula la gente con dónde están los cajeros automátic
 | | |
 |---|---|
 | Vecinos con un **Link** a menos de 500 m ({"caminando" if cam else "en línea recta"}) | **{n(100 * R["cobertura_link"])} %** |
-| Vecinos con un **Banelco** a menos de 500 m | **{n(100 * R["cobertura_banelco"])} %** |
+| Vecinos con un **Banelco** a menos de 500 m | **{n(100 * R["cobertura_banelco"])} %** |{fila_recta}
 | Vecinos sin un Link a distancia caminable | **{n(R["residentes_sin_link"])}** |
-| Con **20 cajeros** en las ubicaciones óptimas | Link pasa al **{n(100 * R["cobertura_link_con_20"], 1)} %** (+{n(R["nuevos_20_exacto"])} vecinos) |
+| Con **20 cajeros** en las ubicaciones óptimas | Link pasa al **{n(100 * R["cobertura_link_con_20"], 1)} %** (+{n(R["nuevos_20_exacto"])} vecinos) |{fila_igualar}
 | Modelo elegido (validación espacial) | {R["modelo_elegido"]}, D² = {n(R["d2_espacial"], 2)} |
 
 Los cajeros **siguen al comercio, no a los vecinos**. Hay dos oportunidades: **competir** en los corredores comerciales del
-norte y el centro, donde la demanda justifica más terminales Link de las que hay, y **cubrir** los barrios residenciales del
-oeste y el sur, donde no hay ningún Link cerca. El detalle está en el [informe técnico](docs/informe.md).
+norte y el centro, donde la demanda justifica más terminales Link de las que hay, y **cubrir** los barrios residenciales
+({bar_tipo("Residencial denso")}) y el sur ({bar_tipo("Mayor vulnerabilidad social")}), donde no hay un Link a distancia caminable. El detalle está en el [informe técnico](docs/informe.md).
 
 ## Cómo ver la app
 

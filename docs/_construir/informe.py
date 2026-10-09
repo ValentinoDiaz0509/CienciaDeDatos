@@ -41,6 +41,17 @@ tabla_zonas = "\n".join(
 tabla_top = "\n".join(f"| {b} | {n(r.r)} | {n(r.l)} | {n(r.b)} | {n(100 * r.cuota)} % | {n(r.f)} |" for b, r in top.iterrows())
 tabla_ex = "\n".join(f"| {int(r.orden)} | {r.barrio} | {int(r.comuna)} | {r.tipo_zona} | {n(r.personas_nuevas)} |" for r in ex.itertuples())
 ef = lambda v: n(coef.loc[v, "efecto"], 2)
+bar_tipo = lambda z: ", ".join(ex[ex["tipo_zona"] == z]["barrio"].value_counts().index[:3])
+cubrir_txt = f"los barrios residenciales ({bar_tipo('Residencial denso')}) y el sur ({bar_tipo('Mayor vulnerabilidad social')})"
+comunes = R.get("sitios_comunes_con_pax_manana", 20)
+robustez_txt = (f"sumar a los pasajeros de la hora pico de la mañana deja {comunes} de los 20 sitios óptimos iguales"
+                if comunes < 20 else "sumar a los pasajeros de la hora pico de la mañana no cambia ninguno de los 20 sitios óptimos")
+recta_txt = (f"Medir caminando cambia la respuesta: en línea recta, el {n(100 * R['cobertura_link_recta'])} % de los vecinos "
+             f"tenía un Link a menos de 500 m; caminando por las calles, el {n(100 * R['cobertura_link'])} %. Uno de cada "
+             f"{n(R['cobertura_link_recta'] / (R['cobertura_link_recta'] - R['cobertura_link']))} vecinos que la línea recta daba por "
+             f"cubiertos en realidad tiene que caminar más." if cam else "")
+igualar_txt = (f"; con {R['cajeros_para_igualar_banelco']} cajeros, Link igualaría la cobertura actual de Banelco"
+               if R.get("cajeros_para_igualar_banelco") else "")
 dif_ini = 100 * (R["cobertura_banelco"] - R["cobertura_link"])
 dif_fin = 100 * (R["cobertura_banelco"] - R["cobertura_link_con_20"])
 red_txt = (f"Las distancias se miden **caminando** por la red peatonal de OpenStreetMap ({n(R['red_km'])} km de calles y sendas, "
@@ -61,14 +72,15 @@ Este informe se genera a partir de los resultados del pipeline (`python docs/_co
 
 - Hoy el **{n(100 * R['cobertura_link'])} %** de los vecinos de CABA tiene un cajero Link a menos de 500 m ({dist}), contra el
   **{n(100 * R['cobertura_banelco'])} %** de Banelco. Unas **{n(R['residentes_sin_link'])} personas** no tienen un Link a distancia caminable.
+  {recta_txt}
 - Los cajeros **siguen al comercio, no a los vecinos**: en los corredores comerciales hay
   {n(perfil.loc['Corredores comerciales con subte', 'terminales_cada_10mil'], 1)} terminales cada 10.000 vecinos; en los barrios
   residenciales, {n(perfil.loc['Residencial denso', 'terminales_cada_10mil'], 1)}.
 - Hay **dos oportunidades**. **Competir** en los corredores comerciales del norte y el centro ({", ".join(top.index[:3])}),
-  donde la demanda justifica más terminales Link de las que hay. **Cubrir** los barrios residenciales del oeste y el sur,
-  donde no hay ningún Link cerca.
+  donde la demanda justifica más terminales Link de las que hay. **Cubrir** {cubrir_txt},
+  donde no hay un Link a distancia caminable.
 - Con **20 cajeros** en las ubicaciones óptimas, Link suma **{n(R['nuevos_20_exacto'])} vecinos** y pasa al
-  **{n(100 * R['cobertura_link_con_20'], 1)} %**. La diferencia con Banelco baja de {n(dif_ini)} a {n(dif_fin)} puntos. Al promedio
+  **{n(100 * R['cobertura_link_con_20'], 1)} %**. La diferencia con Banelco baja de {n(dif_ini)} a {n(dif_fin)} puntos{igualar_txt}. Al promedio
   nacional de {n(3242)} extracciones por terminal por mes (BCRA, 2025), son unas **{n(20 * 3242)} operaciones mensuales**.
 - El modelo se entrega como una **app** que la gerencia puede usar con su listado actual de cajeros.
 
@@ -112,7 +124,7 @@ ubicada es un costo fijo con poco uso.
 | OpenStreetMap (≈29 mil puntos y red peatonal) | Colaboradores de OSM | 2026 | Comercios, estaciones, calles |
 | Barrios | GCBA · BA Data | vigente | Límites |
 
-**Calidad de datos (DAMA).** El listado de cajeros es completo, válido y sin duplicados, pero falla en **oportunidad**: el 31 %
+**Calidad de datos (DAMA).** El listado de cajeros da bien en completitud (97 %), validez (100 %), unicidad (98,9 %: 14 duplicados por ubicación y banco) y consistencia (96,9 %), pero falla en **oportunidad**: el 31 %
 de las ubicaciones está a nombre de bancos que dejaron de operar con ese nombre entre 2017 y 2024 (Citibank, BBVA Banco
 Francés, Santander Río, HSBC). Lo tratamos como una foto de ≈2017. El censo por radio cubre el 99,2 % de la población oficial.
 Los molinetes cubren 335 de los 365 días de 2025. El CSV de usos del suelo no trae coordenadas, así que se tomaron del shapefile.
@@ -188,8 +200,7 @@ El goloso queda a menos del {n(R['goloso_max_diferencia_pct'], 1)} % del óptimo
 Con los molinetes 2025 ({n(R['pax_subte_habil'])} entradas por día hábil), los picos son a las **{R['hora_pico_manana']}:00** y las
 **{R['hora_pico_tarde']}:00**. Un K-Means sobre la forma de la curva horaria de cada estación separa estaciones de **origen** (pico a la
 mañana, barrios) y de **destino** (pico a la tarde, centro). {R['estaciones'] - R['estaciones_sin_link']} de {R['estaciones']}
-estaciones ya tienen un Link a menos de 500 m. Sumar a los pasajeros de la hora pico no cambia las ubicaciones óptimas: el
-faltante está en los barrios, no en el transporte.
+estaciones ya tienen un Link a menos de 500 m; {robustez_txt}: el faltante grande está en los barrios, no en el transporte.
 
 ## 5. Evaluación
 
@@ -198,8 +209,7 @@ faltante está en los barrios, no en el transporte.
   estaban en el listado 2017. Cayeron, en promedio, en zonas con más brecha que el {n(100 * R['percentil_cajeros_nuevos'])} % de la
   ciudad (p = {n(R['p_valor_cajeros_nuevos'], 3)}, Monte Carlo). El AUC es {n(R['auc_validacion'], 2)}, contra 0,51 de usar solo la población.
   Es una evidencia a favor, pero modesta, por la cantidad de casos.
-- **Robustez:** las ubicaciones óptimas no cambian al sumar a los pasajeros de la hora pico. El goloso y el exacto coinciden casi
-  por completo.
+- **Robustez:** {robustez_txt}. El goloso y el exacto coinciden casi por completo.
 
 **Limitaciones.**
 - La oferta es de ≈2017.
@@ -208,6 +218,8 @@ faltante está en los barrios, no en el transporte.
   optimización por cobertura cubre ese caso).
 - OpenStreetMap varía en completitud entre barrios.
 - Los feriados en día de semana cuentan como hábiles.
+- Las distancias se miden desde el centro de cada hexágono y la red peatonal no tiene en cuenta semáforos, pendientes ni
+  la percepción de seguridad de cada cuadra.
 
 ## 6. Despliegue
 

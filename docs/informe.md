@@ -9,16 +9,17 @@ Este informe se genera a partir de los resultados del pipeline (`python docs/_co
 
 ## Resumen ejecutivo
 
-- Hoy el **68 %** de los vecinos de CABA tiene un cajero Link a menos de 500 m (en línea recta), contra el
-  **79 %** de Banelco. Unas **976.441 personas** no tienen un Link a distancia caminable.
+- Hoy el **51 %** de los vecinos de CABA tiene un cajero Link a menos de 500 m (caminando por las calles), contra el
+  **64 %** de Banelco. Unas **1.507.883 personas** no tienen un Link a distancia caminable.
+  Medir caminando cambia la respuesta: en línea recta, el 68 % de los vecinos tenía un Link a menos de 500 m; caminando por las calles, el 51 %. Uno de cada 4 vecinos que la línea recta daba por cubiertos en realidad tiene que caminar más.
 - Los cajeros **siguen al comercio, no a los vecinos**: en los corredores comerciales hay
   17,9 terminales cada 10.000 vecinos; en los barrios
   residenciales, 5,3.
 - Hay **dos oportunidades**. **Competir** en los corredores comerciales del norte y el centro (Palermo, Balvanera, Belgrano),
-  donde la demanda justifica más terminales Link de las que hay. **Cubrir** los barrios residenciales del oeste y el sur,
-  donde no hay ningún Link cerca.
-- Con **20 cajeros** en las ubicaciones óptimas, Link suma **257.165 vecinos** y pasa al
-  **76,7 %**. La diferencia con Banelco baja de 11 a 3 puntos. Al promedio
+  donde la demanda justifica más terminales Link de las que hay. **Cubrir** los barrios residenciales (Belgrano, Villa Urquiza, Almagro) y el sur (Villa Lugano, Barracas, Villa Soldati),
+  donde no hay un Link a distancia caminable.
+- Con **20 cajeros** en las ubicaciones óptimas, Link suma **260.452 vecinos** y pasa al
+  **59,6 %**. La diferencia con Banelco baja de 13 a 5 puntos; con 36 cajeros, Link igualaría la cobertura actual de Banelco. Al promedio
   nacional de 3.242 extracciones por terminal por mes (BCRA, 2025), son unas **64.840 operaciones mensuales**.
 - El modelo se entrega como una **app** que la gerencia puede usar con su listado actual de cajeros.
 
@@ -62,7 +63,7 @@ ubicada es un costo fijo con poco uso.
 | OpenStreetMap (≈29 mil puntos y red peatonal) | Colaboradores de OSM | 2026 | Comercios, estaciones, calles |
 | Barrios | GCBA · BA Data | vigente | Límites |
 
-**Calidad de datos (DAMA).** El listado de cajeros es completo, válido y sin duplicados, pero falla en **oportunidad**: el 31 %
+**Calidad de datos (DAMA).** El listado de cajeros da bien en completitud (97 %), validez (100 %), unicidad (98,9 %: 14 duplicados por ubicación y banco) y consistencia (96,9 %), pero falla en **oportunidad**: el 31 %
 de las ubicaciones está a nombre de bancos que dejaron de operar con ese nombre entre 2017 y 2024 (Citibank, BBVA Banco
 Francés, Santander Río, HSBC). Lo tratamos como una foto de ≈2017. El censo por radio cubre el 99,2 % de la población oficial.
 Los molinetes cubren 335 de los 365 días de 2025. El CSV de usos del suelo no trae coordenadas, así que se tomaron del shapefile.
@@ -85,7 +86,7 @@ OpenStreetMap está incompleto para cajeros (206 contra 1.279).
 - **Variables de demanda (14):** residentes, comercio (OSM y parcelas), oficinas, parcelas residenciales, pasajeros de
   subte, estaciones de tren, distancia al centro y al subte, % NBI, % sin internet, % de 65+, % universitarios, tasa de empleo.
   Se excluyen deliberadamente sucursales y cajeros: son oferta, no demanda.
-- **Distancias:** Las distancias se miden en línea recta (la red peatonal de OpenStreetMap se incorpora con `notebooks/00b_red_peatonal.ipynb`).
+- **Distancias:** Las distancias se miden **caminando** por la red peatonal de OpenStreetMap (4.817 km de calles y sendas, 52.090 esquinas), con el algoritmo de Dijkstra. En la mediana, caminar hasta el Link más cercano es 1,34 veces la distancia en línea recta.
 
 ## 4. Modelado
 
@@ -138,43 +139,42 @@ submodularidad; Nemhauser, Wolsey y Fisher, 1978) y de forma **exacta** como pro
 
 | Cajeros | Goloso (vecinos) | Exacto (vecinos) | Diferencia | Sitios en común | Segundos (exacto) |
 |---|---|---|---|---|---|
-| 5 | 84.521 | 84.521 | 0,00 % | 5 | 0,28 |
-| 10 | 146.755 | 146.755 | 0,00 % | 10 | 0,28 |
-| 20 | 257.038 | 257.165 | 0,05 % | 17 | 0,28 |
-| 30 | 355.443 | 357.314 | 0,52 % | 22 | 0,28 |
-| 50 | 517.597 | 522.141 | 0,87 % | 35 | 0,28 |
+| 5 | 80.292 | 80.292 | 0,00 % | 5 | 0,38 |
+| 10 | 144.322 | 144.322 | -0,00 % | 10 | 0,46 |
+| 20 | 260.452 | 260.452 | -0,00 % | 20 | 0,41 |
+| 30 | 358.831 | 358.831 | 0,00 % | 30 | 0,40 |
+| 50 | 528.604 | 528.916 | 0,06 % | 43 | 0,49 |
 
-El goloso queda a menos del 0,9 % del óptimo. Las 20 ubicaciones óptimas:
+El goloso queda a menos del 0,1 % del óptimo. Las 20 ubicaciones óptimas:
 
 | # | Barrio | Comuna | Tipo de zona | Vecinos que suma |
 |---|---|---|---|---|
-| 1 | Barracas | 4 | Mayor vulnerabilidad social | 22.015 |
-| 2 | Villa Lugano | 8 | Mayor vulnerabilidad social | 18.764 |
-| 3 | Balvanera | 3 | Residencial denso | 15.071 |
-| 4 | Villa Soldati | 8 | Mayor vulnerabilidad social | 14.725 |
-| 5 | Belgrano | 13 | Residencial denso | 13.945 |
-| 6 | Flores | 7 | Residencial denso | 13.676 |
-| 7 | Flores | 7 | Residencial denso | 12.224 |
-| 8 | Villa Pueyrredon | 12 | Residencial denso | 12.155 |
-| 9 | Flores | 7 | Residencial denso | 11.853 |
-| 10 | Villa Urquiza | 12 | Residencial denso | 11.848 |
-| 11 | Flores | 7 | Mayor vulnerabilidad social | 11.830 |
-| 12 | Villa Lugano | 8 | Residencial denso | 11.650 |
-| 13 | Villa Urquiza | 12 | Residencial denso | 11.484 |
-| 14 | Coghlan | 12 | Residencial denso | 11.406 |
-| 15 | Villa Luro | 10 | Residencial denso | 11.222 |
-| 16 | Floresta | 10 | Residencial denso | 10.757 |
-| 17 | Almagro | 5 | Corredores comerciales con subte | 10.750 |
-| 18 | Villa Del Parque | 11 | Residencial denso | 10.677 |
-| 19 | Villa Santa Rita | 11 | Residencial denso | 10.565 |
-| 20 | Boedo | 5 | Residencial denso | 10.549 |
+| 1 | Belgrano | 13 | Residencial denso | 18.418 |
+| 2 | Balvanera | 3 | Residencial denso | 17.261 |
+| 3 | Villa Lugano | 8 | Mayor vulnerabilidad social | 15.938 |
+| 4 | Barracas | 4 | Mayor vulnerabilidad social | 14.889 |
+| 5 | Barracas | 4 | Mayor vulnerabilidad social | 13.786 |
+| 6 | Palermo | 14 | Residencial denso | 13.007 |
+| 7 | Villa Lugano | 8 | Mayor vulnerabilidad social | 12.896 |
+| 8 | Flores | 7 | Residencial denso | 12.726 |
+| 9 | Almagro | 5 | Residencial denso | 12.715 |
+| 10 | Villa Urquiza | 12 | Residencial denso | 12.686 |
+| 11 | Belgrano | 13 | Residencial denso | 12.634 |
+| 12 | Caballito | 6 | Residencial denso | 12.419 |
+| 13 | Villa Urquiza | 12 | Residencial denso | 12.198 |
+| 14 | Villa Soldati | 8 | Mayor vulnerabilidad social | 12.082 |
+| 15 | Villa Urquiza | 12 | Residencial denso | 11.891 |
+| 16 | Belgrano | 13 | Residencial denso | 11.472 |
+| 17 | Colegiales | 13 | Residencial denso | 11.469 |
+| 18 | Balvanera | 3 | Corredores comerciales con subte | 10.922 |
+| 19 | Villa Crespo | 15 | Residencial denso | 10.585 |
+| 20 | Almagro | 5 | Residencial denso | 10.458 |
 
 ### 4.4 Demanda por hora
 Con los molinetes 2025 (690.863 entradas por día hábil), los picos son a las **8:00** y las
 **17:00**. Un K-Means sobre la forma de la curva horaria de cada estación separa estaciones de **origen** (pico a la
-mañana, barrios) y de **destino** (pico a la tarde, centro). 87 de 90
-estaciones ya tienen un Link a menos de 500 m. Sumar a los pasajeros de la hora pico no cambia las ubicaciones óptimas: el
-faltante está en los barrios, no en el transporte.
+mañana, barrios) y de **destino** (pico a la tarde, centro). 80 de 90
+estaciones ya tienen un Link a menos de 500 m; sumar a los pasajeros de la hora pico de la mañana deja 19 de los 20 sitios óptimos iguales: el faltante grande está en los barrios, no en el transporte.
 
 ## 5. Evaluación
 
@@ -183,8 +183,7 @@ faltante está en los barrios, no en el transporte.
   estaban en el listado 2017. Cayeron, en promedio, en zonas con más brecha que el 66 % de la
   ciudad (p = 0,049, Monte Carlo). El AUC es 0,65, contra 0,51 de usar solo la población.
   Es una evidencia a favor, pero modesta, por la cantidad de casos.
-- **Robustez:** las ubicaciones óptimas no cambian al sumar a los pasajeros de la hora pico. El goloso y el exacto coinciden casi
-  por completo.
+- **Robustez:** sumar a los pasajeros de la hora pico de la mañana deja 19 de los 20 sitios óptimos iguales. El goloso y el exacto coinciden casi por completo.
 
 **Limitaciones.**
 - La oferta es de ≈2017.
@@ -193,6 +192,8 @@ faltante está en los barrios, no en el transporte.
   optimización por cobertura cubre ese caso).
 - OpenStreetMap varía en completitud entre barrios.
 - Los feriados en día de semana cuentan como hábiles.
+- Las distancias se miden desde el centro de cada hexágono y la red peatonal no tiene en cuenta semáforos, pendientes ni
+  la percepción de seguridad de cada cuadra.
 
 ## 6. Despliegue
 

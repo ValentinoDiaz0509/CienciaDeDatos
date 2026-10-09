@@ -29,6 +29,7 @@ _cuota = lambda b: _pb.loc[b, "l"] / (_pb.loc[b, "l"] + _pb.loc[b, "b"])
 _ef = lambda v: _n(_coef.loc[v, "efecto"], 2)
 _zonas_ex = _ex["tipo_zona"].value_counts()
 _barrios_ex = _ex["barrio"].value_counts()
+_bar_tipo = lambda z: ", ".join(_ex[_ex["tipo_zona"] == z]["barrio"].value_counts().index[:3])
 
 
 def _p(zona, col):
@@ -100,10 +101,12 @@ un Link a distancia caminable.
 - Con **20 cajeros** en las ubicaciones óptimas, Link suma **{_n(_n20)} vecinos** y pasa al
   **{_n(100 * _R["cobertura_link_con_20"], 1)} %**. La curva muestra rendimientos decrecientes: los primeros 10 cajeros suman
   {_n(_R["nuevos_10"])} vecinos y los siguientes 40, {_n(_R["nuevos_50"] - _R["nuevos_10"])}.
+  {f'Con **{_R["cajeros_para_igualar_banelco"]} cajeros** bien ubicados, Link igualaría la cobertura que Banelco tiene hoy.' if _R.get("cajeros_para_igualar_banelco") else ""}
 - El **goloso** queda a menos del **{_n(_R["goloso_max_diferencia_pct"], 1)} %** del óptimo exacto en todos los casos, y el
   exacto se resuelve en menos de {_n(max(1, _R["segundos_exacto_max"]), 0)} segundo: se puede usar en vivo en la app.
-- Las ubicaciones óptimas están en zonas **residenciales densas** ({_n(_zonas_ex.get(_res_d, 0))} de 20) y de **mayor
-  vulnerabilidad social** en el sur ({_n(_zonas_ex.get(_vul, 0))} de 20), lejos del centro: {", ".join(_barrios_ex.index[:5])}.
+- Las ubicaciones óptimas están en zonas **residenciales densas** ({_n(_zonas_ex.get(_res_d, 0))} de 20; sobre todo
+  {_bar_tipo(_res_d)}) y de **mayor vulnerabilidad social** en el sur ({_n(_zonas_ex.get(_vul, 0))} de 20;
+  {_bar_tipo(_vul)}). Solo {_n(_zonas_ex.get(_corr, 0))} cae en un corredor comercial.
 
 Esta es la oportunidad de **cobertura**, distinta de la competitiva: no se trata de competir donde ya hay cajeros sino de
 llegar adonde no hay ninguno cerca."""
@@ -123,7 +126,8 @@ datos públicos. Aparecen **dos oportunidades distintas**:
 
 1. **Competir** en los corredores comerciales del norte y el centro ({", ".join(_top_brecha.index[:3])}), donde la
    demanda justifica más terminales Link de las que hay.
-2. **Cubrir** los barrios residenciales del oeste y del sur, donde {_n(_R["residentes_sin_link"])} vecinos no tienen un
+2. **Cubrir** los barrios residenciales ({_bar_tipo(_res_d)}) y el sur ({_bar_tipo(_vul)}), donde
+   {_n(_R["residentes_sin_link"])} vecinos no tienen un
    Link a distancia caminable. Con 20 cajeros bien ubicados, Link pasa del {_n(100 * _R["cobertura_link"])} % al
    {_n(100 * _R["cobertura_link_con_20"], 1)} % de cobertura y la diferencia con Banelco baja de
    {_n(100 * (_R["cobertura_banelco"] - _R["cobertura_link"]))} a {_n(100 * (_R["cobertura_banelco"] - _R["cobertura_link_con_20"]))} puntos.
