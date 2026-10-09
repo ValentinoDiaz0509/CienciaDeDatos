@@ -250,6 +250,11 @@ def correr(salida: Path = DIR_PROC) -> dict:
         resumen["red_nodos"] = int(red.n)
         mask_d = np.isfinite(res["dist_link_m_red"]) & (res["dist_link_m"] > 50)
         resumen["factor_desvio_red"] = float(np.median(res.loc[mask_d, "dist_link_m_red"] / res.loc[mask_d, "dist_link_m"]))
+        # Sensibilidad: conectar cada punto también a las cuadras a menos de 25 m extra (p. ej. en una esquina)
+        red_tol = rp.RedPeatonal.desde_archivos(tolerancia_m=25)
+        link = cajeros[cajeros["red"] == "LINK"]
+        d_tol = red_tol.distancia_a_mas_cercano(res["lon"], res["lat"], link["lon"], link["lat"])
+        resumen["cobertura_link_red_tolerancia_25m"] = float(res.loc[d_tol <= radio, "poblacion"].sum() / total)
     (salida / "resumen.json").write_text(json.dumps(resumen, ensure_ascii=False, indent=2), encoding="utf-8")
     return resumen
 

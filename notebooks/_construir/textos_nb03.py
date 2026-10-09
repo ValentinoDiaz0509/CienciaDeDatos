@@ -55,10 +55,10 @@ falta Link: la mayoría de la gente que viaja ya pasa cerca de un cajero. El fal
 
 _cambian = 20 - (_comunes or 0)
 optimizacion = f"""
-**Lectura.** Sumar a los pasajeros de la hora pico de la mañana deja **{_comunes} de los 20 sitios** iguales: lo que
-define dónde poner cajeros son los vecinos sin un Link cerca, porque la mayoría de las estaciones ya está cubierta.
-{"El sitio que cambia está" if _cambian == 1 else "Los sitios que cambian están"} en la tabla de arriba. La recomendación
-es robusta: no depende de cuánto pesemos a los pasajeros."""
+**Lectura.** Sumar a los pasajeros de la hora pico de la mañana {"**no cambia ninguno** de los 20 sitios" if _cambian == 0 else f"deja **{_comunes} de los 20 sitios** iguales"}:
+lo que define dónde poner cajeros son los vecinos sin un Link cerca, porque la mayoría de las estaciones ya está
+cubierta.{"" if _cambian == 0 else (" El sitio que cambia está" if _cambian == 1 else " Los sitios que cambian están") + " en la tabla de arriba."}
+La recomendación es robusta: no depende de cuánto pesemos a los pasajeros."""
 
 conclusion = f"""
 - La demanda de paso tiene horario: **{_pm}:00** y **{_pt}:00** en día hábil. Un cajero cerca de una estación de origen ve

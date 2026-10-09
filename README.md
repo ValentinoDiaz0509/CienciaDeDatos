@@ -13,8 +13,8 @@ Cruzamos dónde vive y circula la gente con dónde están los cajeros automátic
 | Vecinos con un **Banelco** a menos de 500 m | **64 %** |
 | Link con la misma regla, medida en línea recta | 68 % (la línea recta sobreestima la cobertura) |
 | Vecinos sin un Link a distancia caminable | **1.507.883** |
-| Con **20 cajeros** en las ubicaciones óptimas | Link pasa al **59,6 %** (+260.452 vecinos) |
-| Cajeros nuevos para igualar la cobertura de Banelco | **36** |
+| Con **20 cajeros** en las ubicaciones óptimas | Link pasa al **59,8 %** (+265.929 vecinos) |
+| Cajeros nuevos para igualar la cobertura de Banelco | **35** |
 | Modelo elegido (validación espacial) | Regresión de Poisson (GLM), D² = 0,62 |
 
 Los cajeros **siguen al comercio, no a los vecinos**. Hay dos oportunidades: **competir** en los corredores comerciales del

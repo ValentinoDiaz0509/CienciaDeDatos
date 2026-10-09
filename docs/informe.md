@@ -18,8 +18,8 @@ Este informe se genera a partir de los resultados del pipeline (`python docs/_co
 - Hay **dos oportunidades**. **Competir** en los corredores comerciales del norte y el centro (Palermo, Balvanera, Belgrano),
   donde la demanda justifica más terminales Link de las que hay. **Cubrir** los barrios residenciales (Belgrano, Villa Urquiza, Almagro) y el sur (Villa Lugano, Barracas, Villa Soldati),
   donde no hay un Link a distancia caminable.
-- Con **20 cajeros** en las ubicaciones óptimas, Link suma **260.452 vecinos** y pasa al
-  **59,6 %**. La diferencia con Banelco baja de 13 a 5 puntos; con 36 cajeros, Link igualaría la cobertura actual de Banelco. Al promedio
+- Con **20 cajeros** en las ubicaciones óptimas, Link suma **265.929 vecinos** y pasa al
+  **59,8 %**. La diferencia con Banelco baja de 13 a 5 puntos; con 35 cajeros, Link igualaría la cobertura actual de Banelco. Al promedio
   nacional de 3.242 extracciones por terminal por mes (BCRA, 2025), son unas **64.840 operaciones mensuales**.
 - El modelo se entrega como una **app** que la gerencia puede usar con su listado actual de cajeros.
 
@@ -86,7 +86,10 @@ OpenStreetMap está incompleto para cajeros (206 contra 1.279).
 - **Variables de demanda (14):** residentes, comercio (OSM y parcelas), oficinas, parcelas residenciales, pasajeros de
   subte, estaciones de tren, distancia al centro y al subte, % NBI, % sin internet, % de 65+, % universitarios, tasa de empleo.
   Se excluyen deliberadamente sucursales y cajeros: son oferta, no demanda.
-- **Distancias:** Las distancias se miden **caminando** por la red peatonal de OpenStreetMap (4.817 km de calles y sendas, 52.090 esquinas), con el algoritmo de Dijkstra. En la mediana, caminar hasta el Link más cercano es 1,34 veces la distancia en línea recta.
+- **Distancias:** Las distancias se miden **caminando** por la red peatonal de OpenStreetMap (4.817 km de calles y sendas, 52.090 esquinas), con el algoritmo de Dijkstra. En la mediana, caminar hasta el Link más cercano es 1,34 veces la distancia en línea recta. Cada punto se proyecta sobre la cuadra más cercana (no sobre la esquina, que sumaría hasta media cuadra en cada punta) y los cajeros candidatos se ubican sobre la vereda. Como análisis de sensibilidad, si cada punto se conecta también con las cuadras a menos de 25 m extra (una esquina, por ejemplo), la cobertura de Link pasa del 51,2 % al 52,6 %: el resultado no depende de ese detalle.
+
+![Ejemplo en San Cristóbal: el Link más cercano está a unos 400 m en línea recta y a más de 600 m caminando](figuras/ejemplo_caminando.png)
+
 
 ## 4. Modelado
 
@@ -139,42 +142,42 @@ submodularidad; Nemhauser, Wolsey y Fisher, 1978) y de forma **exacta** como pro
 
 | Cajeros | Goloso (vecinos) | Exacto (vecinos) | Diferencia | Sitios en común | Segundos (exacto) |
 |---|---|---|---|---|---|
-| 5 | 80.292 | 80.292 | 0,00 % | 5 | 0,38 |
-| 10 | 144.322 | 144.322 | -0,00 % | 10 | 0,46 |
-| 20 | 260.452 | 260.452 | -0,00 % | 20 | 0,41 |
-| 30 | 358.831 | 358.831 | 0,00 % | 30 | 0,40 |
-| 50 | 528.604 | 528.916 | 0,06 % | 43 | 0,49 |
+| 5 | 80.292 | 80.292 | 0,00 % | 5 | 0,40 |
+| 10 | 144.616 | 144.616 | -0,00 % | 10 | 0,41 |
+| 20 | 264.384 | 265.929 | 0,58 % | 17 | 0,43 |
+| 30 | 366.022 | 369.671 | 0,99 % | 27 | 0,42 |
+| 50 | 538.631 | 544.973 | 1,16 % | 41 | 0,50 |
 
-El goloso queda a menos del 0,1 % del óptimo. Las 20 ubicaciones óptimas:
+El goloso queda a menos del 1,2 % del óptimo. Las 20 ubicaciones óptimas:
 
 | # | Barrio | Comuna | Tipo de zona | Vecinos que suma |
 |---|---|---|---|---|
 | 1 | Belgrano | 13 | Residencial denso | 18.418 |
-| 2 | Balvanera | 3 | Residencial denso | 17.261 |
+| 2 | Balvanera | 3 | Residencial denso | 16.186 |
 | 3 | Villa Lugano | 8 | Mayor vulnerabilidad social | 15.938 |
 | 4 | Barracas | 4 | Mayor vulnerabilidad social | 14.889 |
 | 5 | Barracas | 4 | Mayor vulnerabilidad social | 13.786 |
-| 6 | Palermo | 14 | Residencial denso | 13.007 |
-| 7 | Villa Lugano | 8 | Mayor vulnerabilidad social | 12.896 |
-| 8 | Flores | 7 | Residencial denso | 12.726 |
-| 9 | Almagro | 5 | Residencial denso | 12.715 |
-| 10 | Villa Urquiza | 12 | Residencial denso | 12.686 |
-| 11 | Belgrano | 13 | Residencial denso | 12.634 |
-| 12 | Caballito | 6 | Residencial denso | 12.419 |
-| 13 | Villa Urquiza | 12 | Residencial denso | 12.198 |
-| 14 | Villa Soldati | 8 | Mayor vulnerabilidad social | 12.082 |
-| 15 | Villa Urquiza | 12 | Residencial denso | 11.891 |
-| 16 | Belgrano | 13 | Residencial denso | 11.472 |
-| 17 | Colegiales | 13 | Residencial denso | 11.469 |
-| 18 | Balvanera | 3 | Corredores comerciales con subte | 10.922 |
-| 19 | Villa Crespo | 15 | Residencial denso | 10.585 |
-| 20 | Almagro | 5 | Residencial denso | 10.458 |
+| 6 | San Cristóbal | 3 | Corredores comerciales con subte | 13.373 |
+| 7 | Palermo | 14 | Residencial denso | 13.007 |
+| 8 | Villa Lugano | 8 | Mayor vulnerabilidad social | 12.979 |
+| 9 | Villa Lugano | 8 | Mayor vulnerabilidad social | 12.896 |
+| 10 | Flores | 7 | Residencial denso | 12.726 |
+| 11 | Almagro | 5 | Residencial denso | 12.715 |
+| 12 | Villa Urquiza | 12 | Residencial denso | 12.686 |
+| 13 | Belgrano | 13 | Residencial denso | 12.634 |
+| 14 | Caballito | 6 | Residencial denso | 12.419 |
+| 15 | Villa Urquiza | 12 | Residencial denso | 12.198 |
+| 16 | Villa Soldati | 8 | Mayor vulnerabilidad social | 12.082 |
+| 17 | Villa Urquiza | 12 | Residencial denso | 11.891 |
+| 18 | Balvanera | 3 | Corredores comerciales con subte | 11.866 |
+| 19 | Almagro | 5 | Residencial denso | 11.767 |
+| 20 | Belgrano | 13 | Residencial denso | 11.472 |
 
 ### 4.4 Demanda por hora
 Con los molinetes 2025 (690.863 entradas por día hábil), los picos son a las **8:00** y las
 **17:00**. Un K-Means sobre la forma de la curva horaria de cada estación separa estaciones de **origen** (pico a la
 mañana, barrios) y de **destino** (pico a la tarde, centro). 80 de 90
-estaciones ya tienen un Link a menos de 500 m; sumar a los pasajeros de la hora pico de la mañana deja 19 de los 20 sitios óptimos iguales: el faltante grande está en los barrios, no en el transporte.
+estaciones ya tienen un Link a menos de 500 m; sumar a los pasajeros de la hora pico de la mañana no cambia ninguno de los 20 sitios óptimos: el faltante grande está en los barrios, no en el transporte.
 
 ## 5. Evaluación
 
@@ -183,7 +186,8 @@ estaciones ya tienen un Link a menos de 500 m; sumar a los pasajeros de la hora 
   estaban en el listado 2017. Cayeron, en promedio, en zonas con más brecha que el 66 % de la
   ciudad (p = 0,049, Monte Carlo). El AUC es 0,65, contra 0,51 de usar solo la población.
   Es una evidencia a favor, pero modesta, por la cantidad de casos.
-- **Robustez:** sumar a los pasajeros de la hora pico de la mañana deja 19 de los 20 sitios óptimos iguales. El goloso y el exacto coinciden casi por completo.
+- **Robustez:** sumar a los pasajeros de la hora pico de la mañana no cambia ninguno de los 20 sitios óptimos. El goloso queda a menos del 1,2 % del óptimo exacto, y medir
+  con otra regla de conexión a la red cambia la cobertura en poco más de un punto.
 
 **Limitaciones.**
 - La oferta es de ≈2017.

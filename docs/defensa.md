@@ -87,9 +87,9 @@ La consigna pide **primero la conclusión, después cómo llegamos**. El corte e
 | 2:00 – 3:30 | Ingeniería de datos | Seis fuentes, por qué cada una, y el diagrama de la tubería | 4-5 |
 | 3:30 – 5:30 | Análisis exploratorio | Calidad (el listado de cajeros es de ≈2017), dónde vive la gente vs. dónde están los cajeros, la paradoja del centro | 6-7 |
 | 5:30 – 8:00 | Modelado supervisado | Qué predecimos, seis modelos, por qué validación espacial, por qué ganó el elegido, qué aprendió, el mapa de brecha | 8-10 |
-| 8:00 – 10:30 | Segmentación y optimización | Tipos de zona, cobertura caminando Link vs. Banelco, curva de cajeros nuevos, demanda por hora, validación con OSM | 11-14 |
-| 10:30 – 13:00 | Producto | Demo: panorama → simulador (mover el slider, cambiar caminando/línea recta) → "Usá tus datos" | 15 |
-| 13:00 – 15:00 | Negocio | Valor en operaciones y efectivo, conclusión, próximos pasos y limitaciones | 16-17 |
+| 8:00 – 10:30 | Segmentación y optimización | Tipos de zona, por qué medir caminando, cobertura Link vs. Banelco, curva de cajeros nuevos, demanda por hora, validación con OSM | 11-15 |
+| 10:30 – 13:00 | Producto | Demo: panorama → simulador (mover el slider, cambiar caminando/línea recta) → "Usá tus datos" | 16 |
+| 13:00 – 15:00 | Negocio | Valor en operaciones y efectivo, conclusión, próximos pasos y limitaciones | 17-18 |
 
 ## 4. Checklist del día de la entrega
 
@@ -144,8 +144,8 @@ Con el método del codo y la silueta promedio, entre 3 y 7 grupos, y verificando
 
 **¿El algoritmo goloso da la mejor solución?**
 No necesariamente: garantiza al menos el 63 % del óptimo porque la cobertura es submodular. Por eso también resolvimos el
-problema de forma exacta como programa lineal entero (HiGHS, menos de un segundo): el goloso quedó a menos del 0,1 % del
-óptimo midiendo caminando (y a menos del 1 % en línea recta). La app usa el exacto por defecto.
+problema de forma exacta como programa lineal entero (HiGHS, menos de un segundo): el goloso quedó a poco más del 1 % del
+óptimo en el peor caso (50 cajeros). La app usa el exacto por defecto.
 
 **El uso de efectivo está cayendo. ¿Tiene sentido sumar cajeros?**
 Las extracciones en cajeros cayeron fuerte en el último año (BCRA, julio 2025). Justamente por eso conviene priorizar con
@@ -153,14 +153,15 @@ datos: las zonas que más dependen del efectivo (más NBI, menos acceso a intern
 
 **¿Por qué la demanda por hora casi no cambió las recomendaciones?**
 Porque la gran mayoría de las estaciones de subte ya tiene un Link a menos de 500 m caminando (80 de 90): la gente que
-viaja ya pasa cerca de un cajero. Sumar a los pasajeros de la mañana deja 19 de los 20 sitios iguales. El faltante grande
+viaja ya pasa cerca de un cajero. Sumar a los pasajeros de la mañana no cambia ninguno de los 20 sitios. El faltante grande
 está en los barrios, y que el resultado casi no cambie al sumar pasajeros es una prueba de robustez.
 
 **¿Por qué medir caminando y no en línea recta?**
 Porque nadie camina en línea recta: hay manzanas, vías del tren, parques y autopistas. Bajamos la red peatonal de
 OpenStreetMap con OSMnx (52.090 esquinas), proyectamos cada punto sobre la cuadra más cercana y calculamos el camino más
 corto con Dijkstra. En la mediana, caminar es 1,34 veces la línea recta. Cambia la respuesta: con línea recta, el
-68 % de los vecinos tenía un Link a 500 m; caminando, el 51 %. La línea recta sobreestimaba la cobertura.
+68 % de los vecinos tenía un Link a 500 m; caminando, el 51 %. La línea recta sobreestimaba la cobertura. Probamos además
+conectar cada punto con más de una cuadra (por ejemplo, en una esquina) y la cobertura cambia en poco más de un punto.
 
 **¿Por qué 500 metros?**
 Son unas 5 cuadras, 6 o 7 minutos a pie: una distancia que una persona está dispuesta a caminar hasta un cajero. Es un

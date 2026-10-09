@@ -56,8 +56,15 @@ dif_ini = 100 * (R["cobertura_banelco"] - R["cobertura_link"])
 dif_fin = 100 * (R["cobertura_banelco"] - R["cobertura_link_con_20"])
 red_txt = (f"Las distancias se miden **caminando** por la red peatonal de OpenStreetMap ({n(R['red_km'])} km de calles y sendas, "
            f"{n(R['red_nodos'])} esquinas), con el algoritmo de Dijkstra. En la mediana, caminar hasta el Link más cercano es "
-           f"{n(R['factor_desvio_red'], 2)} veces la distancia en línea recta." if cam else
+           f"{n(R['factor_desvio_red'], 2)} veces la distancia en línea recta. Cada punto se proyecta sobre la cuadra más cercana "
+           "(no sobre la esquina, que sumaría hasta media cuadra en cada punta) y los cajeros candidatos se ubican sobre la vereda. "
+           + (f"Como análisis de sensibilidad, si cada punto se conecta también con las cuadras a menos de 25 m extra (una esquina, "
+              f"por ejemplo), la cobertura de Link pasa del {n(100 * R['cobertura_link'], 1)} % al "
+              f"{n(100 * R['cobertura_link_red_tolerancia_25m'], 1)} %: el resultado no depende de ese detalle."
+              if "cobertura_link_red_tolerancia_25m" in R else "") if cam else
            "Las distancias se miden en línea recta (la red peatonal de OpenStreetMap se incorpora con `notebooks/00b_red_peatonal.ipynb`).")
+
+fig_red = ("\n![Ejemplo en San Cristóbal: el Link más cercano está a unos 400 m en línea recta y a más de 600 m caminando](figuras/ejemplo_caminando.png)\n" if cam and (RAIZ / "docs/figuras/ejemplo_caminando.png").exists() else "")
 
 texto = f"""# Informe técnico · ¿Dónde faltan cajeros Link en CABA?
 
@@ -148,6 +155,7 @@ OpenStreetMap está incompleto para cajeros ({R['cajeros_osm_2026']} contra {n(R
   subte, estaciones de tren, distancia al centro y al subte, % NBI, % sin internet, % de 65+, % universitarios, tasa de empleo.
   Se excluyen deliberadamente sucursales y cajeros: son oferta, no demanda.
 - **Distancias:** {red_txt}
+{fig_red}
 
 ## 4. Modelado
 
@@ -209,7 +217,8 @@ estaciones ya tienen un Link a menos de 500 m; {robustez_txt}: el faltante grand
   estaban en el listado 2017. Cayeron, en promedio, en zonas con más brecha que el {n(100 * R['percentil_cajeros_nuevos'])} % de la
   ciudad (p = {n(R['p_valor_cajeros_nuevos'], 3)}, Monte Carlo). El AUC es {n(R['auc_validacion'], 2)}, contra 0,51 de usar solo la población.
   Es una evidencia a favor, pero modesta, por la cantidad de casos.
-- **Robustez:** {robustez_txt}. El goloso y el exacto coinciden casi por completo.
+- **Robustez:** {robustez_txt}. El goloso queda a menos del {n(R['goloso_max_diferencia_pct'], 1)} % del óptimo exacto, y medir
+  con otra regla de conexión a la red cambia la cobertura en poco más de un punto.
 
 **Limitaciones.**
 - La oferta es de ≈2017.

@@ -72,9 +72,17 @@ def suma_k1(serie: pd.Series) -> pd.Series:
 # --------------------------------------------------------------------------
 # Grilla
 # --------------------------------------------------------------------------
+# El archivo de BA Data trae los nombres en mayúsculas y sin tildes; los corregimos para mostrarlos.
+_NOMBRES_BARRIOS = {
+    "Agronomia": "Agronomía", "Constitucion": "Constitución", "Nuñez": "Núñez", "San Cristobal": "San Cristóbal",
+    "San Nicolas": "San Nicolás", "Velez Sarsfield": "Vélez Sarsfield", "Villa Del Parque": "Villa del Parque",
+    "Villa Gral. Mitre": "Villa General Mitre", "Villa Ortuzar": "Villa Ortúzar", "Villa Pueyrredon": "Villa Pueyrredón",
+}
+
+
 def cargar_barrios(base: Path = DIR_BASE) -> gpd.GeoDataFrame:
     b = gpd.read_file(base / "barrios.geojson").to_crs("EPSG:4326")
-    b["barrio"] = b["nombre"].str.title()
+    b["barrio"] = b["nombre"].str.title().replace(_NOMBRES_BARRIOS)
     b["comuna"] = pd.to_numeric(b["comuna"], errors="coerce").astype("Int64")
     return b[["barrio", "comuna", "geometry"]]
 

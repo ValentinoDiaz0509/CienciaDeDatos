@@ -39,8 +39,8 @@
 
   <rect x="40" y="324" width="260" height="78" rx="10" class="fuente"/>
   <text x="56" y="352" class="titulo">Molinetes del subte</text>
-  <text x="56" y="374" class="sub">SBASE · pasajeros cada 15 min</text>
-  <text x="56" y="391" class="sub">enero a junio 2026</text>
+  <text x="56" y="374" class="sub">SBASE · entradas cada 15 minutos</text>
+  <text x="56" y="391" class="sub">2025 completo (y 2026 para validar)</text>
 
   <rect x="40" y="416" width="260" height="78" rx="10" class="fuente"/>
   <text x="56" y="444" class="titulo">Usos del suelo</text>
@@ -49,8 +49,8 @@
 
   <rect x="40" y="508" width="260" height="78" rx="10" class="fuente"/>
   <text x="56" y="536" class="titulo">OpenStreetMap</text>
-  <text x="56" y="558" class="sub">comercios, estaciones, bancos, cajeros</text>
-  <text x="56" y="575" class="sub">2026 · API Overpass</text>
+  <text x="56" y="558" class="sub">comercios, estaciones, cajeros y</text>
+  <text x="56" y="575" class="sub">red peatonal · 2026 · Overpass y OSMnx</text>
 
   <rect x="40" y="600" width="260" height="62" rx="10" class="fuente"/>
   <text x="56" y="628" class="titulo">Barrios</text>
@@ -58,15 +58,15 @@
 
   <!-- 2. Ingesta -->
   <rect x="350" y="250" width="240" height="250" rx="12" class="caja"/>
-  <text x="368" y="280" class="titulo">00 · Descarga</text>
-  <text x="368" y="302" class="sub">notebook (Colab) + src/descarga.py</text>
+  <text x="368" y="280" class="titulo">00 y 00b · Descarga</text>
+  <text x="368" y="302" class="sub">notebooks (Colab) + src/descarga.py</text>
   <text x="368" y="336" class="texto">• reintentos ante errores</text>
   <text x="368" y="358" class="texto">  del servidor</text>
   <text x="368" y="382" class="texto">• valida cada archivo</text>
   <text x="368" y="406" class="texto">• resume lo pesado:</text>
-  <text x="368" y="428" class="texto">  molinetes 650 MB → 0,2 MB</text>
+  <text x="368" y="428" class="texto">  molinetes 650 MB → 0,4 MB</text>
   <text x="368" y="452" class="texto">• deja data/base/ versionado</text>
-  <text x="368" y="476" class="texto">  en el repo (≈10 MB)</text>
+  <text x="368" y="476" class="texto">  en el repo (≈21 MB)</text>
 
   <!-- 3. Preparación -->
   <rect x="640" y="250" width="270" height="250" rx="12" class="caja"/>
@@ -78,7 +78,7 @@
   <text x="658" y="404" class="texto">  interpolación areal</text>
   <text x="658" y="428" class="texto">• área de influencia: hexágono</text>
   <text x="658" y="450" class="texto">  + 6 vecinos (≈400 m)</text>
-  <text x="658" y="474" class="texto">• distancias a cada red</text>
+  <text x="658" y="474" class="texto">• distancias caminando (Dijkstra)</text>
 
   <!-- 4. Modelos -->
   <rect x="960" y="150" width="280" height="132" rx="12" class="modelo"/>
@@ -90,36 +90,37 @@
   <rect x="960" y="308" width="280" height="132" rx="12" class="modelo"/>
   <text x="978" y="338" class="titulo">K-Means</text>
   <text x="978" y="360" class="sub">no supervisado · silueta y codo</text>
-  <text x="978" y="388" class="texto">→ tipos de zona para explicar</text>
-  <text x="978" y="412" class="texto">  dónde está la brecha</text>
+  <text x="978" y="388" class="texto">→ tipos de zona (dónde está la brecha)</text>
+  <text x="978" y="412" class="texto">→ estaciones de origen y destino</text>
 
   <rect x="960" y="466" width="280" height="132" rx="12" class="modelo"/>
   <text x="978" y="496" class="titulo">Cobertura máxima (MCLP)</text>
-  <text x="978" y="518" class="sub">optimización · algoritmo goloso</text>
+  <text x="978" y="518" class="sub">optimización · exacta (MILP) y golosa</text>
   <text x="978" y="546" class="texto">→ N ubicaciones que suman más</text>
-  <text x="978" y="570" class="texto">  vecinos con un Link a 500 m</text>
+  <text x="978" y="570" class="texto">  vecinos con un Link a 500 m a pie</text>
 
   <rect x="960" y="624" width="280" height="62" rx="10" class="caja"/>
   <text x="978" y="651" class="titulo">Validación temporal de la brecha</text>
   <text x="978" y="672" class="sub">contra cajeros nuevos en OSM 2026</text>
 
   <!-- 5. Consumo -->
-  <rect x="1290" y="170" width="270" height="140" rx="12" class="salida"/>
-  <text x="1308" y="200" class="titulo">App (Streamlit + deck.gl)</text>
-  <text x="1308" y="226" class="texto">mapa 3D de brecha</text>
-  <text x="1308" y="250" class="texto">simulador de cajeros nuevos</text>
-  <text x="1308" y="274" class="texto">carga del listado propio</text>
-  <text x="1308" y="296" class="sub">funciona sin internet</text>
+  <rect x="1290" y="150" width="270" height="166" rx="12" class="salida"/>
+  <text x="1308" y="180" class="titulo">App (Streamlit + deck.gl)</text>
+  <text x="1308" y="206" class="texto">mapa 3D de brecha</text>
+  <text x="1308" y="230" class="texto">simulador de cajeros nuevos</text>
+  <text x="1308" y="254" class="texto">demanda por hora</text>
+  <text x="1308" y="278" class="texto">carga del listado propio</text>
+  <text x="1308" y="302" class="sub">funciona sin internet</text>
 
-  <rect x="1290" y="336" width="270" height="110" rx="12" class="salida"/>
-  <text x="1308" y="366" class="titulo">Notebooks 01 y 02</text>
-  <text x="1308" y="392" class="texto">calidad, EDA, modelos</text>
-  <text x="1308" y="416" class="texto">se pueden correr en vivo</text>
+  <rect x="1290" y="342" width="270" height="110" rx="12" class="salida"/>
+  <text x="1308" y="372" class="titulo">Notebooks 01, 02 y 03</text>
+  <text x="1308" y="398" class="texto">calidad, EDA, modelos, horario</text>
+  <text x="1308" y="422" class="texto">se pueden correr en vivo</text>
 
-  <rect x="1290" y="472" width="270" height="110" rx="12" class="salida"/>
-  <text x="1308" y="502" class="titulo">Presentación e informe</text>
-  <text x="1308" y="528" class="texto">gráficos y conclusiones</text>
-  <text x="1308" y="552" class="texto">para la gerencia</text>
+  <rect x="1290" y="478" width="270" height="110" rx="12" class="salida"/>
+  <text x="1308" y="508" class="titulo">Presentación e informe</text>
+  <text x="1308" y="534" class="texto">gráficos y conclusiones</text>
+  <text x="1308" y="558" class="texto">para la gerencia</text>
 
   <!-- Flechas: fuentes -> ingesta -->
   <path d="M300,179 C325,179 325,300 348,300" class="linea" marker-end="url(#flecha)"/>
@@ -136,8 +137,8 @@
   <path d="M910,420 C935,420 935,532 958,532" class="linea" marker-end="url(#flecha)"/>
   <!-- modelos -> consumo -->
   <path d="M1240,216 C1265,216 1265,240 1288,240" class="linea" marker-end="url(#flecha)"/>
-  <path d="M1240,374 C1265,374 1265,391 1288,391" class="linea" marker-end="url(#flecha)"/>
-  <path d="M1240,532 C1265,532 1265,527 1288,527" class="linea" marker-end="url(#flecha)"/>
+  <path d="M1240,374 C1265,374 1265,397 1288,397" class="linea" marker-end="url(#flecha)"/>
+  <path d="M1240,532 C1265,532 1265,533 1288,533" class="linea" marker-end="url(#flecha)"/>
 
   <text x="40" y="726" class="sub">Repositorio: github.com/ValentinoDiaz0509/CienciaDeDatos · Metodología: CRISP-DM · Datos: GCBA, INDEC, SBASE, © colaboradores de OpenStreetMap</text>
 </svg>

@@ -201,6 +201,14 @@ if HAY_RED:
     ok = np.isfinite(res["dist_link_m_red"]) & (res["dist_link_m"] > 50)
     print(f"Caminar es, en la mediana, {e.num_es(np.median(res.loc[ok, 'dist_link_m_red'] / res.loc[ok, 'dist_link_m']), 2)} veces la distancia en línea recta")
 cob.style.format({"residentes_cubiertos": "{:,.0f}", "pct_residentes": "{:.1%}", "pct_en_linea_recta": "{:.1%}"})"""),
+    md("""**Un ejemplo de por qué la línea recta engaña.** En esta zona de San Cristóbal (elegida a mano porque la cuadrícula es
+regular y el efecto se ve claro), el Link más cercano está a unos 400 m en línea recta, así que la línea recta la cuenta
+como cubierta. Caminando por las calles son más de 600 m."""),
+    code("""if HAY_RED:
+    from src import figura_caminando as fc
+    from IPython.display import Image
+    print(fc.dibujar("89c2e311183ffff"))
+    display(Image(str(FIG / "ejemplo_caminando.png"), width=560))"""),
     md("""Planteamos el **problema de cobertura máxima** (MCLP, Church y ReVelle, 1974): elegir N ubicaciones que maximicen las
 personas que pasan a tener un Link a menos de 500 m. Solo se consideran sitios con comercio o servicios, porque un cajero
 necesita un local. Lo resolvemos de dos formas:
@@ -226,12 +234,12 @@ pct = (base + recs["personas_acumuladas"]) / total * 100
 for n_ in (10, 20):
     v = pct.iloc[n_ - 1]
     ax.annotate(f"{n_} cajeros: {e.num_es(v, 1)} %", (n_, v), xytext=(8, -14), textcoords="offset points", fontsize=9, color=e.TINTA)
-cruce = recs.loc[pct >= banelco, "orden"]
-if len(cruce):
-    n_c = int(cruce.iloc[0])
-    ax.scatter([n_c], [pct.iloc[n_c - 1]], s=60, color=e.BANELCO, zorder=3)
-    ax.annotate(f"con {n_c} cajeros iguala a Banelco", (n_c, pct.iloc[n_c - 1]), xytext=(-10, 12), textcoords="offset points",
-                ha="right", fontsize=9, color=e.BANELCO)
+# cuántos cajeros hacen falta para igualar a Banelco, con el óptimo exacto (lo calcula el pipeline)
+n_c = json.loads((RAIZ / "data/processed/resumen.json").read_text(encoding="utf-8")).get("cajeros_para_igualar_banelco")
+if n_c:
+    ax.scatter([n_c], [banelco], s=60, color=e.BANELCO, zorder=3)
+    ax.annotate(f"óptimo exacto: con {n_c} cajeros iguala a Banelco", (n_c, banelco), xytext=(-10, 12),
+                textcoords="offset points", ha="right", fontsize=9, color=e.BANELCO)
 from matplotlib.ticker import MultipleLocator
 ax.yaxis.set_major_locator(MultipleLocator(2))
 ax.set(title="Vecinos con un Link a menos de 500 m " + ("caminando " if HAY_RED else "") + "según cuántos cajeros se suman",
