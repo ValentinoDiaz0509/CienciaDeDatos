@@ -23,6 +23,7 @@ Uso desde la terminal (parado en la raíz del repo):
 from __future__ import annotations
 
 import argparse
+import csv
 import io
 import json
 import sys
@@ -101,10 +102,24 @@ FUENTES_BA: list[Fuente] = [
         pesada=True,
     ),
     Fuente(
+        "usos_suelo_shp",
+        "Relevamiento de usos del suelo 2022-2024 (shapefile, para tener coordenadas)",
+        "usos-suelo-2022-2024-shp.zip",
+        [f"{BA}/relevamiento-usos-suelo/resource/613ef164-131b-422a-b9e2-257cee4b46b4/download"],
+        pesada=True,
+    ),
+    Fuente(
         "molinetes_2025",
         "Subte: pasajeros por molinete cada 15 minutos (2025)",
         "molinetes-2025.zip",
         [f"{BA}/subte-viajes-molinetes/resource/0d689701-9efd-4644-85d0-f6a1504509f1/download"],
+        pesada=True,
+    ),
+    Fuente(
+        "molinetes_2026",
+        "Subte: pasajeros por molinete cada 15 minutos (2026, primer semestre)",
+        "molinetes-2026.zip",
+        [f"{BA}/subte-viajes-molinetes/resource/f4689712-8698-43ab-9e02-559d03245cb0/download"],
         pesada=True,
     ),
 ]
@@ -128,6 +143,8 @@ def _validar(ruta: Path, extension: str) -> None:
         raise ValueError("no es un PDF válido")
     if extension in (".geojson", ".json") and not inicio.startswith(b"{"):
         raise ValueError("no es un JSON válido")
+    if extension == ".parquet" and not inicio.startswith(b"par1"):
+        raise ValueError("no es un Parquet válido")
 
 
 def descargar(urls: list[str], destino: Path, intentos: int = 4, timeout: int = 300) -> tuple[bool, str]:
@@ -193,44 +210,104 @@ VARIABLES_CENSO = [
 ]
 
 
+# Polígonos de todos los radios del país (~58 MB). Lo bajamos entero y filtramos CABA
+# nosotros, porque el `geometry=True` de censoargentino falla con la versión actual del archivo.
+RADIOS_URL = "https://huggingface.co/datasets/pedroorden/censoargentino/resolve/main/radios-2022.parquet"
+
+
 def descargar_censo() -> None:
     """Variables del Censo 2022 para CABA (provincia 02) + polígonos de radios con población."""
     out_largo = DIR_RAW / "censo2022-caba-largo.parquet"
     out_radios = DIR_RAW / "censo2022-caba-radios.geojson"
-    try:
-        import censoargentino as censo
-    except ImportError:
-        ESTADO["censo"] = (False, "falta instalar: pip install 'censoargentino[geo]'")
-        print("   " + ESTADO["censo"][1])
-        return
 
-    try:
-        if not out_largo.exists():
-            print("→ Censo 2022: variables por radio censal (CABA)")
+    if not out_largo.exists():
+        print("→ Censo 2022: variables por radio censal (CABA)")
+        try:
+            import censoargentino as censo
+
             largo = censo.query(variables=VARIABLES_CENSO, provincia="02")
             largo.to_parquet(out_largo, index=False)
             faltan = sorted(set(VARIABLES_CENSO) - set(largo["codigo_variable"].unique()))
             if faltan:
                 print(f"   aviso: no vinieron datos para {faltan}")
-        if not out_radios.exists():
-            print("→ Censo 2022: polígonos de radios censales (CABA)")
-            radios = radios_con_poblacion(censo.query(variables="PERSONA_P02", provincia="02", geometry=True))
-            radios.to_file(out_radios, driver="GeoJSON")
-        n = len(pd.read_parquet(out_largo, columns=["id_geo"])["id_geo"].unique())
+        except Exception as e:
+            ESTADO["censo"] = (False, f"{type(e).__name__}: {e}")
+    if out_largo.exists():
+        n = pd.read_parquet(out_largo, columns=["id_geo"])["id_geo"].nunique()
         ESTADO["censo"] = (True, f"{n:,} radios censales")
-    except Exception as e:
-        ESTADO["censo"] = (False, f"{type(e).__name__}: {e}")
     print(f"   {'OK' if ESTADO['censo'][0] else 'FALLÓ'}: {ESTADO['censo'][1]}")
 
+    if not out_radios.exists():
+        print("→ Censo 2022: polígonos de radios censales (CABA)")
+        try:
+            ok, det = descargar([RADIOS_URL], DIR_RAW / "radios-2022-pais.parquet")
+            if not ok:
+                raise RuntimeError(f"no se pudo bajar radios-2022.parquet: {det}")
+            radios = radios_caba(DIR_RAW / "radios-2022-pais.parquet")
+            if out_largo.exists():
+                radios = radios.merge(poblacion_por_radio(out_largo), on="id_geo", how="left")
+            radios.to_file(out_radios, driver="GeoJSON")
+        except Exception as e:
+            ESTADO["censo_radios"] = (False, f"{type(e).__name__}: {e}")
+    if out_radios.exists():
+        import geopandas as gpd
 
-def radios_con_poblacion(gdf_largo):
-    """De formato largo (radio x categoría) a un polígono por radio con su población total."""
+        r = gpd.read_file(out_radios)
+        con_pob = int(r["poblacion"].notna().sum()) if "poblacion" in r else 0
+        ESTADO["censo_radios"] = (True, f"{len(r):,} polígonos, {con_pob:,} con población")
+    print(f"   {'OK' if ESTADO['censo_radios'][0] else 'FALLÓ'}: {ESTADO['censo_radios'][1]}")
+
+
+_ID_RADIO_CANDIDATOS = ["cod_2022", "COD_2022", "link", "LINK", "id_geo", "cod_radio", "COD_RADIO",
+                        "geocodigo", "GEOCODIGO", "codigo", "CODIGO"]
+
+
+def _columna_id_radio(df) -> str:
+    for c in _ID_RADIO_CANDIDATOS:
+        if c in df.columns:
+            return c
+    for c in df.columns:  # si cambió el nombre: la columna cuyos valores son códigos de 8-9 dígitos
+        if c == "geometry":
+            continue
+        muestra = df[c].dropna().astype(str).str.replace(r"\.0$", "", regex=True).head(200)
+        if len(muestra) and muestra.str.fullmatch(r"\d{8,9}").all():
+            return c
+    raise ValueError(f"no encuentro la columna con el código de radio; columnas: {list(df.columns)}")
+
+
+def radios_caba(parquet_path: Path):
+    """Polígonos de los radios de CABA (código que empieza con 02), en EPSG:4326."""
     import geopandas as gpd
 
-    pob = gdf_largo.groupby("id_geo", as_index=False)["conteo"].sum().rename(columns={"conteo": "poblacion"})
-    geo = gdf_largo.drop_duplicates("id_geo")[["id_geo", "geometry"]]
-    radios = gpd.GeoDataFrame(geo.merge(pob, on="id_geo"), geometry="geometry", crs=gdf_largo.crs)
-    return radios[radios.geometry.notna()]
+    try:
+        g = gpd.read_parquet(parquet_path)  # GeoParquet
+    except Exception:
+        df = pd.read_parquet(parquet_path)
+        col_geo = next((c for c in ["geometry", "geom", "wkb_geometry", "GEOMETRY"] if c in df.columns), None)
+        if col_geo is None:
+            raise ValueError(f"no encuentro la geometría; columnas: {list(df.columns)}")
+        geom = gpd.GeoSeries.from_wkb(df[col_geo].map(lambda b: bytes(b) if b is not None else None))
+        g = gpd.GeoDataFrame(df.drop(columns=[col_geo]), geometry=geom, crs=None)
+
+    col_id = _columna_id_radio(g)
+    g["id_geo"] = g[col_id].astype(str).str.replace(r"\.0$", "", regex=True).str.zfill(9)
+    g = g[g["id_geo"].str.startswith("02")].copy()
+    if g.empty:
+        raise ValueError(f"no hay radios de CABA usando la columna '{col_id}'; columnas: {list(g.columns)}")
+    if g.crs is None:
+        minx = g.total_bounds[0]
+        if -75 < minx < -50:
+            g = g.set_crs("EPSG:4326")
+        else:
+            raise ValueError(f"no sé en qué sistema de coordenadas están los radios (bounds {g.total_bounds})")
+    return g.to_crs("EPSG:4326")[["id_geo", "geometry"]].reset_index(drop=True)
+
+
+def poblacion_por_radio(largo_path: Path) -> pd.DataFrame:
+    """Población total por radio = suma de las categorías de sexo (PERSONA_P02)."""
+    l = pd.read_parquet(largo_path, columns=["id_geo", "codigo_variable", "conteo"])
+    l = l[l["codigo_variable"] == "PERSONA_P02"]
+    return l.groupby("id_geo", as_index=False)["conteo"].sum().rename(columns={"conteo": "poblacion"})
 
 
 # --------------------------------------------------------------------------
@@ -364,17 +441,49 @@ def _normalizar_columnas(cols) -> list[str]:
     return [_sin_tildes(str(c)).strip().lower().replace(" ", "_") for c in cols]
 
 
-def _detectar_formato(muestra: bytes) -> tuple[str, str]:
-    """Devuelve (encoding, separador) a partir de los primeros bytes de un CSV."""
-    try:
-        texto = muestra.decode("utf-8")
-        encoding = "utf-8"
-    except UnicodeDecodeError:
-        texto = muestra.decode("latin-1")
-        encoding = "latin-1"
-    primera = texto.splitlines()[0] if texto else ""
+def _detectar_formato(muestra: bytes) -> tuple[str, str, bool]:
+    """
+    Devuelve (encoding, separador, filas_entre_comillas) a partir de los primeros bytes de un CSV.
+    `filas_entre_comillas` cubre archivos como los molinetes, donde cada fila entera viene
+    entre comillas: "1/1/2025;07:45:00;...;2"
+    """
+    if muestra.startswith(b"\xef\xbb\xbf"):
+        encoding, texto = "utf-8-sig", muestra[3:].decode("utf-8", errors="replace")
+    else:
+        texto, encoding = None, "latin-1"
+        # la muestra puede cortar un carácter multibyte (hasta 3 bytes) justo al final
+        candidatas = [muestra[: len(muestra) - k] for k in range(4)] if len(muestra) > 4 else [muestra]
+        for cand in candidatas:
+            try:
+                texto, encoding = cand.decode("utf-8"), "utf-8"
+                break
+            except UnicodeDecodeError:
+                continue
+        if texto is None:
+            texto = muestra.decode("latin-1")
+    primera = texto.splitlines()[0].strip() if texto else ""
     sep = max([";", ",", "\t", "|"], key=primera.count)
-    return encoding, sep
+    entre_comillas = primera.startswith('"') and primera.endswith('"') and primera.count('"') == 2
+    return encoding, sep, entre_comillas
+
+
+def _leer_csv(fuente, encoding: str, sep: str, entre_comillas: bool, chunksize: int | None = None):
+    """read_csv que además limpia las comillas de las filas entrecomilladas."""
+    lector = pd.read_csv(fuente, sep=sep, encoding=encoding, dtype=str, on_bad_lines="skip",
+                         quoting=csv.QUOTE_NONE if entre_comillas else csv.QUOTE_MINIMAL,
+                         chunksize=chunksize)
+
+    def limpiar(df: pd.DataFrame) -> pd.DataFrame:
+        if entre_comillas:
+            df.columns = [str(c).strip('"') for c in df.columns]
+            primera, ultima = df.columns[0], df.columns[-1]
+            df[primera] = df[primera].str.lstrip('"')
+            df[ultima] = df[ultima].str.rstrip('"')
+        return df
+
+    if chunksize is None:
+        return limpiar(lector)
+    return (limpiar(c) for c in lector)
 
 
 def _buscar(cols: list[str], *claves: str) -> str | None:
@@ -426,11 +535,9 @@ def agregar_molinetes(zip_path: Path, destino: Path) -> str:
             raise ValueError(f"el zip no tiene CSV: {z.namelist()[:10]}")
         for nombre, contenedor in csvs:
             with contenedor.open(nombre) as f:
-                encoding, sep = _detectar_formato(f.read(50_000))
+                formato = _detectar_formato(f.read(50_000))
             with contenedor.open(nombre) as f:
-                lector = pd.read_csv(f, sep=sep, encoding=encoding, dtype=str,
-                                     chunksize=500_000, on_bad_lines="skip")
-                for chunk in lector:
+                for chunk in _leer_csv(f, *formato, chunksize=500_000):
                     chunk.columns = _normalizar_columnas(chunk.columns)
                     cols = list(chunk.columns)
                     c_fecha = _buscar(cols, "fecha")
@@ -477,26 +584,78 @@ def agregar_molinetes(zip_path: Path, destino: Path) -> str:
 def usos_suelo_a_parquet(csv_path: Path, destino: Path) -> str:
     """Mismo contenido que el CSV, en Parquet (pesa varias veces menos)."""
     with open(csv_path, "rb") as f:
-        encoding, sep = _detectar_formato(f.read(50_000))
-    df = pd.read_csv(csv_path, sep=sep, encoding=encoding, dtype=str, on_bad_lines="skip")
+        formato = _detectar_formato(f.read(50_000))
+    df = _leer_csv(csv_path, *formato)
     df.to_parquet(destino, index=False, compression="zstd")
     return f"{len(df):,} parcelas, columnas: {list(df.columns)}"
 
 
+# Gauss-Krüger Buenos Aires: el sistema en metros que usa el GCBA en muchos shapefiles
+GKBA = ("+proj=tmerc +lat_0=-34.6297166 +lon_0=-58.4627 +k=1 +x_0=100000 +y_0=100000 "
+        "+ellps=intl +units=m +no_defs")
+
+
+def usos_suelo_puntos(zip_path: Path, destino: Path) -> str:
+    """
+    Del shapefile de usos del suelo (polígonos de parcelas) a una tabla con un punto
+    (lon, lat) por fila: el CSV oficial no trae coordenadas.
+    """
+    import tempfile
+
+    import geopandas as gpd
+
+    with tempfile.TemporaryDirectory() as tmp, zipfile.ZipFile(zip_path) as z:
+        z.extractall(tmp)
+        shps = sorted(Path(tmp).rglob("*.shp"))
+        if not shps:
+            raise ValueError(f"el zip no tiene .shp: {z.namelist()[:20]}")
+        g = gpd.read_file(max(shps, key=lambda p: p.stat().st_size))
+
+    if g.crs is None:
+        minx = g.total_bounds[0]
+        if 80_000 < minx < 120_000:
+            g = g.set_crs(GKBA)
+        elif -59 < minx < -58:
+            g = g.set_crs("EPSG:4326")
+        else:
+            raise ValueError(f"no sé en qué sistema de coordenadas está (bounds {g.total_bounds})")
+    puntos = g.to_crs("EPSG:5347").geometry.representative_point().to_crs("EPSG:4326")
+    tabla = pd.DataFrame(g.drop(columns=g.geometry.name))
+    tabla["lon"], tabla["lat"] = puntos.x.round(6), puntos.y.round(6)
+    for c in tabla.columns:  # parquet no acepta columnas mixtas
+        if tabla[c].dtype == object:
+            tabla[c] = tabla[c].astype("string")
+    tabla.to_parquet(destino, index=False, compression="zstd")
+    return f"{len(tabla):,} filas con coordenadas (CRS original: {g.crs.name if g.crs else '?'})"
+
+
 def procesar_pesados() -> None:
-    mol_zip = DIR_RAW / "molinetes-2025.zip"
-    mol_out = DIR_RAW / "molinetes-2025-estacion-hora.csv"
-    if mol_zip.exists() and not mol_out.exists():
-        print("→ Resumiendo molinetes 2025 por estación y hora (tarda unos minutos)")
+    for mol_zip in sorted(DIR_RAW.glob("molinetes-20??.zip")):
+        anio = mol_zip.stem.split("-")[-1]
+        mol_out = DIR_RAW / f"molinetes-{anio}-estacion-hora.csv"
+        if mol_out.exists():
+            continue
+        clave = f"molinetes_{anio}_resumen"
+        print(f"→ Resumiendo molinetes {anio} por estación y hora (tarda unos minutos)")
         try:
-            ESTADO["molinetes_resumen"] = (True, agregar_molinetes(mol_zip, mol_out))
+            ESTADO[clave] = (True, agregar_molinetes(mol_zip, mol_out))
         except Exception as e:
-            ESTADO["molinetes_resumen"] = (False, f"{type(e).__name__}: {e}")
+            ESTADO[clave] = (False, f"{type(e).__name__}: {e}")
             try:  # una muestra para poder adaptar el código al formato real
-                muestra_de_zip(mol_zip, DIR_RAW / "molinetes-2025-muestra.csv")
+                muestra_de_zip(mol_zip, DIR_RAW / f"molinetes-{anio}-muestra.csv")
             except Exception:
                 pass
-        print(f"   {'OK' if ESTADO['molinetes_resumen'][0] else 'FALLÓ'}: {ESTADO['molinetes_resumen'][1]}")
+        print(f"   {'OK' if ESTADO[clave][0] else 'FALLÓ'}: {ESTADO[clave][1]}")
+
+    shp_zip = DIR_RAW / "usos-suelo-2022-2024-shp.zip"
+    shp_out = DIR_RAW / "usos-suelo-2022-2024-puntos.parquet"
+    if shp_zip.exists() and not shp_out.exists():
+        print("→ Usos del suelo: un punto (lon, lat) por parcela")
+        try:
+            ESTADO["usos_suelo_puntos"] = (True, usos_suelo_puntos(shp_zip, shp_out))
+        except Exception as e:
+            ESTADO["usos_suelo_puntos"] = (False, f"{type(e).__name__}: {e}")
+        print(f"   {'OK' if ESTADO['usos_suelo_puntos'][0] else 'FALLÓ'}: {ESTADO['usos_suelo_puntos'][1]}")
 
     uso_csv = DIR_RAW / "usos-suelo-2022-2024.csv"
     uso_out = DIR_RAW / "usos-suelo-2022-2024.parquet"
@@ -515,7 +674,11 @@ def procesar_pesados() -> None:
 # Resumen y empaquetado
 # --------------------------------------------------------------------------
 # Los crudos pesados no van al zip: van sus versiones resumidas.
-EXCLUIR_DEL_ZIP = {"molinetes-2025.zip", "usos-suelo-2022-2024.csv"}
+EXCLUIR_DEL_ZIP = {
+    "molinetes-2024.zip", "molinetes-2025.zip", "molinetes-2026.zip",
+    "usos-suelo-2022-2024.csv", "usos-suelo-2022-2024-shp.zip",
+    "radios-2022-pais.parquet",
+}
 
 
 def resumen() -> pd.DataFrame:

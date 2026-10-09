@@ -23,10 +23,12 @@ TPO de Ciencia de Datos · UADE · 2º cuatrimestre 2026
 |---|---|---|
 | Cajeros automáticos | Oferta actual: ubicación, banco, red y cantidad de terminales | [BA Data](https://data.buenosaires.gob.ar/dataset/cajeros-automaticos) |
 | Censo 2022 por radio censal | Población, edad, actividad, NBI, acceso a internet | INDEC, vía [`censoargentino`](https://github.com/pedroorden/censoargentino) |
-| Subte: viajes por molinete 2025 | Cuánta gente pasa por cada estación y a qué hora | [BA Data / SBASE](https://data.buenosaires.gob.ar/dataset/subte-viajes-molinetes) |
+| Subte: viajes por molinete 2025-2026 | Cuánta gente pasa por cada estación y a qué hora | [BA Data / SBASE](https://data.buenosaires.gob.ar/dataset/subte-viajes-molinetes) |
 | Relevamiento de usos del suelo 2022-2024 | Uso de cada parcela: comercio, oficinas, residencial | [BA Data](https://data.buenosaires.gob.ar/dataset/relevamiento-usos-suelo) |
 | Barrios | Límites y nombres | [BA Data](https://data.buenosaires.gob.ar/dataset/barrios) |
-| OpenStreetMap | Estaciones de subte y tren, sucursales bancarias, cajeros de todas las redes, comercios | [Overpass API](https://overpass-api.de) |
+| OpenStreetMap | Estaciones de subte y tren, sucursales bancarias, cajeros de todas las redes, comercios | [Overpass API](https://overpass-api.de), © colaboradores de OpenStreetMap |
+
+> **Ojo con los cajeros:** el listado de BA Data parece ser un relevamiento de alrededor de 2017 (detalle en [`data/base/LEEME.md`](data/base/LEEME.md)).
 
 ## Arquitectura
 
@@ -43,7 +45,9 @@ flowchart LR
 
 ## Cómo correrlo
 
-**1. Bajar los datos.** Abrí el notebook en Colab y ejecutá todo (*Entorno de ejecución → Ejecutar todo*). Tarda entre 5 y 15 minutos y al final descarga `datos_tpo.zip`.
+Los datos livianos ya están en `data/base/`, así que para analizar alcanza con clonar el repo.
+
+**1. Bajar los datos de nuevo (solo si hace falta actualizarlos).** Abrí el notebook en Colab y ejecutá todo (*Entorno de ejecución → Ejecutar todo*). Tarda entre 5 y 15 minutos y al final descarga `datos_tpo.zip`.
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00_descarga_datos.ipynb)
 
@@ -60,7 +64,8 @@ BA Data a veces devuelve errores de servidor. El script reintenta cada archivo, 
 
 ```text
 ├── data/
-│   └── raw/                      # fuentes originales (no se suben al repo)
+│   ├── base/                     # versiones livianas, listas para analizar (sí se suben; ver LEEME.md)
+│   └── raw/                      # descargas originales completas (no se suben)
 ├── notebooks/
 │   └── 00_descarga_datos.ipynb   # baja todas las fuentes y arma datos_tpo.zip
 ├── src/

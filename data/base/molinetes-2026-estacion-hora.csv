@@ -1,0 +1,4140 @@
+linea,estacion,tipo_dia,hora,pasajeros,dias,pasajeros_promedio_dia
+LINEAA,Acoyte,fin_de_semana,0,6,52,0.1
+LINEAA,Acoyte,fin_de_semana,4,1,52,0.0
+LINEAA,Acoyte,fin_de_semana,5,84,52,1.6
+LINEAA,Acoyte,fin_de_semana,6,1007,52,19.4
+LINEAA,Acoyte,fin_de_semana,7,3156,52,60.7
+LINEAA,Acoyte,fin_de_semana,8,5928,52,114.0
+LINEAA,Acoyte,fin_de_semana,9,7655,52,147.2
+LINEAA,Acoyte,fin_de_semana,10,9748,52,187.5
+LINEAA,Acoyte,fin_de_semana,11,14046,52,270.1
+LINEAA,Acoyte,fin_de_semana,12,16232,52,312.2
+LINEAA,Acoyte,fin_de_semana,13,16046,52,308.6
+LINEAA,Acoyte,fin_de_semana,14,15204,52,292.4
+LINEAA,Acoyte,fin_de_semana,15,16371,52,314.8
+LINEAA,Acoyte,fin_de_semana,16,18179,52,349.6
+LINEAA,Acoyte,fin_de_semana,17,18669,52,359.0
+LINEAA,Acoyte,fin_de_semana,18,19127,52,367.8
+LINEAA,Acoyte,fin_de_semana,19,17994,52,346.0
+LINEAA,Acoyte,fin_de_semana,20,14384,52,276.6
+LINEAA,Acoyte,fin_de_semana,21,7800,52,150.0
+LINEAA,Acoyte,fin_de_semana,22,3389,52,65.2
+LINEAA,Acoyte,fin_de_semana,23,713,52,13.7
+LINEAA,Acoyte,habil,0,3,129,0.0
+LINEAA,Acoyte,habil,4,52,129,0.4
+LINEAA,Acoyte,habil,5,4565,129,35.4
+LINEAA,Acoyte,habil,6,30211,129,234.2
+LINEAA,Acoyte,habil,7,108435,129,840.6
+LINEAA,Acoyte,habil,8,135476,129,1050.2
+LINEAA,Acoyte,habil,9,107332,129,832.0
+LINEAA,Acoyte,habil,10,71763,129,556.3
+LINEAA,Acoyte,habil,11,80052,129,620.6
+LINEAA,Acoyte,habil,12,89918,129,697.0
+LINEAA,Acoyte,habil,13,80571,129,624.6
+LINEAA,Acoyte,habil,14,65114,129,504.8
+LINEAA,Acoyte,habil,15,66710,129,517.1
+LINEAA,Acoyte,habil,16,78378,129,607.6
+LINEAA,Acoyte,habil,17,79487,129,616.2
+LINEAA,Acoyte,habil,18,76576,129,593.6
+LINEAA,Acoyte,habil,19,56013,129,434.2
+LINEAA,Acoyte,habil,20,43076,129,333.9
+LINEAA,Acoyte,habil,21,23933,129,185.5
+LINEAA,Acoyte,habil,22,10670,129,82.7
+LINEAA,Acoyte,habil,23,1011,129,7.8
+LINEAA,Alberti,fin_de_semana,0,10,52,0.2
+LINEAA,Alberti,fin_de_semana,5,30,52,0.6
+LINEAA,Alberti,fin_de_semana,6,474,52,9.1
+LINEAA,Alberti,fin_de_semana,7,1407,52,27.1
+LINEAA,Alberti,fin_de_semana,8,3545,52,68.2
+LINEAA,Alberti,fin_de_semana,9,4968,52,95.5
+LINEAA,Alberti,fin_de_semana,10,5831,52,112.1
+LINEAA,Alberti,fin_de_semana,11,7290,52,140.2
+LINEAA,Alberti,fin_de_semana,12,8109,52,155.9
+LINEAA,Alberti,fin_de_semana,13,8950,52,172.1
+LINEAA,Alberti,fin_de_semana,14,7685,52,147.8
+LINEAA,Alberti,fin_de_semana,15,7212,52,138.7
+LINEAA,Alberti,fin_de_semana,16,7034,52,135.3
+LINEAA,Alberti,fin_de_semana,17,6318,52,121.5
+LINEAA,Alberti,fin_de_semana,18,5859,52,112.7
+LINEAA,Alberti,fin_de_semana,19,5653,52,108.7
+LINEAA,Alberti,fin_de_semana,20,4771,52,91.8
+LINEAA,Alberti,fin_de_semana,21,3163,52,60.8
+LINEAA,Alberti,fin_de_semana,22,1738,52,33.4
+LINEAA,Alberti,fin_de_semana,23,497,52,9.6
+LINEAA,Alberti,habil,0,2,129,0.0
+LINEAA,Alberti,habil,4,8,129,0.1
+LINEAA,Alberti,habil,5,676,129,5.2
+LINEAA,Alberti,habil,6,5533,129,42.9
+LINEAA,Alberti,habil,7,18636,129,144.5
+LINEAA,Alberti,habil,8,19839,129,153.8
+LINEAA,Alberti,habil,9,20820,129,161.4
+LINEAA,Alberti,habil,10,22979,129,178.1
+LINEAA,Alberti,habil,11,29392,129,227.8
+LINEAA,Alberti,habil,12,35779,129,277.4
+LINEAA,Alberti,habil,13,40416,129,313.3
+LINEAA,Alberti,habil,14,40186,129,311.5
+LINEAA,Alberti,habil,15,51919,129,402.5
+LINEAA,Alberti,habil,16,56221,129,435.8
+LINEAA,Alberti,habil,17,61229,129,474.6
+LINEAA,Alberti,habil,18,56447,129,437.6
+LINEAA,Alberti,habil,19,30633,129,237.5
+LINEAA,Alberti,habil,20,20848,129,161.6
+LINEAA,Alberti,habil,21,12341,129,95.7
+LINEAA,Alberti,habil,22,6425,129,49.8
+LINEAA,Alberti,habil,23,1376,129,10.7
+LINEAA,Carabobo,fin_de_semana,0,1,52,0.0
+LINEAA,Carabobo,fin_de_semana,5,46,52,0.9
+LINEAA,Carabobo,fin_de_semana,6,831,52,16.0
+LINEAA,Carabobo,fin_de_semana,7,2656,52,51.1
+LINEAA,Carabobo,fin_de_semana,8,5243,52,100.8
+LINEAA,Carabobo,fin_de_semana,9,7176,52,138.0
+LINEAA,Carabobo,fin_de_semana,10,8252,52,158.7
+LINEAA,Carabobo,fin_de_semana,11,10120,52,194.6
+LINEAA,Carabobo,fin_de_semana,12,10997,52,211.5
+LINEAA,Carabobo,fin_de_semana,13,10918,52,210.0
+LINEAA,Carabobo,fin_de_semana,14,10526,52,202.4
+LINEAA,Carabobo,fin_de_semana,15,11761,52,226.2
+LINEAA,Carabobo,fin_de_semana,16,12167,52,234.0
+LINEAA,Carabobo,fin_de_semana,17,11313,52,217.6
+LINEAA,Carabobo,fin_de_semana,18,11359,52,218.4
+LINEAA,Carabobo,fin_de_semana,19,10146,52,195.1
+LINEAA,Carabobo,fin_de_semana,20,8010,52,154.0
+LINEAA,Carabobo,fin_de_semana,21,4666,52,89.7
+LINEAA,Carabobo,fin_de_semana,22,1756,52,33.8
+LINEAA,Carabobo,fin_de_semana,23,360,52,6.9
+LINEAA,Carabobo,habil,4,26,129,0.2
+LINEAA,Carabobo,habil,5,3283,129,25.4
+LINEAA,Carabobo,habil,6,30478,129,236.3
+LINEAA,Carabobo,habil,7,116444,129,902.7
+LINEAA,Carabobo,habil,8,140154,129,1086.5
+LINEAA,Carabobo,habil,9,98419,129,762.9
+LINEAA,Carabobo,habil,10,58383,129,452.6
+LINEAA,Carabobo,habil,11,63357,129,491.1
+LINEAA,Carabobo,habil,12,61705,129,478.3
+LINEAA,Carabobo,habil,13,56370,129,437.0
+LINEAA,Carabobo,habil,14,46483,129,360.3
+LINEAA,Carabobo,habil,15,46879,129,363.4
+LINEAA,Carabobo,habil,16,61019,129,473.0
+LINEAA,Carabobo,habil,17,68437,129,530.5
+LINEAA,Carabobo,habil,18,53812,129,417.1
+LINEAA,Carabobo,habil,19,34560,129,267.9
+LINEAA,Carabobo,habil,20,24025,129,186.2
+LINEAA,Carabobo,habil,21,13198,129,102.3
+LINEAA,Carabobo,habil,22,7018,129,54.4
+LINEAA,Carabobo,habil,23,97,129,0.8
+LINEAA,Castro Barros,fin_de_semana,0,6,52,0.1
+LINEAA,Castro Barros,fin_de_semana,5,38,52,0.7
+LINEAA,Castro Barros,fin_de_semana,6,636,52,12.2
+LINEAA,Castro Barros,fin_de_semana,7,2301,52,44.2
+LINEAA,Castro Barros,fin_de_semana,8,4426,52,85.1
+LINEAA,Castro Barros,fin_de_semana,9,6664,52,128.2
+LINEAA,Castro Barros,fin_de_semana,10,7880,52,151.5
+LINEAA,Castro Barros,fin_de_semana,11,9868,52,189.8
+LINEAA,Castro Barros,fin_de_semana,12,10294,52,198.0
+LINEAA,Castro Barros,fin_de_semana,13,9838,52,189.2
+LINEAA,Castro Barros,fin_de_semana,14,9278,52,178.4
+LINEAA,Castro Barros,fin_de_semana,15,9334,52,179.5
+LINEAA,Castro Barros,fin_de_semana,16,10302,52,198.1
+LINEAA,Castro Barros,fin_de_semana,17,9526,52,183.2
+LINEAA,Castro Barros,fin_de_semana,18,9733,52,187.2
+LINEAA,Castro Barros,fin_de_semana,19,9114,52,175.3
+LINEAA,Castro Barros,fin_de_semana,20,7528,52,144.8
+LINEAA,Castro Barros,fin_de_semana,21,4642,52,89.3
+LINEAA,Castro Barros,fin_de_semana,22,2105,52,40.5
+LINEAA,Castro Barros,fin_de_semana,23,460,52,8.8
+LINEAA,Castro Barros,habil,4,44,129,0.3
+LINEAA,Castro Barros,habil,5,1944,129,15.1
+LINEAA,Castro Barros,habil,6,14087,129,109.2
+LINEAA,Castro Barros,habil,7,65913,129,511.0
+LINEAA,Castro Barros,habil,8,74757,129,579.5
+LINEAA,Castro Barros,habil,9,63074,129,488.9
+LINEAA,Castro Barros,habil,10,43418,129,336.6
+LINEAA,Castro Barros,habil,11,46526,129,360.7
+LINEAA,Castro Barros,habil,12,53296,129,413.1
+LINEAA,Castro Barros,habil,13,54864,129,425.3
+LINEAA,Castro Barros,habil,14,49588,129,384.4
+LINEAA,Castro Barros,habil,15,51540,129,399.5
+LINEAA,Castro Barros,habil,16,66597,129,516.3
+LINEAA,Castro Barros,habil,17,65590,129,508.4
+LINEAA,Castro Barros,habil,18,55938,129,433.6
+LINEAA,Castro Barros,habil,19,35890,129,278.2
+LINEAA,Castro Barros,habil,20,29249,129,226.7
+LINEAA,Castro Barros,habil,21,18411,129,142.7
+LINEAA,Castro Barros,habil,22,9159,129,71.0
+LINEAA,Castro Barros,habil,23,1022,129,7.9
+LINEAA,Congreso,fin_de_semana,0,19,52,0.4
+LINEAA,Congreso,fin_de_semana,5,36,52,0.7
+LINEAA,Congreso,fin_de_semana,6,487,52,9.4
+LINEAA,Congreso,fin_de_semana,7,1418,52,27.3
+LINEAA,Congreso,fin_de_semana,8,2782,52,53.5
+LINEAA,Congreso,fin_de_semana,9,3925,52,75.5
+LINEAA,Congreso,fin_de_semana,10,4689,52,90.2
+LINEAA,Congreso,fin_de_semana,11,5345,52,102.8
+LINEAA,Congreso,fin_de_semana,12,5607,52,107.8
+LINEAA,Congreso,fin_de_semana,13,5843,52,112.4
+LINEAA,Congreso,fin_de_semana,14,5192,52,99.8
+LINEAA,Congreso,fin_de_semana,15,5535,52,106.4
+LINEAA,Congreso,fin_de_semana,16,5705,52,109.7
+LINEAA,Congreso,fin_de_semana,17,5903,52,113.5
+LINEAA,Congreso,fin_de_semana,18,6101,52,117.3
+LINEAA,Congreso,fin_de_semana,19,6611,52,127.1
+LINEAA,Congreso,fin_de_semana,20,5607,52,107.8
+LINEAA,Congreso,fin_de_semana,21,4427,52,85.1
+LINEAA,Congreso,fin_de_semana,22,2648,52,50.9
+LINEAA,Congreso,fin_de_semana,23,1173,52,22.6
+LINEAA,Congreso,habil,4,10,129,0.1
+LINEAA,Congreso,habil,5,739,129,5.7
+LINEAA,Congreso,habil,6,4812,129,37.3
+LINEAA,Congreso,habil,7,16889,129,130.9
+LINEAA,Congreso,habil,8,18980,129,147.1
+LINEAA,Congreso,habil,9,21415,129,166.0
+LINEAA,Congreso,habil,10,21875,129,169.6
+LINEAA,Congreso,habil,11,27560,129,213.6
+LINEAA,Congreso,habil,12,32250,129,250.0
+LINEAA,Congreso,habil,13,34021,129,263.7
+LINEAA,Congreso,habil,14,33117,129,256.7
+LINEAA,Congreso,habil,15,42025,129,325.8
+LINEAA,Congreso,habil,16,47655,129,369.4
+LINEAA,Congreso,habil,17,50349,129,390.3
+LINEAA,Congreso,habil,18,46953,129,364.0
+LINEAA,Congreso,habil,19,33396,129,258.9
+LINEAA,Congreso,habil,20,27738,129,215.0
+LINEAA,Congreso,habil,21,19045,129,147.6
+LINEAA,Congreso,habil,22,10709,129,83.0
+LINEAA,Congreso,habil,23,2246,129,17.4
+LINEAA,Flores,fin_de_semana,5,126,52,2.4
+LINEAA,Flores,fin_de_semana,6,1550,52,29.8
+LINEAA,Flores,fin_de_semana,7,3806,52,73.2
+LINEAA,Flores,fin_de_semana,8,7802,52,150.0
+LINEAA,Flores,fin_de_semana,9,9285,52,178.6
+LINEAA,Flores,fin_de_semana,10,10086,52,194.0
+LINEAA,Flores,fin_de_semana,11,12667,52,243.6
+LINEAA,Flores,fin_de_semana,12,13534,52,260.3
+LINEAA,Flores,fin_de_semana,13,14679,52,282.3
+LINEAA,Flores,fin_de_semana,14,13517,52,259.9
+LINEAA,Flores,fin_de_semana,15,14271,52,274.4
+LINEAA,Flores,fin_de_semana,16,14235,52,273.8
+LINEAA,Flores,fin_de_semana,17,12247,52,235.5
+LINEAA,Flores,fin_de_semana,18,11716,52,225.3
+LINEAA,Flores,fin_de_semana,19,10737,52,206.5
+LINEAA,Flores,fin_de_semana,20,8697,52,167.2
+LINEAA,Flores,fin_de_semana,21,4830,52,92.9
+LINEAA,Flores,fin_de_semana,22,1746,52,33.6
+LINEAA,Flores,fin_de_semana,23,314,52,6.0
+LINEAA,Flores,habil,0,3,129,0.0
+LINEAA,Flores,habil,4,131,129,1.0
+LINEAA,Flores,habil,5,6305,129,48.9
+LINEAA,Flores,habil,6,43862,129,340.0
+LINEAA,Flores,habil,7,127640,129,989.5
+LINEAA,Flores,habil,8,148005,129,1147.3
+LINEAA,Flores,habil,9,105104,129,814.8
+LINEAA,Flores,habil,10,65041,129,504.2
+LINEAA,Flores,habil,11,69899,129,541.9
+LINEAA,Flores,habil,12,70191,129,544.1
+LINEAA,Flores,habil,13,66959,129,519.1
+LINEAA,Flores,habil,14,52844,129,409.6
+LINEAA,Flores,habil,15,54741,129,424.3
+LINEAA,Flores,habil,16,65106,129,504.7
+LINEAA,Flores,habil,17,70439,129,546.0
+LINEAA,Flores,habil,18,52144,129,404.2
+LINEAA,Flores,habil,19,33556,129,260.1
+LINEAA,Flores,habil,20,23710,129,183.8
+LINEAA,Flores,habil,21,13860,129,107.4
+LINEAA,Flores,habil,22,5904,129,45.8
+LINEAA,Flores,habil,23,37,129,0.3
+LINEAA,Lima,fin_de_semana,0,3,52,0.1
+LINEAA,Lima,fin_de_semana,1,3,52,0.1
+LINEAA,Lima,fin_de_semana,4,1,52,0.0
+LINEAA,Lima,fin_de_semana,5,75,52,1.4
+LINEAA,Lima,fin_de_semana,6,707,52,13.6
+LINEAA,Lima,fin_de_semana,7,1719,52,33.1
+LINEAA,Lima,fin_de_semana,8,3539,52,68.1
+LINEAA,Lima,fin_de_semana,9,4390,52,84.4
+LINEAA,Lima,fin_de_semana,10,4951,52,95.2
+LINEAA,Lima,fin_de_semana,11,5467,52,105.1
+LINEAA,Lima,fin_de_semana,12,6273,52,120.6
+LINEAA,Lima,fin_de_semana,13,5918,52,113.8
+LINEAA,Lima,fin_de_semana,14,5822,52,112.0
+LINEAA,Lima,fin_de_semana,15,5489,52,105.6
+LINEAA,Lima,fin_de_semana,16,5929,52,114.0
+LINEAA,Lima,fin_de_semana,17,5791,52,111.4
+LINEAA,Lima,fin_de_semana,18,6204,52,119.3
+LINEAA,Lima,fin_de_semana,19,7556,52,145.3
+LINEAA,Lima,fin_de_semana,20,6427,52,123.6
+LINEAA,Lima,fin_de_semana,21,6853,52,131.8
+LINEAA,Lima,fin_de_semana,22,4804,52,92.4
+LINEAA,Lima,fin_de_semana,23,2197,52,42.2
+LINEAA,Lima,habil,0,3,129,0.0
+LINEAA,Lima,habil,1,11,129,0.1
+LINEAA,Lima,habil,3,6,129,0.0
+LINEAA,Lima,habil,4,27,129,0.2
+LINEAA,Lima,habil,5,1500,129,11.6
+LINEAA,Lima,habil,6,6224,129,48.2
+LINEAA,Lima,habil,7,16250,129,126.0
+LINEAA,Lima,habil,8,19643,129,152.3
+LINEAA,Lima,habil,9,20862,129,161.7
+LINEAA,Lima,habil,10,23428,129,181.6
+LINEAA,Lima,habil,11,29702,129,230.2
+LINEAA,Lima,habil,12,36351,129,281.8
+LINEAA,Lima,habil,13,41841,129,324.3
+LINEAA,Lima,habil,14,45039,129,349.1
+LINEAA,Lima,habil,15,62283,129,482.8
+LINEAA,Lima,habil,16,73288,129,568.1
+LINEAA,Lima,habil,17,87787,129,680.5
+LINEAA,Lima,habil,18,72945,129,565.5
+LINEAA,Lima,habil,19,34167,129,264.9
+LINEAA,Lima,habil,20,24184,129,187.5
+LINEAA,Lima,habil,21,19572,129,151.7
+LINEAA,Lima,habil,22,12891,129,99.9
+LINEAA,Lima,habil,23,2727,129,21.1
+LINEAA,Loria,fin_de_semana,0,8,52,0.2
+LINEAA,Loria,fin_de_semana,1,2,52,0.0
+LINEAA,Loria,fin_de_semana,5,29,52,0.6
+LINEAA,Loria,fin_de_semana,6,685,52,13.2
+LINEAA,Loria,fin_de_semana,7,1613,52,31.0
+LINEAA,Loria,fin_de_semana,8,3955,52,76.1
+LINEAA,Loria,fin_de_semana,9,5453,52,104.9
+LINEAA,Loria,fin_de_semana,10,5774,52,111.0
+LINEAA,Loria,fin_de_semana,11,6719,52,129.2
+LINEAA,Loria,fin_de_semana,12,7481,52,143.9
+LINEAA,Loria,fin_de_semana,13,7263,52,139.7
+LINEAA,Loria,fin_de_semana,14,6973,52,134.1
+LINEAA,Loria,fin_de_semana,15,7088,52,136.3
+LINEAA,Loria,fin_de_semana,16,7592,52,146.0
+LINEAA,Loria,fin_de_semana,17,6800,52,130.8
+LINEAA,Loria,fin_de_semana,18,6578,52,126.5
+LINEAA,Loria,fin_de_semana,19,6410,52,123.3
+LINEAA,Loria,fin_de_semana,20,5761,52,110.8
+LINEAA,Loria,fin_de_semana,21,4028,52,77.5
+LINEAA,Loria,fin_de_semana,22,1659,52,31.9
+LINEAA,Loria,fin_de_semana,23,351,52,6.8
+LINEAA,Loria,habil,0,4,129,0.0
+LINEAA,Loria,habil,3,1,129,0.0
+LINEAA,Loria,habil,4,53,129,0.4
+LINEAA,Loria,habil,5,1465,129,11.4
+LINEAA,Loria,habil,6,10268,129,79.6
+LINEAA,Loria,habil,7,43035,129,333.6
+LINEAA,Loria,habil,8,46312,129,359.0
+LINEAA,Loria,habil,9,37903,129,293.8
+LINEAA,Loria,habil,10,30797,129,238.7
+LINEAA,Loria,habil,11,34996,129,271.3
+LINEAA,Loria,habil,12,40490,129,313.9
+LINEAA,Loria,habil,13,42567,129,330.0
+LINEAA,Loria,habil,14,37826,129,293.2
+LINEAA,Loria,habil,15,39348,129,305.0
+LINEAA,Loria,habil,16,47212,129,366.0
+LINEAA,Loria,habil,17,43390,129,336.4
+LINEAA,Loria,habil,18,42175,129,326.9
+LINEAA,Loria,habil,19,26062,129,202.0
+LINEAA,Loria,habil,20,19830,129,153.7
+LINEAA,Loria,habil,21,16353,129,126.8
+LINEAA,Loria,habil,22,7186,129,55.7
+LINEAA,Loria,habil,23,895,129,6.9
+LINEAA,Pasco,fin_de_semana,5,12,52,0.2
+LINEAA,Pasco,fin_de_semana,6,194,52,3.7
+LINEAA,Pasco,fin_de_semana,7,410,52,7.9
+LINEAA,Pasco,fin_de_semana,8,937,52,18.0
+LINEAA,Pasco,fin_de_semana,9,1538,52,29.6
+LINEAA,Pasco,fin_de_semana,10,2271,52,43.7
+LINEAA,Pasco,fin_de_semana,11,2916,52,56.1
+LINEAA,Pasco,fin_de_semana,12,3454,52,66.4
+LINEAA,Pasco,fin_de_semana,13,3966,52,76.3
+LINEAA,Pasco,fin_de_semana,14,4171,52,80.2
+LINEAA,Pasco,fin_de_semana,15,3517,52,67.6
+LINEAA,Pasco,fin_de_semana,16,3457,52,66.5
+LINEAA,Pasco,fin_de_semana,17,3169,52,60.9
+LINEAA,Pasco,fin_de_semana,18,3106,52,59.7
+LINEAA,Pasco,fin_de_semana,19,2784,52,53.5
+LINEAA,Pasco,fin_de_semana,20,2088,52,40.2
+LINEAA,Pasco,fin_de_semana,21,1109,52,21.3
+LINEAA,Pasco,fin_de_semana,22,515,52,9.9
+LINEAA,Pasco,fin_de_semana,23,76,52,1.5
+LINEAA,Pasco,habil,4,5,129,0.0
+LINEAA,Pasco,habil,5,585,129,4.5
+LINEAA,Pasco,habil,6,2817,129,21.8
+LINEAA,Pasco,habil,7,10314,129,80.0
+LINEAA,Pasco,habil,8,15824,129,122.7
+LINEAA,Pasco,habil,9,17956,129,139.2
+LINEAA,Pasco,habil,10,14889,129,115.4
+LINEAA,Pasco,habil,11,16791,129,130.2
+LINEAA,Pasco,habil,12,19200,129,148.8
+LINEAA,Pasco,habil,13,19627,129,152.1
+LINEAA,Pasco,habil,14,18419,129,142.8
+LINEAA,Pasco,habil,15,18368,129,142.4
+LINEAA,Pasco,habil,16,19952,129,154.7
+LINEAA,Pasco,habil,17,20281,129,157.2
+LINEAA,Pasco,habil,18,17527,129,135.9
+LINEAA,Pasco,habil,19,8530,129,66.1
+LINEAA,Pasco,habil,20,6186,129,48.0
+LINEAA,Pasco,habil,21,3731,129,28.9
+LINEAA,Pasco,habil,22,1633,129,12.7
+LINEAA,Pasco,habil,23,140,129,1.1
+LINEAA,Peru,fin_de_semana,0,1,52,0.0
+LINEAA,Peru,fin_de_semana,5,69,52,1.3
+LINEAA,Peru,fin_de_semana,6,436,52,8.4
+LINEAA,Peru,fin_de_semana,7,1129,52,21.7
+LINEAA,Peru,fin_de_semana,8,2455,52,47.2
+LINEAA,Peru,fin_de_semana,9,2923,52,56.2
+LINEAA,Peru,fin_de_semana,10,3479,52,66.9
+LINEAA,Peru,fin_de_semana,11,4843,52,93.1
+LINEAA,Peru,fin_de_semana,12,5799,52,111.5
+LINEAA,Peru,fin_de_semana,13,7300,52,140.4
+LINEAA,Peru,fin_de_semana,14,6532,52,125.6
+LINEAA,Peru,fin_de_semana,15,6629,52,127.5
+LINEAA,Peru,fin_de_semana,16,8195,52,157.6
+LINEAA,Peru,fin_de_semana,17,8648,52,166.3
+LINEAA,Peru,fin_de_semana,18,9340,52,179.6
+LINEAA,Peru,fin_de_semana,19,8626,52,165.9
+LINEAA,Peru,fin_de_semana,20,6748,52,129.8
+LINEAA,Peru,fin_de_semana,21,4088,52,78.6
+LINEAA,Peru,fin_de_semana,22,2012,52,38.7
+LINEAA,Peru,fin_de_semana,23,730,52,14.0
+LINEAA,Peru,habil,0,2,129,0.0
+LINEAA,Peru,habil,1,1,129,0.0
+LINEAA,Peru,habil,3,1,129,0.0
+LINEAA,Peru,habil,4,4,129,0.0
+LINEAA,Peru,habil,5,732,129,5.7
+LINEAA,Peru,habil,6,3901,129,30.2
+LINEAA,Peru,habil,7,8977,129,69.6
+LINEAA,Peru,habil,8,11401,129,88.4
+LINEAA,Peru,habil,9,14207,129,110.1
+LINEAA,Peru,habil,10,20834,129,161.5
+LINEAA,Peru,habil,11,31911,129,247.4
+LINEAA,Peru,habil,12,44855,129,347.7
+LINEAA,Peru,habil,13,53328,129,413.4
+LINEAA,Peru,habil,14,76888,129,596.0
+LINEAA,Peru,habil,15,121708,129,943.5
+LINEAA,Peru,habil,16,143460,129,1112.1
+LINEAA,Peru,habil,17,191858,129,1487.3
+LINEAA,Peru,habil,18,142665,129,1105.9
+LINEAA,Peru,habil,19,62926,129,487.8
+LINEAA,Peru,habil,20,45737,129,354.6
+LINEAA,Peru,habil,21,24137,129,187.1
+LINEAA,Peru,habil,22,9688,129,75.1
+LINEAA,Peru,habil,23,2994,129,23.2
+LINEAA,Piedras,fin_de_semana,0,1,52,0.0
+LINEAA,Piedras,fin_de_semana,5,1,52,0.0
+LINEAA,Piedras,fin_de_semana,6,56,52,1.1
+LINEAA,Piedras,fin_de_semana,7,113,52,2.2
+LINEAA,Piedras,fin_de_semana,8,191,52,3.7
+LINEAA,Piedras,fin_de_semana,9,280,52,5.4
+LINEAA,Piedras,fin_de_semana,10,302,52,5.8
+LINEAA,Piedras,fin_de_semana,11,398,52,7.7
+LINEAA,Piedras,fin_de_semana,12,486,52,9.3
+LINEAA,Piedras,fin_de_semana,13,422,52,8.1
+LINEAA,Piedras,fin_de_semana,14,389,52,7.5
+LINEAA,Piedras,fin_de_semana,15,431,52,8.3
+LINEAA,Piedras,fin_de_semana,16,464,52,8.9
+LINEAA,Piedras,fin_de_semana,17,515,52,9.9
+LINEAA,Piedras,fin_de_semana,18,547,52,10.5
+LINEAA,Piedras,fin_de_semana,19,509,52,9.8
+LINEAA,Piedras,fin_de_semana,20,422,52,8.1
+LINEAA,Piedras,fin_de_semana,21,344,52,6.6
+LINEAA,Piedras,fin_de_semana,22,167,52,3.2
+LINEAA,Piedras,fin_de_semana,23,39,52,0.8
+LINEAA,Piedras,habil,4,4,129,0.0
+LINEAA,Piedras,habil,5,88,129,0.7
+LINEAA,Piedras,habil,6,467,129,3.6
+LINEAA,Piedras,habil,7,1036,129,8.0
+LINEAA,Piedras,habil,8,1206,129,9.3
+LINEAA,Piedras,habil,9,1647,129,12.8
+LINEAA,Piedras,habil,10,2071,129,16.1
+LINEAA,Piedras,habil,11,2824,129,21.9
+LINEAA,Piedras,habil,12,3616,129,28.0
+LINEAA,Piedras,habil,13,4324,129,33.5
+LINEAA,Piedras,habil,14,6094,129,47.2
+LINEAA,Piedras,habil,15,9131,129,70.8
+LINEAA,Piedras,habil,16,11328,129,87.8
+LINEAA,Piedras,habil,17,13719,129,106.3
+LINEAA,Piedras,habil,18,9860,129,76.4
+LINEAA,Piedras,habil,19,4044,129,31.3
+LINEAA,Piedras,habil,20,3053,129,23.7
+LINEAA,Piedras,habil,21,1858,129,14.4
+LINEAA,Piedras,habil,22,756,129,5.9
+LINEAA,Piedras,habil,23,217,129,1.7
+LINEAA,Plaza Miserere,fin_de_semana,0,12,52,0.2
+LINEAA,Plaza Miserere,fin_de_semana,3,1,52,0.0
+LINEAA,Plaza Miserere,fin_de_semana,4,2,52,0.0
+LINEAA,Plaza Miserere,fin_de_semana,5,112,52,2.2
+LINEAA,Plaza Miserere,fin_de_semana,6,1934,52,37.2
+LINEAA,Plaza Miserere,fin_de_semana,7,3929,52,75.6
+LINEAA,Plaza Miserere,fin_de_semana,8,7585,52,145.9
+LINEAA,Plaza Miserere,fin_de_semana,9,8879,52,170.8
+LINEAA,Plaza Miserere,fin_de_semana,10,9881,52,190.0
+LINEAA,Plaza Miserere,fin_de_semana,11,12661,52,243.5
+LINEAA,Plaza Miserere,fin_de_semana,12,14889,52,286.3
+LINEAA,Plaza Miserere,fin_de_semana,13,16023,52,308.1
+LINEAA,Plaza Miserere,fin_de_semana,14,15245,52,293.2
+LINEAA,Plaza Miserere,fin_de_semana,15,12916,52,248.4
+LINEAA,Plaza Miserere,fin_de_semana,16,12483,52,240.1
+LINEAA,Plaza Miserere,fin_de_semana,17,11248,52,216.3
+LINEAA,Plaza Miserere,fin_de_semana,18,10233,52,196.8
+LINEAA,Plaza Miserere,fin_de_semana,19,8598,52,165.3
+LINEAA,Plaza Miserere,fin_de_semana,20,6967,52,134.0
+LINEAA,Plaza Miserere,fin_de_semana,21,4445,52,85.5
+LINEAA,Plaza Miserere,fin_de_semana,22,1975,52,38.0
+LINEAA,Plaza Miserere,fin_de_semana,23,396,52,7.6
+LINEAA,Plaza Miserere,habil,0,2,129,0.0
+LINEAA,Plaza Miserere,habil,1,3,129,0.0
+LINEAA,Plaza Miserere,habil,2,2,129,0.0
+LINEAA,Plaza Miserere,habil,3,7,129,0.1
+LINEAA,Plaza Miserere,habil,4,103,129,0.8
+LINEAA,Plaza Miserere,habil,5,5100,129,39.5
+LINEAA,Plaza Miserere,habil,6,28884,129,223.9
+LINEAA,Plaza Miserere,habil,7,58019,129,449.8
+LINEAA,Plaza Miserere,habil,8,101558,129,787.3
+LINEAA,Plaza Miserere,habil,9,84693,129,656.5
+LINEAA,Plaza Miserere,habil,10,63549,129,492.6
+LINEAA,Plaza Miserere,habil,11,65361,129,506.7
+LINEAA,Plaza Miserere,habil,12,68895,129,534.1
+LINEAA,Plaza Miserere,habil,13,67649,129,524.4
+LINEAA,Plaza Miserere,habil,14,57413,129,445.1
+LINEAA,Plaza Miserere,habil,15,55459,129,429.9
+LINEAA,Plaza Miserere,habil,16,57192,129,443.3
+LINEAA,Plaza Miserere,habil,17,61527,129,477.0
+LINEAA,Plaza Miserere,habil,18,53403,129,414.0
+LINEAA,Plaza Miserere,habil,19,26541,129,205.7
+LINEAA,Plaza Miserere,habil,20,15390,129,119.3
+LINEAA,Plaza Miserere,habil,21,10352,129,80.2
+LINEAA,Plaza Miserere,habil,22,5026,129,39.0
+LINEAA,Plaza Miserere,habil,23,847,129,6.6
+LINEAA,Plaza de Mayo,fin_de_semana,2,1,52,0.0
+LINEAA,Plaza de Mayo,fin_de_semana,5,170,52,3.3
+LINEAA,Plaza de Mayo,fin_de_semana,6,1800,52,34.6
+LINEAA,Plaza de Mayo,fin_de_semana,7,4373,52,84.1
+LINEAA,Plaza de Mayo,fin_de_semana,8,7984,52,153.5
+LINEAA,Plaza de Mayo,fin_de_semana,9,8790,52,169.0
+LINEAA,Plaza de Mayo,fin_de_semana,10,7433,52,142.9
+LINEAA,Plaza de Mayo,fin_de_semana,11,7582,52,145.8
+LINEAA,Plaza de Mayo,fin_de_semana,12,7262,52,139.7
+LINEAA,Plaza de Mayo,fin_de_semana,13,7594,52,146.0
+LINEAA,Plaza de Mayo,fin_de_semana,14,7204,52,138.5
+LINEAA,Plaza de Mayo,fin_de_semana,15,8180,52,157.3
+LINEAA,Plaza de Mayo,fin_de_semana,16,10165,52,195.5
+LINEAA,Plaza de Mayo,fin_de_semana,17,11375,52,218.8
+LINEAA,Plaza de Mayo,fin_de_semana,18,12825,52,246.6
+LINEAA,Plaza de Mayo,fin_de_semana,19,12237,52,235.3
+LINEAA,Plaza de Mayo,fin_de_semana,20,9460,52,181.9
+LINEAA,Plaza de Mayo,fin_de_semana,21,6198,52,119.2
+LINEAA,Plaza de Mayo,fin_de_semana,22,3200,52,61.5
+LINEAA,Plaza de Mayo,fin_de_semana,23,847,52,16.3
+LINEAA,Plaza de Mayo,habil,0,3,129,0.0
+LINEAA,Plaza de Mayo,habil,1,3,129,0.0
+LINEAA,Plaza de Mayo,habil,3,12,129,0.1
+LINEAA,Plaza de Mayo,habil,4,47,129,0.4
+LINEAA,Plaza de Mayo,habil,5,4115,129,31.9
+LINEAA,Plaza de Mayo,habil,6,23967,129,185.8
+LINEAA,Plaza de Mayo,habil,7,39970,129,309.8
+LINEAA,Plaza de Mayo,habil,8,41640,129,322.8
+LINEAA,Plaza de Mayo,habil,9,43423,129,336.6
+LINEAA,Plaza de Mayo,habil,10,40666,129,315.2
+LINEAA,Plaza de Mayo,habil,11,49120,129,380.8
+LINEAA,Plaza de Mayo,habil,12,62238,129,482.5
+LINEAA,Plaza de Mayo,habil,13,77593,129,601.5
+LINEAA,Plaza de Mayo,habil,14,82933,129,642.9
+LINEAA,Plaza de Mayo,habil,15,125616,129,973.8
+LINEAA,Plaza de Mayo,habil,16,186239,129,1443.7
+LINEAA,Plaza de Mayo,habil,17,284428,129,2204.9
+LINEAA,Plaza de Mayo,habil,18,184880,129,1433.2
+LINEAA,Plaza de Mayo,habil,19,65852,129,510.5
+LINEAA,Plaza de Mayo,habil,20,38122,129,295.5
+LINEAA,Plaza de Mayo,habil,21,22410,129,173.7
+LINEAA,Plaza de Mayo,habil,22,12270,129,95.1
+LINEAA,Plaza de Mayo,habil,23,1958,129,15.2
+LINEAA,Primera Junta,fin_de_semana,0,53,52,1.0
+LINEAA,Primera Junta,fin_de_semana,1,50,52,1.0
+LINEAA,Primera Junta,fin_de_semana,2,28,52,0.5
+LINEAA,Primera Junta,fin_de_semana,3,47,52,0.9
+LINEAA,Primera Junta,fin_de_semana,4,31,52,0.6
+LINEAA,Primera Junta,fin_de_semana,5,170,52,3.3
+LINEAA,Primera Junta,fin_de_semana,6,1736,52,33.4
+LINEAA,Primera Junta,fin_de_semana,7,4015,52,77.2
+LINEAA,Primera Junta,fin_de_semana,8,7920,52,152.3
+LINEAA,Primera Junta,fin_de_semana,9,10121,52,194.6
+LINEAA,Primera Junta,fin_de_semana,10,11108,52,213.6
+LINEAA,Primera Junta,fin_de_semana,11,13846,52,266.3
+LINEAA,Primera Junta,fin_de_semana,12,14300,52,275.0
+LINEAA,Primera Junta,fin_de_semana,13,13537,52,260.3
+LINEAA,Primera Junta,fin_de_semana,14,12602,52,242.3
+LINEAA,Primera Junta,fin_de_semana,15,13494,52,259.5
+LINEAA,Primera Junta,fin_de_semana,16,14583,52,280.4
+LINEAA,Primera Junta,fin_de_semana,17,12879,52,247.7
+LINEAA,Primera Junta,fin_de_semana,18,12912,52,248.3
+LINEAA,Primera Junta,fin_de_semana,19,12532,52,241.0
+LINEAA,Primera Junta,fin_de_semana,20,10233,52,196.8
+LINEAA,Primera Junta,fin_de_semana,21,6100,52,117.3
+LINEAA,Primera Junta,fin_de_semana,22,2171,52,41.8
+LINEAA,Primera Junta,fin_de_semana,23,571,52,11.0
+LINEAA,Primera Junta,habil,0,101,129,0.8
+LINEAA,Primera Junta,habil,1,131,129,1.0
+LINEAA,Primera Junta,habil,2,109,129,0.8
+LINEAA,Primera Junta,habil,3,103,129,0.8
+LINEAA,Primera Junta,habil,4,172,129,1.3
+LINEAA,Primera Junta,habil,5,7559,129,58.6
+LINEAA,Primera Junta,habil,6,39131,129,303.3
+LINEAA,Primera Junta,habil,7,125290,129,971.2
+LINEAA,Primera Junta,habil,8,156353,129,1212.0
+LINEAA,Primera Junta,habil,9,118824,129,921.1
+LINEAA,Primera Junta,habil,10,70461,129,546.2
+LINEAA,Primera Junta,habil,11,78009,129,604.7
+LINEAA,Primera Junta,habil,12,74239,129,575.5
+LINEAA,Primera Junta,habil,13,69751,129,540.7
+LINEAA,Primera Junta,habil,14,55082,129,427.0
+LINEAA,Primera Junta,habil,15,55131,129,427.4
+LINEAA,Primera Junta,habil,16,64289,129,498.4
+LINEAA,Primera Junta,habil,17,69567,129,539.3
+LINEAA,Primera Junta,habil,18,60035,129,465.4
+LINEAA,Primera Junta,habil,19,41745,129,323.6
+LINEAA,Primera Junta,habil,20,30049,129,232.9
+LINEAA,Primera Junta,habil,21,16617,129,128.8
+LINEAA,Primera Junta,habil,22,7438,129,57.7
+LINEAA,Primera Junta,habil,23,459,129,3.6
+LINEAA,Puan,fin_de_semana,0,5,52,0.1
+LINEAA,Puan,fin_de_semana,4,1,52,0.0
+LINEAA,Puan,fin_de_semana,5,40,52,0.8
+LINEAA,Puan,fin_de_semana,6,522,52,10.0
+LINEAA,Puan,fin_de_semana,7,1683,52,32.4
+LINEAA,Puan,fin_de_semana,8,3228,52,62.1
+LINEAA,Puan,fin_de_semana,9,4858,52,93.4
+LINEAA,Puan,fin_de_semana,10,5941,52,114.2
+LINEAA,Puan,fin_de_semana,11,7095,52,136.4
+LINEAA,Puan,fin_de_semana,12,7340,52,141.2
+LINEAA,Puan,fin_de_semana,13,6780,52,130.4
+LINEAA,Puan,fin_de_semana,14,6561,52,126.2
+LINEAA,Puan,fin_de_semana,15,6708,52,129.0
+LINEAA,Puan,fin_de_semana,16,7687,52,147.8
+LINEAA,Puan,fin_de_semana,17,7294,52,140.3
+LINEAA,Puan,fin_de_semana,18,6984,52,134.3
+LINEAA,Puan,fin_de_semana,19,6296,52,121.1
+LINEAA,Puan,fin_de_semana,20,4903,52,94.3
+LINEAA,Puan,fin_de_semana,21,3040,52,58.5
+LINEAA,Puan,fin_de_semana,22,1159,52,22.3
+LINEAA,Puan,fin_de_semana,23,294,52,5.7
+LINEAA,Puan,habil,0,1,129,0.0
+LINEAA,Puan,habil,1,1,129,0.0
+LINEAA,Puan,habil,3,15,129,0.1
+LINEAA,Puan,habil,4,145,129,1.1
+LINEAA,Puan,habil,5,2497,129,19.4
+LINEAA,Puan,habil,6,18277,129,141.7
+LINEAA,Puan,habil,7,75123,129,582.3
+LINEAA,Puan,habil,8,88607,129,686.9
+LINEAA,Puan,habil,9,61554,129,477.2
+LINEAA,Puan,habil,10,36906,129,286.1
+LINEAA,Puan,habil,11,40647,129,315.1
+LINEAA,Puan,habil,12,39927,129,309.5
+LINEAA,Puan,habil,13,36717,129,284.6
+LINEAA,Puan,habil,14,29326,129,227.3
+LINEAA,Puan,habil,15,31569,129,244.7
+LINEAA,Puan,habil,16,42924,129,332.7
+LINEAA,Puan,habil,17,41826,129,324.2
+LINEAA,Puan,habil,18,38335,129,297.2
+LINEAA,Puan,habil,19,25605,129,198.5
+LINEAA,Puan,habil,20,21528,129,166.9
+LINEAA,Puan,habil,21,11856,129,91.9
+LINEAA,Puan,habil,22,6486,129,50.3
+LINEAA,Puan,habil,23,145,129,1.1
+LINEAA,Rio de Janeiro,fin_de_semana,0,7,52,0.1
+LINEAA,Rio de Janeiro,fin_de_semana,4,5,52,0.1
+LINEAA,Rio de Janeiro,fin_de_semana,5,69,52,1.3
+LINEAA,Rio de Janeiro,fin_de_semana,6,567,52,10.9
+LINEAA,Rio de Janeiro,fin_de_semana,7,2167,52,41.7
+LINEAA,Rio de Janeiro,fin_de_semana,8,4171,52,80.2
+LINEAA,Rio de Janeiro,fin_de_semana,9,6537,52,125.7
+LINEAA,Rio de Janeiro,fin_de_semana,10,7601,52,146.2
+LINEAA,Rio de Janeiro,fin_de_semana,11,9703,52,186.6
+LINEAA,Rio de Janeiro,fin_de_semana,12,10306,52,198.2
+LINEAA,Rio de Janeiro,fin_de_semana,13,9666,52,185.9
+LINEAA,Rio de Janeiro,fin_de_semana,14,9015,52,173.4
+LINEAA,Rio de Janeiro,fin_de_semana,15,9861,52,189.6
+LINEAA,Rio de Janeiro,fin_de_semana,16,11568,52,222.5
+LINEAA,Rio de Janeiro,fin_de_semana,17,10936,52,210.3
+LINEAA,Rio de Janeiro,fin_de_semana,18,10497,52,201.9
+LINEAA,Rio de Janeiro,fin_de_semana,19,9852,52,189.5
+LINEAA,Rio de Janeiro,fin_de_semana,20,8119,52,156.1
+LINEAA,Rio de Janeiro,fin_de_semana,21,5222,52,100.4
+LINEAA,Rio de Janeiro,fin_de_semana,22,2290,52,44.0
+LINEAA,Rio de Janeiro,fin_de_semana,23,576,52,11.1
+LINEAA,Rio de Janeiro,habil,4,75,129,0.6
+LINEAA,Rio de Janeiro,habil,5,2018,129,15.6
+LINEAA,Rio de Janeiro,habil,6,16174,129,125.4
+LINEAA,Rio de Janeiro,habil,7,75381,129,584.3
+LINEAA,Rio de Janeiro,habil,8,98328,129,762.2
+LINEAA,Rio de Janeiro,habil,9,77266,129,599.0
+LINEAA,Rio de Janeiro,habil,10,48800,129,378.3
+LINEAA,Rio de Janeiro,habil,11,52948,129,410.4
+LINEAA,Rio de Janeiro,habil,12,58980,129,457.2
+LINEAA,Rio de Janeiro,habil,13,57251,129,443.8
+LINEAA,Rio de Janeiro,habil,14,45510,129,352.8
+LINEAA,Rio de Janeiro,habil,15,46592,129,361.2
+LINEAA,Rio de Janeiro,habil,16,64384,129,499.1
+LINEAA,Rio de Janeiro,habil,17,63610,129,493.1
+LINEAA,Rio de Janeiro,habil,18,53280,129,413.0
+LINEAA,Rio de Janeiro,habil,19,37633,129,291.7
+LINEAA,Rio de Janeiro,habil,20,26810,129,207.8
+LINEAA,Rio de Janeiro,habil,21,16725,129,129.7
+LINEAA,Rio de Janeiro,habil,22,7601,129,58.9
+LINEAA,Rio de Janeiro,habil,23,812,129,6.3
+LINEAA,Saenz Peña,fin_de_semana,0,8,52,0.2
+LINEAA,Saenz Peña,fin_de_semana,5,60,52,1.2
+LINEAA,Saenz Peña,fin_de_semana,6,729,52,14.0
+LINEAA,Saenz Peña,fin_de_semana,7,1812,52,34.8
+LINEAA,Saenz Peña,fin_de_semana,8,3903,52,75.1
+LINEAA,Saenz Peña,fin_de_semana,9,5303,52,102.0
+LINEAA,Saenz Peña,fin_de_semana,10,6128,52,117.8
+LINEAA,Saenz Peña,fin_de_semana,11,7723,52,148.5
+LINEAA,Saenz Peña,fin_de_semana,12,7894,52,151.8
+LINEAA,Saenz Peña,fin_de_semana,13,8313,52,159.9
+LINEAA,Saenz Peña,fin_de_semana,14,6969,52,134.0
+LINEAA,Saenz Peña,fin_de_semana,15,7230,52,139.0
+LINEAA,Saenz Peña,fin_de_semana,16,7732,52,148.7
+LINEAA,Saenz Peña,fin_de_semana,17,7557,52,145.3
+LINEAA,Saenz Peña,fin_de_semana,18,7125,52,137.0
+LINEAA,Saenz Peña,fin_de_semana,19,7163,52,137.8
+LINEAA,Saenz Peña,fin_de_semana,20,6286,52,120.9
+LINEAA,Saenz Peña,fin_de_semana,21,5460,52,105.0
+LINEAA,Saenz Peña,fin_de_semana,22,3621,52,69.6
+LINEAA,Saenz Peña,fin_de_semana,23,1446,52,27.8
+LINEAA,Saenz Peña,habil,0,1,129,0.0
+LINEAA,Saenz Peña,habil,1,3,129,0.0
+LINEAA,Saenz Peña,habil,4,34,129,0.3
+LINEAA,Saenz Peña,habil,5,1464,129,11.3
+LINEAA,Saenz Peña,habil,6,8016,129,62.1
+LINEAA,Saenz Peña,habil,7,23900,129,185.3
+LINEAA,Saenz Peña,habil,8,29041,129,225.1
+LINEAA,Saenz Peña,habil,9,30286,129,234.8
+LINEAA,Saenz Peña,habil,10,33671,129,261.0
+LINEAA,Saenz Peña,habil,11,42686,129,330.9
+LINEAA,Saenz Peña,habil,12,53785,129,416.9
+LINEAA,Saenz Peña,habil,13,63926,129,495.6
+LINEAA,Saenz Peña,habil,14,71773,129,556.4
+LINEAA,Saenz Peña,habil,15,90246,129,699.6
+LINEAA,Saenz Peña,habil,16,104840,129,812.7
+LINEAA,Saenz Peña,habil,17,106582,129,826.2
+LINEAA,Saenz Peña,habil,18,83593,129,648.0
+LINEAA,Saenz Peña,habil,19,45787,129,354.9
+LINEAA,Saenz Peña,habil,20,34978,129,271.1
+LINEAA,Saenz Peña,habil,21,18094,129,140.3
+LINEAA,Saenz Peña,habil,22,10382,129,80.5
+LINEAA,Saenz Peña,habil,23,2372,129,18.4
+LINEAA,San Pedrito,fin_de_semana,0,3,52,0.1
+LINEAA,San Pedrito,fin_de_semana,4,2,52,0.0
+LINEAA,San Pedrito,fin_de_semana,5,359,52,6.9
+LINEAA,San Pedrito,fin_de_semana,6,3531,52,67.9
+LINEAA,San Pedrito,fin_de_semana,7,9694,52,186.4
+LINEAA,San Pedrito,fin_de_semana,8,18100,52,348.1
+LINEAA,San Pedrito,fin_de_semana,9,20674,52,397.6
+LINEAA,San Pedrito,fin_de_semana,10,23215,52,446.4
+LINEAA,San Pedrito,fin_de_semana,11,34590,52,665.2
+LINEAA,San Pedrito,fin_de_semana,12,45365,52,872.4
+LINEAA,San Pedrito,fin_de_semana,13,52321,52,1006.2
+LINEAA,San Pedrito,fin_de_semana,14,44594,52,857.6
+LINEAA,San Pedrito,fin_de_semana,15,34550,52,664.4
+LINEAA,San Pedrito,fin_de_semana,16,26473,52,509.1
+LINEAA,San Pedrito,fin_de_semana,17,20690,52,397.9
+LINEAA,San Pedrito,fin_de_semana,18,16788,52,322.8
+LINEAA,San Pedrito,fin_de_semana,19,14303,52,275.1
+LINEAA,San Pedrito,fin_de_semana,20,10542,52,202.7
+LINEAA,San Pedrito,fin_de_semana,21,6472,52,124.5
+LINEAA,San Pedrito,fin_de_semana,22,2203,52,42.4
+LINEAA,San Pedrito,fin_de_semana,23,587,52,11.3
+LINEAA,San Pedrito,habil,0,1,129,0.0
+LINEAA,San Pedrito,habil,1,1,129,0.0
+LINEAA,San Pedrito,habil,3,1,129,0.0
+LINEAA,San Pedrito,habil,4,212,129,1.6
+LINEAA,San Pedrito,habil,5,18100,129,140.3
+LINEAA,San Pedrito,habil,6,117498,129,910.8
+LINEAA,San Pedrito,habil,7,325788,129,2525.5
+LINEAA,San Pedrito,habil,8,377063,129,2923.0
+LINEAA,San Pedrito,habil,9,238335,129,1847.6
+LINEAA,San Pedrito,habil,10,134934,129,1046.0
+LINEAA,San Pedrito,habil,11,152559,129,1182.6
+LINEAA,San Pedrito,habil,12,158561,129,1229.2
+LINEAA,San Pedrito,habil,13,152254,129,1180.3
+LINEAA,San Pedrito,habil,14,124067,129,961.8
+LINEAA,San Pedrito,habil,15,124849,129,967.8
+LINEAA,San Pedrito,habil,16,152476,129,1182.0
+LINEAA,San Pedrito,habil,17,157934,129,1224.3
+LINEAA,San Pedrito,habil,18,78437,129,608.0
+LINEAA,San Pedrito,habil,19,38070,129,295.1
+LINEAA,San Pedrito,habil,20,23062,129,178.8
+LINEAA,San Pedrito,habil,21,13810,129,107.1
+LINEAA,San Pedrito,habil,22,6365,129,49.3
+LINEAA,San Pedrito,habil,23,18,129,0.1
+LINEAB,Angel Gallardo,fin_de_semana,0,18,52,0.3
+LINEAB,Angel Gallardo,fin_de_semana,1,7,52,0.1
+LINEAB,Angel Gallardo,fin_de_semana,2,1,52,0.0
+LINEAB,Angel Gallardo,fin_de_semana,4,2,52,0.0
+LINEAB,Angel Gallardo,fin_de_semana,5,93,52,1.8
+LINEAB,Angel Gallardo,fin_de_semana,6,1435,52,27.6
+LINEAB,Angel Gallardo,fin_de_semana,7,3243,52,62.4
+LINEAB,Angel Gallardo,fin_de_semana,8,6689,52,128.6
+LINEAB,Angel Gallardo,fin_de_semana,9,9278,52,178.4
+LINEAB,Angel Gallardo,fin_de_semana,10,11611,52,223.3
+LINEAB,Angel Gallardo,fin_de_semana,11,15443,52,297.0
+LINEAB,Angel Gallardo,fin_de_semana,12,17235,52,331.4
+LINEAB,Angel Gallardo,fin_de_semana,13,18145,52,348.9
+LINEAB,Angel Gallardo,fin_de_semana,14,16680,52,320.8
+LINEAB,Angel Gallardo,fin_de_semana,15,18717,52,359.9
+LINEAB,Angel Gallardo,fin_de_semana,16,21500,52,413.5
+LINEAB,Angel Gallardo,fin_de_semana,17,21599,52,415.4
+LINEAB,Angel Gallardo,fin_de_semana,18,22411,52,431.0
+LINEAB,Angel Gallardo,fin_de_semana,19,22478,52,432.3
+LINEAB,Angel Gallardo,fin_de_semana,20,18836,52,362.2
+LINEAB,Angel Gallardo,fin_de_semana,21,10918,52,210.0
+LINEAB,Angel Gallardo,fin_de_semana,22,4036,52,77.6
+LINEAB,Angel Gallardo,fin_de_semana,23,1123,52,21.6
+LINEAB,Angel Gallardo,habil,0,1,129,0.0
+LINEAB,Angel Gallardo,habil,1,1,129,0.0
+LINEAB,Angel Gallardo,habil,4,65,129,0.5
+LINEAB,Angel Gallardo,habil,5,4500,129,34.9
+LINEAB,Angel Gallardo,habil,6,29533,129,228.9
+LINEAB,Angel Gallardo,habil,7,108537,129,841.4
+LINEAB,Angel Gallardo,habil,8,146678,129,1137.0
+LINEAB,Angel Gallardo,habil,9,125172,129,970.3
+LINEAB,Angel Gallardo,habil,10,85038,129,659.2
+LINEAB,Angel Gallardo,habil,11,90742,129,703.4
+LINEAB,Angel Gallardo,habil,12,95892,129,743.3
+LINEAB,Angel Gallardo,habil,13,93394,129,724.0
+LINEAB,Angel Gallardo,habil,14,80226,129,621.9
+LINEAB,Angel Gallardo,habil,15,85496,129,662.8
+LINEAB,Angel Gallardo,habil,16,110818,129,859.1
+LINEAB,Angel Gallardo,habil,17,112871,129,875.0
+LINEAB,Angel Gallardo,habil,18,102479,129,794.4
+LINEAB,Angel Gallardo,habil,19,71082,129,551.0
+LINEAB,Angel Gallardo,habil,20,55821,129,432.7
+LINEAB,Angel Gallardo,habil,21,32452,129,251.6
+LINEAB,Angel Gallardo,habil,22,15988,129,123.9
+LINEAB,Angel Gallardo,habil,23,2157,129,16.7
+LINEAB,Callao.B,fin_de_semana,0,1429,52,27.5
+LINEAB,Callao.B,fin_de_semana,1,405,52,7.8
+LINEAB,Callao.B,fin_de_semana,4,2,52,0.0
+LINEAB,Callao.B,fin_de_semana,5,150,52,2.9
+LINEAB,Callao.B,fin_de_semana,6,1758,52,33.8
+LINEAB,Callao.B,fin_de_semana,7,3765,52,72.4
+LINEAB,Callao.B,fin_de_semana,8,5930,52,114.0
+LINEAB,Callao.B,fin_de_semana,9,7659,52,147.3
+LINEAB,Callao.B,fin_de_semana,10,9137,52,175.7
+LINEAB,Callao.B,fin_de_semana,11,12170,52,234.0
+LINEAB,Callao.B,fin_de_semana,12,13970,52,268.7
+LINEAB,Callao.B,fin_de_semana,13,15746,52,302.8
+LINEAB,Callao.B,fin_de_semana,14,14470,52,278.3
+LINEAB,Callao.B,fin_de_semana,15,15311,52,294.4
+LINEAB,Callao.B,fin_de_semana,16,16560,52,318.5
+LINEAB,Callao.B,fin_de_semana,17,16671,52,320.6
+LINEAB,Callao.B,fin_de_semana,18,18150,52,349.0
+LINEAB,Callao.B,fin_de_semana,19,19558,52,376.1
+LINEAB,Callao.B,fin_de_semana,20,17799,52,342.3
+LINEAB,Callao.B,fin_de_semana,21,15787,52,303.6
+LINEAB,Callao.B,fin_de_semana,22,10858,52,208.8
+LINEAB,Callao.B,fin_de_semana,23,5627,52,108.2
+LINEAB,Callao.B,habil,0,2,129,0.0
+LINEAB,Callao.B,habil,1,1,129,0.0
+LINEAB,Callao.B,habil,3,1,129,0.0
+LINEAB,Callao.B,habil,4,13,129,0.1
+LINEAB,Callao.B,habil,5,3580,129,27.8
+LINEAB,Callao.B,habil,6,15787,129,122.4
+LINEAB,Callao.B,habil,7,36946,129,286.4
+LINEAB,Callao.B,habil,8,47597,129,369.0
+LINEAB,Callao.B,habil,9,49523,129,383.9
+LINEAB,Callao.B,habil,10,55069,129,426.9
+LINEAB,Callao.B,habil,11,73490,129,569.7
+LINEAB,Callao.B,habil,12,97380,129,754.9
+LINEAB,Callao.B,habil,13,105309,129,816.3
+LINEAB,Callao.B,habil,14,98693,129,765.1
+LINEAB,Callao.B,habil,15,119964,129,930.0
+LINEAB,Callao.B,habil,16,147464,129,1143.1
+LINEAB,Callao.B,habil,17,152484,129,1182.0
+LINEAB,Callao.B,habil,18,136807,129,1060.5
+LINEAB,Callao.B,habil,19,91396,129,708.5
+LINEAB,Callao.B,habil,20,73073,129,566.5
+LINEAB,Callao.B,habil,21,53223,129,412.6
+LINEAB,Callao.B,habil,22,31964,129,247.8
+LINEAB,Callao.B,habil,23,8220,129,63.7
+LINEAB,Carlos Gardel,fin_de_semana,0,48,52,0.9
+LINEAB,Carlos Gardel,fin_de_semana,1,3,52,0.1
+LINEAB,Carlos Gardel,fin_de_semana,4,1,52,0.0
+LINEAB,Carlos Gardel,fin_de_semana,5,92,52,1.8
+LINEAB,Carlos Gardel,fin_de_semana,6,901,52,17.3
+LINEAB,Carlos Gardel,fin_de_semana,7,1614,52,31.0
+LINEAB,Carlos Gardel,fin_de_semana,8,3363,52,64.7
+LINEAB,Carlos Gardel,fin_de_semana,9,4743,52,91.2
+LINEAB,Carlos Gardel,fin_de_semana,10,7228,52,139.0
+LINEAB,Carlos Gardel,fin_de_semana,11,11261,52,216.6
+LINEAB,Carlos Gardel,fin_de_semana,12,14815,52,284.9
+LINEAB,Carlos Gardel,fin_de_semana,13,17437,52,335.3
+LINEAB,Carlos Gardel,fin_de_semana,14,20403,52,392.4
+LINEAB,Carlos Gardel,fin_de_semana,15,25603,52,492.4
+LINEAB,Carlos Gardel,fin_de_semana,16,31479,52,605.4
+LINEAB,Carlos Gardel,fin_de_semana,17,35482,52,682.3
+LINEAB,Carlos Gardel,fin_de_semana,18,38425,52,738.9
+LINEAB,Carlos Gardel,fin_de_semana,19,38159,52,733.8
+LINEAB,Carlos Gardel,fin_de_semana,20,32772,52,630.2
+LINEAB,Carlos Gardel,fin_de_semana,21,26065,52,501.2
+LINEAB,Carlos Gardel,fin_de_semana,22,17577,52,338.0
+LINEAB,Carlos Gardel,fin_de_semana,23,3059,52,58.8
+LINEAB,Carlos Gardel,habil,0,2,129,0.0
+LINEAB,Carlos Gardel,habil,1,1,129,0.0
+LINEAB,Carlos Gardel,habil,2,1,129,0.0
+LINEAB,Carlos Gardel,habil,4,23,129,0.2
+LINEAB,Carlos Gardel,habil,5,1684,129,13.1
+LINEAB,Carlos Gardel,habil,6,10314,129,80.0
+LINEAB,Carlos Gardel,habil,7,30687,129,237.9
+LINEAB,Carlos Gardel,habil,8,35745,129,277.1
+LINEAB,Carlos Gardel,habil,9,32002,129,248.1
+LINEAB,Carlos Gardel,habil,10,31875,129,247.1
+LINEAB,Carlos Gardel,habil,11,41334,129,320.4
+LINEAB,Carlos Gardel,habil,12,52854,129,409.7
+LINEAB,Carlos Gardel,habil,13,58702,129,455.1
+LINEAB,Carlos Gardel,habil,14,58418,129,452.9
+LINEAB,Carlos Gardel,habil,15,68742,129,532.9
+LINEAB,Carlos Gardel,habil,16,89436,129,693.3
+LINEAB,Carlos Gardel,habil,17,90917,129,704.8
+LINEAB,Carlos Gardel,habil,18,87979,129,682.0
+LINEAB,Carlos Gardel,habil,19,72967,129,565.6
+LINEAB,Carlos Gardel,habil,20,62000,129,480.6
+LINEAB,Carlos Gardel,habil,21,46848,129,363.2
+LINEAB,Carlos Gardel,habil,22,39657,129,307.4
+LINEAB,Carlos Gardel,habil,23,4491,129,34.8
+LINEAB,Carlos Pellegrini,fin_de_semana,0,4690,52,90.2
+LINEAB,Carlos Pellegrini,fin_de_semana,1,1643,52,31.6
+LINEAB,Carlos Pellegrini,fin_de_semana,4,5,52,0.1
+LINEAB,Carlos Pellegrini,fin_de_semana,5,336,52,6.5
+LINEAB,Carlos Pellegrini,fin_de_semana,6,2268,52,43.6
+LINEAB,Carlos Pellegrini,fin_de_semana,7,4068,52,78.2
+LINEAB,Carlos Pellegrini,fin_de_semana,8,8021,52,154.2
+LINEAB,Carlos Pellegrini,fin_de_semana,9,10401,52,200.0
+LINEAB,Carlos Pellegrini,fin_de_semana,10,13633,52,262.2
+LINEAB,Carlos Pellegrini,fin_de_semana,11,18178,52,349.6
+LINEAB,Carlos Pellegrini,fin_de_semana,12,20662,52,397.3
+LINEAB,Carlos Pellegrini,fin_de_semana,13,22010,52,423.3
+LINEAB,Carlos Pellegrini,fin_de_semana,14,20850,52,401.0
+LINEAB,Carlos Pellegrini,fin_de_semana,15,23601,52,453.9
+LINEAB,Carlos Pellegrini,fin_de_semana,16,26929,52,517.9
+LINEAB,Carlos Pellegrini,fin_de_semana,17,28538,52,548.8
+LINEAB,Carlos Pellegrini,fin_de_semana,18,30832,52,592.9
+LINEAB,Carlos Pellegrini,fin_de_semana,19,32638,52,627.7
+LINEAB,Carlos Pellegrini,fin_de_semana,20,30371,52,584.1
+LINEAB,Carlos Pellegrini,fin_de_semana,21,26640,52,512.3
+LINEAB,Carlos Pellegrini,fin_de_semana,22,21278,52,409.2
+LINEAB,Carlos Pellegrini,fin_de_semana,23,10504,52,202.0
+LINEAB,Carlos Pellegrini,habil,0,1,129,0.0
+LINEAB,Carlos Pellegrini,habil,1,2,129,0.0
+LINEAB,Carlos Pellegrini,habil,4,104,129,0.8
+LINEAB,Carlos Pellegrini,habil,5,7146,129,55.4
+LINEAB,Carlos Pellegrini,habil,6,24404,129,189.2
+LINEAB,Carlos Pellegrini,habil,7,44058,129,341.5
+LINEAB,Carlos Pellegrini,habil,8,49239,129,381.7
+LINEAB,Carlos Pellegrini,habil,9,49365,129,382.7
+LINEAB,Carlos Pellegrini,habil,10,56951,129,441.5
+LINEAB,Carlos Pellegrini,habil,11,74554,129,577.9
+LINEAB,Carlos Pellegrini,habil,12,97149,129,753.1
+LINEAB,Carlos Pellegrini,habil,13,142270,129,1102.9
+LINEAB,Carlos Pellegrini,habil,14,132896,129,1030.2
+LINEAB,Carlos Pellegrini,habil,15,152432,129,1181.6
+LINEAB,Carlos Pellegrini,habil,16,175226,129,1358.3
+LINEAB,Carlos Pellegrini,habil,17,203614,129,1578.4
+LINEAB,Carlos Pellegrini,habil,18,196346,129,1522.1
+LINEAB,Carlos Pellegrini,habil,19,107355,129,832.2
+LINEAB,Carlos Pellegrini,habil,20,84946,129,658.5
+LINEAB,Carlos Pellegrini,habil,21,59974,129,464.9
+LINEAB,Carlos Pellegrini,habil,22,49255,129,381.8
+LINEAB,Carlos Pellegrini,habil,23,14776,129,114.5
+LINEAB,Dorrego,fin_de_semana,0,6802,52,130.8
+LINEAB,Dorrego,fin_de_semana,1,623,52,12.0
+LINEAB,Dorrego,fin_de_semana,4,1,52,0.0
+LINEAB,Dorrego,fin_de_semana,5,158,52,3.0
+LINEAB,Dorrego,fin_de_semana,6,1745,52,33.6
+LINEAB,Dorrego,fin_de_semana,7,3370,52,64.8
+LINEAB,Dorrego,fin_de_semana,8,7362,52,141.6
+LINEAB,Dorrego,fin_de_semana,9,8390,52,161.3
+LINEAB,Dorrego,fin_de_semana,10,9559,52,183.8
+LINEAB,Dorrego,fin_de_semana,11,11945,52,229.7
+LINEAB,Dorrego,fin_de_semana,12,12949,52,249.0
+LINEAB,Dorrego,fin_de_semana,13,13623,52,262.0
+LINEAB,Dorrego,fin_de_semana,14,13704,52,263.5
+LINEAB,Dorrego,fin_de_semana,15,14773,52,284.1
+LINEAB,Dorrego,fin_de_semana,16,16645,52,320.1
+LINEAB,Dorrego,fin_de_semana,17,16011,52,307.9
+LINEAB,Dorrego,fin_de_semana,18,17393,52,334.5
+LINEAB,Dorrego,fin_de_semana,19,16270,52,312.9
+LINEAB,Dorrego,fin_de_semana,20,12732,52,244.8
+LINEAB,Dorrego,fin_de_semana,21,9320,52,179.2
+LINEAB,Dorrego,fin_de_semana,22,5939,52,114.2
+LINEAB,Dorrego,fin_de_semana,23,7901,52,151.9
+LINEAB,Dorrego,habil,0,1,129,0.0
+LINEAB,Dorrego,habil,3,1,129,0.0
+LINEAB,Dorrego,habil,4,55,129,0.4
+LINEAB,Dorrego,habil,5,4270,129,33.1
+LINEAB,Dorrego,habil,6,26500,129,205.4
+LINEAB,Dorrego,habil,7,71064,129,550.9
+LINEAB,Dorrego,habil,8,102264,129,792.7
+LINEAB,Dorrego,habil,9,81393,129,631.0
+LINEAB,Dorrego,habil,10,60724,129,470.7
+LINEAB,Dorrego,habil,11,57862,129,448.5
+LINEAB,Dorrego,habil,12,59650,129,462.4
+LINEAB,Dorrego,habil,13,56198,129,435.6
+LINEAB,Dorrego,habil,14,54458,129,422.2
+LINEAB,Dorrego,habil,15,60176,129,466.5
+LINEAB,Dorrego,habil,16,84825,129,657.6
+LINEAB,Dorrego,habil,17,101304,129,785.3
+LINEAB,Dorrego,habil,18,88865,129,688.9
+LINEAB,Dorrego,habil,19,49635,129,384.8
+LINEAB,Dorrego,habil,20,35932,129,278.5
+LINEAB,Dorrego,habil,21,24186,129,187.5
+LINEAB,Dorrego,habil,22,19192,129,148.8
+LINEAB,Dorrego,habil,23,13106,129,101.6
+LINEAB,Echeverria,fin_de_semana,4,1,52,0.0
+LINEAB,Echeverria,fin_de_semana,5,80,52,1.5
+LINEAB,Echeverria,fin_de_semana,6,510,52,9.8
+LINEAB,Echeverria,fin_de_semana,7,1468,52,28.2
+LINEAB,Echeverria,fin_de_semana,8,3243,52,62.4
+LINEAB,Echeverria,fin_de_semana,9,3998,52,76.9
+LINEAB,Echeverria,fin_de_semana,10,4840,52,93.1
+LINEAB,Echeverria,fin_de_semana,11,5858,52,112.7
+LINEAB,Echeverria,fin_de_semana,12,6362,52,122.3
+LINEAB,Echeverria,fin_de_semana,13,6532,52,125.6
+LINEAB,Echeverria,fin_de_semana,14,6457,52,124.2
+LINEAB,Echeverria,fin_de_semana,15,7235,52,139.1
+LINEAB,Echeverria,fin_de_semana,16,7686,52,147.8
+LINEAB,Echeverria,fin_de_semana,17,7918,52,152.3
+LINEAB,Echeverria,fin_de_semana,18,7402,52,142.3
+LINEAB,Echeverria,fin_de_semana,19,7732,52,148.7
+LINEAB,Echeverria,fin_de_semana,20,6344,52,122.0
+LINEAB,Echeverria,fin_de_semana,21,3390,52,65.2
+LINEAB,Echeverria,fin_de_semana,22,1063,52,20.4
+LINEAB,Echeverria,fin_de_semana,23,240,52,4.6
+LINEAB,Echeverria,habil,3,1,129,0.0
+LINEAB,Echeverria,habil,4,39,129,0.3
+LINEAB,Echeverria,habil,5,2593,129,20.1
+LINEAB,Echeverria,habil,6,24311,129,188.5
+LINEAB,Echeverria,habil,7,68989,129,534.8
+LINEAB,Echeverria,habil,8,86623,129,671.5
+LINEAB,Echeverria,habil,9,53701,129,416.3
+LINEAB,Echeverria,habil,10,30474,129,236.2
+LINEAB,Echeverria,habil,11,34111,129,264.4
+LINEAB,Echeverria,habil,12,31024,129,240.5
+LINEAB,Echeverria,habil,13,29633,129,229.7
+LINEAB,Echeverria,habil,14,24266,129,188.1
+LINEAB,Echeverria,habil,15,27306,129,211.7
+LINEAB,Echeverria,habil,16,35619,129,276.1
+LINEAB,Echeverria,habil,17,40351,129,312.8
+LINEAB,Echeverria,habil,18,31322,129,242.8
+LINEAB,Echeverria,habil,19,23109,129,179.1
+LINEAB,Echeverria,habil,20,17233,129,133.6
+LINEAB,Echeverria,habil,21,8656,129,67.1
+LINEAB,Echeverria,habil,22,3925,129,30.4
+LINEAB,Echeverria,habil,23,43,129,0.3
+LINEAB,Federico Lacroze,fin_de_semana,0,1846,52,35.5
+LINEAB,Federico Lacroze,fin_de_semana,1,290,52,5.6
+LINEAB,Federico Lacroze,fin_de_semana,2,3,52,0.1
+LINEAB,Federico Lacroze,fin_de_semana,4,5,52,0.1
+LINEAB,Federico Lacroze,fin_de_semana,5,864,52,16.6
+LINEAB,Federico Lacroze,fin_de_semana,6,4105,52,78.9
+LINEAB,Federico Lacroze,fin_de_semana,7,9297,52,178.8
+LINEAB,Federico Lacroze,fin_de_semana,8,17887,52,344.0
+LINEAB,Federico Lacroze,fin_de_semana,9,22176,52,426.5
+LINEAB,Federico Lacroze,fin_de_semana,10,20163,52,387.8
+LINEAB,Federico Lacroze,fin_de_semana,11,22354,52,429.9
+LINEAB,Federico Lacroze,fin_de_semana,12,22960,52,441.5
+LINEAB,Federico Lacroze,fin_de_semana,13,23556,52,453.0
+LINEAB,Federico Lacroze,fin_de_semana,14,22950,52,441.3
+LINEAB,Federico Lacroze,fin_de_semana,15,23421,52,450.4
+LINEAB,Federico Lacroze,fin_de_semana,16,24350,52,468.3
+LINEAB,Federico Lacroze,fin_de_semana,17,22367,52,430.1
+LINEAB,Federico Lacroze,fin_de_semana,18,21865,52,420.5
+LINEAB,Federico Lacroze,fin_de_semana,19,20873,52,401.4
+LINEAB,Federico Lacroze,fin_de_semana,20,16477,52,316.9
+LINEAB,Federico Lacroze,fin_de_semana,21,10275,52,197.6
+LINEAB,Federico Lacroze,fin_de_semana,22,3629,52,69.8
+LINEAB,Federico Lacroze,fin_de_semana,23,1971,52,37.9
+LINEAB,Federico Lacroze,habil,0,2,129,0.0
+LINEAB,Federico Lacroze,habil,1,4,129,0.0
+LINEAB,Federico Lacroze,habil,2,4,129,0.0
+LINEAB,Federico Lacroze,habil,3,8,129,0.1
+LINEAB,Federico Lacroze,habil,4,240,129,1.9
+LINEAB,Federico Lacroze,habil,5,26411,129,204.7
+LINEAB,Federico Lacroze,habil,6,107502,129,833.3
+LINEAB,Federico Lacroze,habil,7,232111,129,1799.3
+LINEAB,Federico Lacroze,habil,8,324709,129,2517.1
+LINEAB,Federico Lacroze,habil,9,233618,129,1811.0
+LINEAB,Federico Lacroze,habil,10,137484,129,1065.8
+LINEAB,Federico Lacroze,habil,11,126307,129,979.1
+LINEAB,Federico Lacroze,habil,12,125730,129,974.7
+LINEAB,Federico Lacroze,habil,13,122036,129,946.0
+LINEAB,Federico Lacroze,habil,14,99145,129,768.6
+LINEAB,Federico Lacroze,habil,15,96113,129,745.1
+LINEAB,Federico Lacroze,habil,16,110416,129,855.9
+LINEAB,Federico Lacroze,habil,17,131495,129,1019.3
+LINEAB,Federico Lacroze,habil,18,104016,129,806.3
+LINEAB,Federico Lacroze,habil,19,57783,129,447.9
+LINEAB,Federico Lacroze,habil,20,39224,129,304.1
+LINEAB,Federico Lacroze,habil,21,25066,129,194.3
+LINEAB,Federico Lacroze,habil,22,12373,129,95.9
+LINEAB,Federico Lacroze,habil,23,1599,129,12.4
+LINEAB,Florida,fin_de_semana,0,1,52,0.0
+LINEAB,Florida,fin_de_semana,5,34,52,0.7
+LINEAB,Florida,fin_de_semana,6,429,52,8.2
+LINEAB,Florida,fin_de_semana,7,780,52,15.0
+LINEAB,Florida,fin_de_semana,8,1506,52,29.0
+LINEAB,Florida,fin_de_semana,9,2142,52,41.2
+LINEAB,Florida,fin_de_semana,10,3644,52,70.1
+LINEAB,Florida,fin_de_semana,11,5620,52,108.1
+LINEAB,Florida,fin_de_semana,12,7303,52,140.4
+LINEAB,Florida,fin_de_semana,13,9126,52,175.5
+LINEAB,Florida,fin_de_semana,14,9076,52,174.5
+LINEAB,Florida,fin_de_semana,15,9709,52,186.7
+LINEAB,Florida,fin_de_semana,16,11258,52,216.5
+LINEAB,Florida,fin_de_semana,17,12508,52,240.5
+LINEAB,Florida,fin_de_semana,18,13556,52,260.7
+LINEAB,Florida,fin_de_semana,19,13263,52,255.1
+LINEAB,Florida,fin_de_semana,20,10460,52,201.2
+LINEAB,Florida,fin_de_semana,21,8487,52,163.2
+LINEAB,Florida,fin_de_semana,22,4417,52,84.9
+LINEAB,Florida,fin_de_semana,23,1595,52,30.7
+LINEAB,Florida,habil,0,6,129,0.0
+LINEAB,Florida,habil,1,1,129,0.0
+LINEAB,Florida,habil,3,2,129,0.0
+LINEAB,Florida,habil,4,17,129,0.1
+LINEAB,Florida,habil,5,572,129,4.4
+LINEAB,Florida,habil,6,2421,129,18.8
+LINEAB,Florida,habil,7,8182,129,63.4
+LINEAB,Florida,habil,8,12423,129,96.3
+LINEAB,Florida,habil,9,17033,129,132.0
+LINEAB,Florida,habil,10,29213,129,226.5
+LINEAB,Florida,habil,11,45574,129,353.3
+LINEAB,Florida,habil,12,61262,129,474.9
+LINEAB,Florida,habil,13,69204,129,536.5
+LINEAB,Florida,habil,14,86514,129,670.7
+LINEAB,Florida,habil,15,125935,129,976.2
+LINEAB,Florida,habil,16,154111,129,1194.7
+LINEAB,Florida,habil,17,215221,129,1668.4
+LINEAB,Florida,habil,18,163442,129,1267.0
+LINEAB,Florida,habil,19,74298,129,576.0
+LINEAB,Florida,habil,20,46735,129,362.3
+LINEAB,Florida,habil,21,27223,129,211.0
+LINEAB,Florida,habil,22,10649,129,82.6
+LINEAB,Florida,habil,23,2638,129,20.4
+LINEAB,Leandro N. Alem,fin_de_semana,0,1447,52,27.8
+LINEAB,Leandro N. Alem,fin_de_semana,1,556,52,10.7
+LINEAB,Leandro N. Alem,fin_de_semana,3,1,52,0.0
+LINEAB,Leandro N. Alem,fin_de_semana,5,399,52,7.7
+LINEAB,Leandro N. Alem,fin_de_semana,6,3171,52,61.0
+LINEAB,Leandro N. Alem,fin_de_semana,7,5418,52,104.2
+LINEAB,Leandro N. Alem,fin_de_semana,8,7907,52,152.1
+LINEAB,Leandro N. Alem,fin_de_semana,9,7942,52,152.7
+LINEAB,Leandro N. Alem,fin_de_semana,10,7088,52,136.3
+LINEAB,Leandro N. Alem,fin_de_semana,11,9018,52,173.4
+LINEAB,Leandro N. Alem,fin_de_semana,12,9193,52,176.8
+LINEAB,Leandro N. Alem,fin_de_semana,13,8846,52,170.1
+LINEAB,Leandro N. Alem,fin_de_semana,14,8872,52,170.6
+LINEAB,Leandro N. Alem,fin_de_semana,15,9924,52,190.8
+LINEAB,Leandro N. Alem,fin_de_semana,16,12454,52,239.5
+LINEAB,Leandro N. Alem,fin_de_semana,17,13828,52,265.9
+LINEAB,Leandro N. Alem,fin_de_semana,18,15197,52,292.2
+LINEAB,Leandro N. Alem,fin_de_semana,19,14605,52,280.9
+LINEAB,Leandro N. Alem,fin_de_semana,20,12710,52,244.4
+LINEAB,Leandro N. Alem,fin_de_semana,21,9533,52,183.3
+LINEAB,Leandro N. Alem,fin_de_semana,22,4854,52,93.3
+LINEAB,Leandro N. Alem,fin_de_semana,23,2005,52,38.6
+LINEAB,Leandro N. Alem,habil,0,1,129,0.0
+LINEAB,Leandro N. Alem,habil,1,1,129,0.0
+LINEAB,Leandro N. Alem,habil,4,75,129,0.6
+LINEAB,Leandro N. Alem,habil,5,13150,129,101.9
+LINEAB,Leandro N. Alem,habil,6,49010,129,379.9
+LINEAB,Leandro N. Alem,habil,7,77674,129,602.1
+LINEAB,Leandro N. Alem,habil,8,69846,129,541.4
+LINEAB,Leandro N. Alem,habil,9,58709,129,455.1
+LINEAB,Leandro N. Alem,habil,10,45165,129,350.1
+LINEAB,Leandro N. Alem,habil,11,52961,129,410.6
+LINEAB,Leandro N. Alem,habil,12,64707,129,501.6
+LINEAB,Leandro N. Alem,habil,13,76880,129,596.0
+LINEAB,Leandro N. Alem,habil,14,77699,129,602.3
+LINEAB,Leandro N. Alem,habil,15,108130,129,838.2
+LINEAB,Leandro N. Alem,habil,16,161361,129,1250.9
+LINEAB,Leandro N. Alem,habil,17,268053,129,2077.9
+LINEAB,Leandro N. Alem,habil,18,217025,129,1682.4
+LINEAB,Leandro N. Alem,habil,19,78414,129,607.9
+LINEAB,Leandro N. Alem,habil,20,45723,129,354.4
+LINEAB,Leandro N. Alem,habil,21,26664,129,206.7
+LINEAB,Leandro N. Alem,habil,22,13856,129,107.4
+LINEAB,Leandro N. Alem,habil,23,3075,129,23.8
+LINEAB,Los Incas,fin_de_semana,0,13,52,0.2
+LINEAB,Los Incas,fin_de_semana,4,2,52,0.0
+LINEAB,Los Incas,fin_de_semana,5,142,52,2.7
+LINEAB,Los Incas,fin_de_semana,6,890,52,17.1
+LINEAB,Los Incas,fin_de_semana,7,2188,52,42.1
+LINEAB,Los Incas,fin_de_semana,8,3986,52,76.7
+LINEAB,Los Incas,fin_de_semana,9,5642,52,108.5
+LINEAB,Los Incas,fin_de_semana,10,6577,52,126.5
+LINEAB,Los Incas,fin_de_semana,11,8056,52,154.9
+LINEAB,Los Incas,fin_de_semana,12,8731,52,167.9
+LINEAB,Los Incas,fin_de_semana,13,8585,52,165.1
+LINEAB,Los Incas,fin_de_semana,14,8226,52,158.2
+LINEAB,Los Incas,fin_de_semana,15,8763,52,168.5
+LINEAB,Los Incas,fin_de_semana,16,9627,52,185.1
+LINEAB,Los Incas,fin_de_semana,17,8852,52,170.2
+LINEAB,Los Incas,fin_de_semana,18,9071,52,174.4
+LINEAB,Los Incas,fin_de_semana,19,9236,52,177.6
+LINEAB,Los Incas,fin_de_semana,20,7586,52,145.9
+LINEAB,Los Incas,fin_de_semana,21,4339,52,83.4
+LINEAB,Los Incas,fin_de_semana,22,1581,52,30.4
+LINEAB,Los Incas,fin_de_semana,23,400,52,7.7
+LINEAB,Los Incas,habil,0,1,129,0.0
+LINEAB,Los Incas,habil,4,27,129,0.2
+LINEAB,Los Incas,habil,5,3552,129,27.5
+LINEAB,Los Incas,habil,6,30174,129,233.9
+LINEAB,Los Incas,habil,7,74796,129,579.8
+LINEAB,Los Incas,habil,8,93385,129,723.9
+LINEAB,Los Incas,habil,9,68100,129,527.9
+LINEAB,Los Incas,habil,10,46428,129,359.9
+LINEAB,Los Incas,habil,11,52654,129,408.2
+LINEAB,Los Incas,habil,12,49877,129,386.6
+LINEAB,Los Incas,habil,13,44232,129,342.9
+LINEAB,Los Incas,habil,14,38430,129,297.9
+LINEAB,Los Incas,habil,15,41872,129,324.6
+LINEAB,Los Incas,habil,16,55656,129,431.4
+LINEAB,Los Incas,habil,17,63147,129,489.5
+LINEAB,Los Incas,habil,18,46833,129,363.0
+LINEAB,Los Incas,habil,19,28062,129,217.5
+LINEAB,Los Incas,habil,20,20632,129,159.9
+LINEAB,Los Incas,habil,21,12106,129,93.8
+LINEAB,Los Incas,habil,22,5553,129,43.0
+LINEAB,Los Incas,habil,23,213,129,1.7
+LINEAB,Malabia,fin_de_semana,0,27,52,0.5
+LINEAB,Malabia,fin_de_semana,1,4,52,0.1
+LINEAB,Malabia,fin_de_semana,4,1,52,0.0
+LINEAB,Malabia,fin_de_semana,5,41,52,0.8
+LINEAB,Malabia,fin_de_semana,6,438,52,8.4
+LINEAB,Malabia,fin_de_semana,7,1039,52,20.0
+LINEAB,Malabia,fin_de_semana,8,2394,52,46.0
+LINEAB,Malabia,fin_de_semana,9,3462,52,66.6
+LINEAB,Malabia,fin_de_semana,10,4413,52,84.9
+LINEAB,Malabia,fin_de_semana,11,5767,52,110.9
+LINEAB,Malabia,fin_de_semana,12,6808,52,130.9
+LINEAB,Malabia,fin_de_semana,13,7407,52,142.4
+LINEAB,Malabia,fin_de_semana,14,7347,52,141.3
+LINEAB,Malabia,fin_de_semana,15,8242,52,158.5
+LINEAB,Malabia,fin_de_semana,16,8760,52,168.5
+LINEAB,Malabia,fin_de_semana,17,8894,52,171.0
+LINEAB,Malabia,fin_de_semana,18,9646,52,185.5
+LINEAB,Malabia,fin_de_semana,19,9319,52,179.2
+LINEAB,Malabia,fin_de_semana,20,6858,52,131.9
+LINEAB,Malabia,fin_de_semana,21,3839,52,73.8
+LINEAB,Malabia,fin_de_semana,22,1618,52,31.1
+LINEAB,Malabia,fin_de_semana,23,528,52,10.2
+LINEAB,Malabia,habil,0,7,129,0.1
+LINEAB,Malabia,habil,2,1,129,0.0
+LINEAB,Malabia,habil,4,36,129,0.3
+LINEAB,Malabia,habil,5,1345,129,10.4
+LINEAB,Malabia,habil,6,11088,129,86.0
+LINEAB,Malabia,habil,7,41111,129,318.7
+LINEAB,Malabia,habil,8,56196,129,435.6
+LINEAB,Malabia,habil,9,45194,129,350.3
+LINEAB,Malabia,habil,10,28264,129,219.1
+LINEAB,Malabia,habil,11,28937,129,224.3
+LINEAB,Malabia,habil,12,31035,129,240.6
+LINEAB,Malabia,habil,13,32019,129,248.2
+LINEAB,Malabia,habil,14,29368,129,227.7
+LINEAB,Malabia,habil,15,31609,129,245.0
+LINEAB,Malabia,habil,16,42943,129,332.9
+LINEAB,Malabia,habil,17,46005,129,356.6
+LINEAB,Malabia,habil,18,41980,129,325.4
+LINEAB,Malabia,habil,19,26478,129,205.3
+LINEAB,Malabia,habil,20,18038,129,139.8
+LINEAB,Malabia,habil,21,11648,129,90.3
+LINEAB,Malabia,habil,22,6291,129,48.8
+LINEAB,Malabia,habil,23,846,129,6.6
+LINEAB,Medrano,fin_de_semana,0,1728,52,33.2
+LINEAB,Medrano,fin_de_semana,1,655,52,12.6
+LINEAB,Medrano,fin_de_semana,3,2,52,0.0
+LINEAB,Medrano,fin_de_semana,5,117,52,2.2
+LINEAB,Medrano,fin_de_semana,6,1371,52,26.4
+LINEAB,Medrano,fin_de_semana,7,3226,52,62.0
+LINEAB,Medrano,fin_de_semana,8,6400,52,123.1
+LINEAB,Medrano,fin_de_semana,9,8662,52,166.6
+LINEAB,Medrano,fin_de_semana,10,11041,52,212.3
+LINEAB,Medrano,fin_de_semana,11,15401,52,296.2
+LINEAB,Medrano,fin_de_semana,12,16401,52,315.4
+LINEAB,Medrano,fin_de_semana,13,15854,52,304.9
+LINEAB,Medrano,fin_de_semana,14,14728,52,283.2
+LINEAB,Medrano,fin_de_semana,15,15571,52,299.4
+LINEAB,Medrano,fin_de_semana,16,17177,52,330.3
+LINEAB,Medrano,fin_de_semana,17,16703,52,321.2
+LINEAB,Medrano,fin_de_semana,18,16355,52,314.5
+LINEAB,Medrano,fin_de_semana,19,17477,52,336.1
+LINEAB,Medrano,fin_de_semana,20,15996,52,307.6
+LINEAB,Medrano,fin_de_semana,21,10328,52,198.6
+LINEAB,Medrano,fin_de_semana,22,4480,52,86.2
+LINEAB,Medrano,fin_de_semana,23,1724,52,33.2
+LINEAB,Medrano,habil,0,2,129,0.0
+LINEAB,Medrano,habil,3,1,129,0.0
+LINEAB,Medrano,habil,4,72,129,0.6
+LINEAB,Medrano,habil,5,4017,129,31.1
+LINEAB,Medrano,habil,6,19349,129,150.0
+LINEAB,Medrano,habil,7,73505,129,569.8
+LINEAB,Medrano,habil,8,89235,129,691.7
+LINEAB,Medrano,habil,9,82411,129,638.8
+LINEAB,Medrano,habil,10,66633,129,516.5
+LINEAB,Medrano,habil,11,77262,129,598.9
+LINEAB,Medrano,habil,12,84511,129,655.1
+LINEAB,Medrano,habil,13,78805,129,610.9
+LINEAB,Medrano,habil,14,73879,129,572.7
+LINEAB,Medrano,habil,15,82786,129,641.8
+LINEAB,Medrano,habil,16,99068,129,768.0
+LINEAB,Medrano,habil,17,114260,129,885.7
+LINEAB,Medrano,habil,18,95081,129,737.1
+LINEAB,Medrano,habil,19,66797,129,517.8
+LINEAB,Medrano,habil,20,53061,129,411.3
+LINEAB,Medrano,habil,21,40112,129,310.9
+LINEAB,Medrano,habil,22,20239,129,156.9
+LINEAB,Medrano,habil,23,3678,129,28.5
+LINEAB,Pasteur,fin_de_semana,0,1,52,0.0
+LINEAB,Pasteur,fin_de_semana,1,1,52,0.0
+LINEAB,Pasteur,fin_de_semana,5,61,52,1.2
+LINEAB,Pasteur,fin_de_semana,6,657,52,12.6
+LINEAB,Pasteur,fin_de_semana,7,1490,52,28.7
+LINEAB,Pasteur,fin_de_semana,8,3185,52,61.2
+LINEAB,Pasteur,fin_de_semana,9,5323,52,102.4
+LINEAB,Pasteur,fin_de_semana,10,7498,52,144.2
+LINEAB,Pasteur,fin_de_semana,11,11463,52,220.4
+LINEAB,Pasteur,fin_de_semana,12,14533,52,279.5
+LINEAB,Pasteur,fin_de_semana,13,16093,52,309.5
+LINEAB,Pasteur,fin_de_semana,14,12210,52,234.8
+LINEAB,Pasteur,fin_de_semana,15,10125,52,194.7
+LINEAB,Pasteur,fin_de_semana,16,9632,52,185.2
+LINEAB,Pasteur,fin_de_semana,17,8917,52,171.5
+LINEAB,Pasteur,fin_de_semana,18,8155,52,156.8
+LINEAB,Pasteur,fin_de_semana,19,7311,52,140.6
+LINEAB,Pasteur,fin_de_semana,20,5128,52,98.6
+LINEAB,Pasteur,fin_de_semana,21,3237,52,62.2
+LINEAB,Pasteur,fin_de_semana,22,1641,52,31.6
+LINEAB,Pasteur,fin_de_semana,23,450,52,8.7
+LINEAB,Pasteur,habil,0,1,129,0.0
+LINEAB,Pasteur,habil,4,32,129,0.2
+LINEAB,Pasteur,habil,5,1970,129,15.3
+LINEAB,Pasteur,habil,6,9016,129,69.9
+LINEAB,Pasteur,habil,7,23631,129,183.2
+LINEAB,Pasteur,habil,8,29275,129,226.9
+LINEAB,Pasteur,habil,9,34043,129,263.9
+LINEAB,Pasteur,habil,10,43962,129,340.8
+LINEAB,Pasteur,habil,11,56906,129,441.1
+LINEAB,Pasteur,habil,12,76163,129,590.4
+LINEAB,Pasteur,habil,13,78621,129,609.5
+LINEAB,Pasteur,habil,14,68877,129,533.9
+LINEAB,Pasteur,habil,15,78973,129,612.2
+LINEAB,Pasteur,habil,16,90143,129,698.8
+LINEAB,Pasteur,habil,17,99440,129,770.9
+LINEAB,Pasteur,habil,18,86755,129,672.5
+LINEAB,Pasteur,habil,19,38672,129,299.8
+LINEAB,Pasteur,habil,20,28278,129,219.2
+LINEAB,Pasteur,habil,21,20428,129,158.4
+LINEAB,Pasteur,habil,22,10744,129,83.3
+LINEAB,Pasteur,habil,23,1844,129,14.3
+LINEAB,Pueyrredon,fin_de_semana,0,163,52,3.1
+LINEAB,Pueyrredon,fin_de_semana,1,34,52,0.7
+LINEAB,Pueyrredon,fin_de_semana,5,25,52,0.5
+LINEAB,Pueyrredon,fin_de_semana,6,345,52,6.6
+LINEAB,Pueyrredon,fin_de_semana,7,688,52,13.2
+LINEAB,Pueyrredon,fin_de_semana,8,1180,52,22.7
+LINEAB,Pueyrredon,fin_de_semana,9,1767,52,34.0
+LINEAB,Pueyrredon,fin_de_semana,10,2807,52,54.0
+LINEAB,Pueyrredon,fin_de_semana,11,4403,52,84.7
+LINEAB,Pueyrredon,fin_de_semana,12,5932,52,114.1
+LINEAB,Pueyrredon,fin_de_semana,13,6806,52,130.9
+LINEAB,Pueyrredon,fin_de_semana,14,5456,52,104.9
+LINEAB,Pueyrredon,fin_de_semana,15,4553,52,87.6
+LINEAB,Pueyrredon,fin_de_semana,16,3693,52,71.0
+LINEAB,Pueyrredon,fin_de_semana,17,3065,52,58.9
+LINEAB,Pueyrredon,fin_de_semana,18,2790,52,53.7
+LINEAB,Pueyrredon,fin_de_semana,19,2238,52,43.0
+LINEAB,Pueyrredon,fin_de_semana,20,1622,52,31.2
+LINEAB,Pueyrredon,fin_de_semana,21,1124,52,21.6
+LINEAB,Pueyrredon,fin_de_semana,22,764,52,14.7
+LINEAB,Pueyrredon,fin_de_semana,23,233,52,4.5
+LINEAB,Pueyrredon,habil,5,1156,129,9.0
+LINEAB,Pueyrredon,habil,6,4644,129,36.0
+LINEAB,Pueyrredon,habil,7,10228,129,79.3
+LINEAB,Pueyrredon,habil,8,12189,129,94.5
+LINEAB,Pueyrredon,habil,9,12887,129,99.9
+LINEAB,Pueyrredon,habil,10,15274,129,118.4
+LINEAB,Pueyrredon,habil,11,19686,129,152.6
+LINEAB,Pueyrredon,habil,12,23070,129,178.8
+LINEAB,Pueyrredon,habil,13,24459,129,189.6
+LINEAB,Pueyrredon,habil,14,22547,129,174.8
+LINEAB,Pueyrredon,habil,15,23329,129,180.8
+LINEAB,Pueyrredon,habil,16,25844,129,200.3
+LINEAB,Pueyrredon,habil,17,26917,129,208.7
+LINEAB,Pueyrredon,habil,18,20912,129,162.1
+LINEAB,Pueyrredon,habil,19,11124,129,86.2
+LINEAB,Pueyrredon,habil,20,6720,129,52.1
+LINEAB,Pueyrredon,habil,21,2840,129,22.0
+LINEAB,Pueyrredon,habil,22,1726,129,13.4
+LINEAB,Pueyrredon,habil,23,351,129,2.7
+LINEAB,Pueyrredon.B,fin_de_semana,0,640,52,12.3
+LINEAB,Pueyrredon.B,fin_de_semana,1,191,52,3.7
+LINEAB,Pueyrredon.B,fin_de_semana,4,1,52,0.0
+LINEAB,Pueyrredon.B,fin_de_semana,5,44,52,0.8
+LINEAB,Pueyrredon.B,fin_de_semana,6,518,52,10.0
+LINEAB,Pueyrredon.B,fin_de_semana,7,1109,52,21.3
+LINEAB,Pueyrredon.B,fin_de_semana,8,2253,52,43.3
+LINEAB,Pueyrredon.B,fin_de_semana,9,3251,52,62.5
+LINEAB,Pueyrredon.B,fin_de_semana,10,4801,52,92.3
+LINEAB,Pueyrredon.B,fin_de_semana,11,7984,52,153.5
+LINEAB,Pueyrredon.B,fin_de_semana,12,10522,52,202.3
+LINEAB,Pueyrredon.B,fin_de_semana,13,11643,52,223.9
+LINEAB,Pueyrredon.B,fin_de_semana,14,10313,52,198.3
+LINEAB,Pueyrredon.B,fin_de_semana,15,8599,52,165.4
+LINEAB,Pueyrredon.B,fin_de_semana,16,8152,52,156.8
+LINEAB,Pueyrredon.B,fin_de_semana,17,6889,52,132.5
+LINEAB,Pueyrredon.B,fin_de_semana,18,6084,52,117.0
+LINEAB,Pueyrredon.B,fin_de_semana,19,5468,52,105.2
+LINEAB,Pueyrredon.B,fin_de_semana,20,3905,52,75.1
+LINEAB,Pueyrredon.B,fin_de_semana,21,2498,52,48.0
+LINEAB,Pueyrredon.B,fin_de_semana,22,1481,52,28.5
+LINEAB,Pueyrredon.B,fin_de_semana,23,582,52,11.2
+LINEAB,Pueyrredon.B,habil,0,3,129,0.0
+LINEAB,Pueyrredon.B,habil,2,12,129,0.1
+LINEAB,Pueyrredon.B,habil,4,45,129,0.3
+LINEAB,Pueyrredon.B,habil,5,1829,129,14.2
+LINEAB,Pueyrredon.B,habil,6,8031,129,62.3
+LINEAB,Pueyrredon.B,habil,7,18932,129,146.8
+LINEAB,Pueyrredon.B,habil,8,23012,129,178.4
+LINEAB,Pueyrredon.B,habil,9,24056,129,186.5
+LINEAB,Pueyrredon.B,habil,10,25163,129,195.1
+LINEAB,Pueyrredon.B,habil,11,34113,129,264.4
+LINEAB,Pueyrredon.B,habil,12,39287,129,304.6
+LINEAB,Pueyrredon.B,habil,13,42191,129,327.1
+LINEAB,Pueyrredon.B,habil,14,40056,129,310.5
+LINEAB,Pueyrredon.B,habil,15,43125,129,334.3
+LINEAB,Pueyrredon.B,habil,16,49066,129,380.4
+LINEAB,Pueyrredon.B,habil,17,52376,129,406.0
+LINEAB,Pueyrredon.B,habil,18,42356,129,328.3
+LINEAB,Pueyrredon.B,habil,19,21805,129,169.0
+LINEAB,Pueyrredon.B,habil,20,13746,129,106.6
+LINEAB,Pueyrredon.B,habil,21,7054,129,54.7
+LINEAB,Pueyrredon.B,habil,22,3691,129,28.6
+LINEAB,Pueyrredon.B,habil,23,883,129,6.8
+LINEAB,Rosas,fin_de_semana,0,1935,52,37.2
+LINEAB,Rosas,fin_de_semana,1,94,52,1.8
+LINEAB,Rosas,fin_de_semana,3,1,52,0.0
+LINEAB,Rosas,fin_de_semana,4,7,52,0.1
+LINEAB,Rosas,fin_de_semana,5,510,52,9.8
+LINEAB,Rosas,fin_de_semana,6,3696,52,71.1
+LINEAB,Rosas,fin_de_semana,7,9883,52,190.1
+LINEAB,Rosas,fin_de_semana,8,17340,52,333.5
+LINEAB,Rosas,fin_de_semana,9,22474,52,432.2
+LINEAB,Rosas,fin_de_semana,10,21217,52,408.0
+LINEAB,Rosas,fin_de_semana,11,26035,52,500.7
+LINEAB,Rosas,fin_de_semana,12,25629,52,492.9
+LINEAB,Rosas,fin_de_semana,13,27478,52,528.4
+LINEAB,Rosas,fin_de_semana,14,25736,52,494.9
+LINEAB,Rosas,fin_de_semana,15,27999,52,538.4
+LINEAB,Rosas,fin_de_semana,16,27904,52,536.6
+LINEAB,Rosas,fin_de_semana,17,26828,52,515.9
+LINEAB,Rosas,fin_de_semana,18,25798,52,496.1
+LINEAB,Rosas,fin_de_semana,19,27076,52,520.7
+LINEAB,Rosas,fin_de_semana,20,22423,52,431.2
+LINEAB,Rosas,fin_de_semana,21,13397,52,257.6
+LINEAB,Rosas,fin_de_semana,22,4091,52,78.7
+LINEAB,Rosas,fin_de_semana,23,1574,52,30.3
+LINEAB,Rosas,habil,0,5,129,0.0
+LINEAB,Rosas,habil,1,2,129,0.0
+LINEAB,Rosas,habil,3,1,129,0.0
+LINEAB,Rosas,habil,4,320,129,2.5
+LINEAB,Rosas,habil,5,23507,129,182.2
+LINEAB,Rosas,habil,6,141927,129,1100.2
+LINEAB,Rosas,habil,7,332349,129,2576.3
+LINEAB,Rosas,habil,8,386454,129,2995.8
+LINEAB,Rosas,habil,9,237941,129,1844.5
+LINEAB,Rosas,habil,10,131662,129,1020.6
+LINEAB,Rosas,habil,11,141538,129,1097.2
+LINEAB,Rosas,habil,12,129020,129,1000.2
+LINEAB,Rosas,habil,13,123780,129,959.5
+LINEAB,Rosas,habil,14,97032,129,752.2
+LINEAB,Rosas,habil,15,105092,129,814.7
+LINEAB,Rosas,habil,16,131416,129,1018.7
+LINEAB,Rosas,habil,17,151308,129,1172.9
+LINEAB,Rosas,habil,18,113748,129,881.8
+LINEAB,Rosas,habil,19,77210,129,598.5
+LINEAB,Rosas,habil,20,53893,129,417.8
+LINEAB,Rosas,habil,21,30072,129,233.1
+LINEAB,Rosas,habil,22,14883,129,115.4
+LINEAB,Rosas,habil,23,1090,129,8.4
+LINEAB,Tronador,fin_de_semana,0,4,52,0.1
+LINEAB,Tronador,fin_de_semana,4,1,52,0.0
+LINEAB,Tronador,fin_de_semana,5,35,52,0.7
+LINEAB,Tronador,fin_de_semana,6,632,52,12.2
+LINEAB,Tronador,fin_de_semana,7,848,52,16.3
+LINEAB,Tronador,fin_de_semana,8,1846,52,35.5
+LINEAB,Tronador,fin_de_semana,9,2796,52,53.8
+LINEAB,Tronador,fin_de_semana,10,3512,52,67.5
+LINEAB,Tronador,fin_de_semana,11,4439,52,85.4
+LINEAB,Tronador,fin_de_semana,12,5583,52,107.4
+LINEAB,Tronador,fin_de_semana,13,5766,52,110.9
+LINEAB,Tronador,fin_de_semana,14,4864,52,93.5
+LINEAB,Tronador,fin_de_semana,15,5015,52,96.4
+LINEAB,Tronador,fin_de_semana,16,5310,52,102.1
+LINEAB,Tronador,fin_de_semana,17,4742,52,91.2
+LINEAB,Tronador,fin_de_semana,18,5229,52,100.6
+LINEAB,Tronador,fin_de_semana,19,4458,52,85.7
+LINEAB,Tronador,fin_de_semana,20,3483,52,67.0
+LINEAB,Tronador,fin_de_semana,21,2599,52,50.0
+LINEAB,Tronador,fin_de_semana,22,1117,52,21.5
+LINEAB,Tronador,fin_de_semana,23,317,52,6.1
+LINEAB,Tronador,habil,0,1,129,0.0
+LINEAB,Tronador,habil,2,1,129,0.0
+LINEAB,Tronador,habil,3,1,129,0.0
+LINEAB,Tronador,habil,4,31,129,0.2
+LINEAB,Tronador,habil,5,2107,129,16.3
+LINEAB,Tronador,habil,6,12999,129,100.8
+LINEAB,Tronador,habil,7,31603,129,245.0
+LINEAB,Tronador,habil,8,43149,129,334.5
+LINEAB,Tronador,habil,9,32592,129,252.7
+LINEAB,Tronador,habil,10,23198,129,179.8
+LINEAB,Tronador,habil,11,26872,129,208.3
+LINEAB,Tronador,habil,12,28453,129,220.6
+LINEAB,Tronador,habil,13,26352,129,204.3
+LINEAB,Tronador,habil,14,26904,129,208.6
+LINEAB,Tronador,habil,15,31407,129,243.5
+LINEAB,Tronador,habil,16,43145,129,334.5
+LINEAB,Tronador,habil,17,48490,129,375.9
+LINEAB,Tronador,habil,18,41063,129,318.3
+LINEAB,Tronador,habil,19,18488,129,143.3
+LINEAB,Tronador,habil,20,12825,129,99.4
+LINEAB,Tronador,habil,21,10752,129,83.3
+LINEAB,Tronador,habil,22,11152,129,86.4
+LINEAB,Tronador,habil,23,502,129,3.9
+LINEAB,Uruguay,fin_de_semana,0,3424,52,65.8
+LINEAB,Uruguay,fin_de_semana,1,956,52,18.4
+LINEAB,Uruguay,fin_de_semana,2,1,52,0.0
+LINEAB,Uruguay,fin_de_semana,3,2,52,0.0
+LINEAB,Uruguay,fin_de_semana,4,5,52,0.1
+LINEAB,Uruguay,fin_de_semana,5,70,52,1.3
+LINEAB,Uruguay,fin_de_semana,6,487,52,9.4
+LINEAB,Uruguay,fin_de_semana,7,875,52,16.8
+LINEAB,Uruguay,fin_de_semana,8,2073,52,39.9
+LINEAB,Uruguay,fin_de_semana,9,3007,52,57.8
+LINEAB,Uruguay,fin_de_semana,10,4130,52,79.4
+LINEAB,Uruguay,fin_de_semana,11,5822,52,112.0
+LINEAB,Uruguay,fin_de_semana,12,6998,52,134.6
+LINEAB,Uruguay,fin_de_semana,13,7855,52,151.1
+LINEAB,Uruguay,fin_de_semana,14,6870,52,132.1
+LINEAB,Uruguay,fin_de_semana,15,7467,52,143.6
+LINEAB,Uruguay,fin_de_semana,16,8279,52,159.2
+LINEAB,Uruguay,fin_de_semana,17,8710,52,167.5
+LINEAB,Uruguay,fin_de_semana,18,9723,52,187.0
+LINEAB,Uruguay,fin_de_semana,19,10508,52,202.1
+LINEAB,Uruguay,fin_de_semana,20,9933,52,191.0
+LINEAB,Uruguay,fin_de_semana,21,11414,52,219.5
+LINEAB,Uruguay,fin_de_semana,22,8166,52,157.0
+LINEAB,Uruguay,fin_de_semana,23,4830,52,92.9
+LINEAB,Uruguay,habil,0,5,129,0.0
+LINEAB,Uruguay,habil,2,2,129,0.0
+LINEAB,Uruguay,habil,4,24,129,0.2
+LINEAB,Uruguay,habil,5,1349,129,10.5
+LINEAB,Uruguay,habil,6,5751,129,44.6
+LINEAB,Uruguay,habil,7,13734,129,106.5
+LINEAB,Uruguay,habil,8,18722,129,145.1
+LINEAB,Uruguay,habil,9,21835,129,169.3
+LINEAB,Uruguay,habil,10,30401,129,235.7
+LINEAB,Uruguay,habil,11,43215,129,335.0
+LINEAB,Uruguay,habil,12,54886,129,425.5
+LINEAB,Uruguay,habil,13,72747,129,563.9
+LINEAB,Uruguay,habil,14,67065,129,519.9
+LINEAB,Uruguay,habil,15,80045,129,620.5
+LINEAB,Uruguay,habil,16,87337,129,677.0
+LINEAB,Uruguay,habil,17,93716,129,726.5
+LINEAB,Uruguay,habil,18,82751,129,641.5
+LINEAB,Uruguay,habil,19,47517,129,368.3
+LINEAB,Uruguay,habil,20,32314,129,250.5
+LINEAB,Uruguay,habil,21,24472,129,189.7
+LINEAB,Uruguay,habil,22,20337,129,157.7
+LINEAB,Uruguay,habil,23,5504,129,42.7
+LINEAC,Avenida de Mayo,fin_de_semana,3,1,52,0.0
+LINEAC,Avenida de Mayo,fin_de_semana,4,1,52,0.0
+LINEAC,Avenida de Mayo,fin_de_semana,5,57,52,1.1
+LINEAC,Avenida de Mayo,fin_de_semana,6,708,52,13.6
+LINEAC,Avenida de Mayo,fin_de_semana,7,934,52,18.0
+LINEAC,Avenida de Mayo,fin_de_semana,8,1731,52,33.3
+LINEAC,Avenida de Mayo,fin_de_semana,9,2492,52,47.9
+LINEAC,Avenida de Mayo,fin_de_semana,10,2928,52,56.3
+LINEAC,Avenida de Mayo,fin_de_semana,11,3218,52,61.9
+LINEAC,Avenida de Mayo,fin_de_semana,12,3229,52,62.1
+LINEAC,Avenida de Mayo,fin_de_semana,13,3482,52,67.0
+LINEAC,Avenida de Mayo,fin_de_semana,14,3706,52,71.3
+LINEAC,Avenida de Mayo,fin_de_semana,15,3861,52,74.2
+LINEAC,Avenida de Mayo,fin_de_semana,16,4179,52,80.4
+LINEAC,Avenida de Mayo,fin_de_semana,17,4720,52,90.8
+LINEAC,Avenida de Mayo,fin_de_semana,18,4976,52,95.7
+LINEAC,Avenida de Mayo,fin_de_semana,19,4897,52,94.2
+LINEAC,Avenida de Mayo,fin_de_semana,20,4834,52,93.0
+LINEAC,Avenida de Mayo,fin_de_semana,21,4290,52,82.5
+LINEAC,Avenida de Mayo,fin_de_semana,22,2302,52,44.3
+LINEAC,Avenida de Mayo,fin_de_semana,23,610,52,11.7
+LINEAC,Avenida de Mayo,habil,2,3,129,0.0
+LINEAC,Avenida de Mayo,habil,3,5,129,0.0
+LINEAC,Avenida de Mayo,habil,4,8,129,0.1
+LINEAC,Avenida de Mayo,habil,5,867,129,6.7
+LINEAC,Avenida de Mayo,habil,6,4443,129,34.4
+LINEAC,Avenida de Mayo,habil,7,9034,129,70.0
+LINEAC,Avenida de Mayo,habil,8,10322,129,80.0
+LINEAC,Avenida de Mayo,habil,9,13196,129,102.3
+LINEAC,Avenida de Mayo,habil,10,16119,129,125.0
+LINEAC,Avenida de Mayo,habil,11,20071,129,155.6
+LINEAC,Avenida de Mayo,habil,12,21973,129,170.3
+LINEAC,Avenida de Mayo,habil,13,25864,129,200.5
+LINEAC,Avenida de Mayo,habil,14,35521,129,275.4
+LINEAC,Avenida de Mayo,habil,15,54490,129,422.4
+LINEAC,Avenida de Mayo,habil,16,64448,129,499.6
+LINEAC,Avenida de Mayo,habil,17,77481,129,600.6
+LINEAC,Avenida de Mayo,habil,18,55957,129,433.8
+LINEAC,Avenida de Mayo,habil,19,30320,129,235.0
+LINEAC,Avenida de Mayo,habil,20,22845,129,177.1
+LINEAC,Avenida de Mayo,habil,21,13653,129,105.8
+LINEAC,Avenida de Mayo,habil,22,4684,129,36.3
+LINEAC,Avenida de Mayo,habil,23,869,129,6.7
+LINEAC,Constitucion,fin_de_semana,0,1,52,0.0
+LINEAC,Constitucion,fin_de_semana,1,1,52,0.0
+LINEAC,Constitucion,fin_de_semana,4,16,52,0.3
+LINEAC,Constitucion,fin_de_semana,5,4080,52,78.5
+LINEAC,Constitucion,fin_de_semana,6,33480,52,643.8
+LINEAC,Constitucion,fin_de_semana,7,59867,52,1151.3
+LINEAC,Constitucion,fin_de_semana,8,98792,52,1899.8
+LINEAC,Constitucion,fin_de_semana,9,93958,52,1806.9
+LINEAC,Constitucion,fin_de_semana,10,85888,52,1651.7
+LINEAC,Constitucion,fin_de_semana,11,88253,52,1697.2
+LINEAC,Constitucion,fin_de_semana,12,79613,52,1531.0
+LINEAC,Constitucion,fin_de_semana,13,77336,52,1487.2
+LINEAC,Constitucion,fin_de_semana,14,70977,52,1364.9
+LINEAC,Constitucion,fin_de_semana,15,76995,52,1480.7
+LINEAC,Constitucion,fin_de_semana,16,79755,52,1533.8
+LINEAC,Constitucion,fin_de_semana,17,66168,52,1272.5
+LINEAC,Constitucion,fin_de_semana,18,70549,52,1356.7
+LINEAC,Constitucion,fin_de_semana,19,65815,52,1265.7
+LINEAC,Constitucion,fin_de_semana,20,51467,52,989.8
+LINEAC,Constitucion,fin_de_semana,21,31914,52,613.7
+LINEAC,Constitucion,fin_de_semana,22,7400,52,142.3
+LINEAC,Constitucion,fin_de_semana,23,940,52,18.1
+LINEAC,Constitucion,habil,0,3,129,0.0
+LINEAC,Constitucion,habil,1,123,129,1.0
+LINEAC,Constitucion,habil,2,349,129,2.7
+LINEAC,Constitucion,habil,3,131,129,1.0
+LINEAC,Constitucion,habil,4,676,129,5.2
+LINEAC,Constitucion,habil,5,109400,129,848.1
+LINEAC,Constitucion,habil,6,549938,129,4263.1
+LINEAC,Constitucion,habil,7,918284,129,7118.5
+LINEAC,Constitucion,habil,8,1065434,129,8259.2
+LINEAC,Constitucion,habil,9,728930,129,5650.6
+LINEAC,Constitucion,habil,10,402342,129,3118.9
+LINEAC,Constitucion,habil,11,384184,129,2978.2
+LINEAC,Constitucion,habil,12,319849,129,2479.4
+LINEAC,Constitucion,habil,13,343001,129,2658.9
+LINEAC,Constitucion,habil,14,243724,129,1889.3
+LINEAC,Constitucion,habil,15,236922,129,1836.6
+LINEAC,Constitucion,habil,16,217275,129,1684.3
+LINEAC,Constitucion,habil,17,237637,129,1842.1
+LINEAC,Constitucion,habil,18,198546,129,1539.1
+LINEAC,Constitucion,habil,19,126790,129,982.9
+LINEAC,Constitucion,habil,20,93371,129,723.8
+LINEAC,Constitucion,habil,21,50500,129,391.5
+LINEAC,Constitucion,habil,22,19927,129,154.5
+LINEAC,Constitucion,habil,23,1766,129,13.7
+LINEAC,Diagonal Norte,fin_de_semana,1,2,52,0.0
+LINEAC,Diagonal Norte,fin_de_semana,5,17,52,0.3
+LINEAC,Diagonal Norte,fin_de_semana,6,241,52,4.6
+LINEAC,Diagonal Norte,fin_de_semana,7,536,52,10.3
+LINEAC,Diagonal Norte,fin_de_semana,8,896,52,17.2
+LINEAC,Diagonal Norte,fin_de_semana,9,1342,52,25.8
+LINEAC,Diagonal Norte,fin_de_semana,10,2185,52,42.0
+LINEAC,Diagonal Norte,fin_de_semana,11,2657,52,51.1
+LINEAC,Diagonal Norte,fin_de_semana,12,3092,52,59.5
+LINEAC,Diagonal Norte,fin_de_semana,13,3230,52,62.1
+LINEAC,Diagonal Norte,fin_de_semana,14,3143,52,60.4
+LINEAC,Diagonal Norte,fin_de_semana,15,3536,52,68.0
+LINEAC,Diagonal Norte,fin_de_semana,16,4106,52,79.0
+LINEAC,Diagonal Norte,fin_de_semana,17,3983,52,76.6
+LINEAC,Diagonal Norte,fin_de_semana,18,4128,52,79.4
+LINEAC,Diagonal Norte,fin_de_semana,19,3652,52,70.2
+LINEAC,Diagonal Norte,fin_de_semana,20,3364,52,64.7
+LINEAC,Diagonal Norte,fin_de_semana,21,3735,52,71.8
+LINEAC,Diagonal Norte,fin_de_semana,22,1697,52,32.6
+LINEAC,Diagonal Norte,fin_de_semana,23,571,52,11.0
+LINEAC,Diagonal Norte,habil,0,6,129,0.0
+LINEAC,Diagonal Norte,habil,1,4,129,0.0
+LINEAC,Diagonal Norte,habil,4,6,129,0.0
+LINEAC,Diagonal Norte,habil,5,671,129,5.2
+LINEAC,Diagonal Norte,habil,6,2642,129,20.5
+LINEAC,Diagonal Norte,habil,7,7261,129,56.3
+LINEAC,Diagonal Norte,habil,8,8787,129,68.1
+LINEAC,Diagonal Norte,habil,9,10047,129,77.9
+LINEAC,Diagonal Norte,habil,10,12274,129,95.1
+LINEAC,Diagonal Norte,habil,11,15998,129,124.0
+LINEAC,Diagonal Norte,habil,12,22480,129,174.3
+LINEAC,Diagonal Norte,habil,13,26916,129,208.7
+LINEAC,Diagonal Norte,habil,14,37287,129,289.0
+LINEAC,Diagonal Norte,habil,15,64626,129,501.0
+LINEAC,Diagonal Norte,habil,16,69438,129,538.3
+LINEAC,Diagonal Norte,habil,17,86640,129,671.6
+LINEAC,Diagonal Norte,habil,18,65477,129,507.6
+LINEAC,Diagonal Norte,habil,19,29418,129,228.0
+LINEAC,Diagonal Norte,habil,20,25804,129,200.0
+LINEAC,Diagonal Norte,habil,21,15448,129,119.8
+LINEAC,Diagonal Norte,habil,22,4471,129,34.7
+LINEAC,Diagonal Norte,habil,23,1050,129,8.1
+LINEAC,General San Martin,fin_de_semana,4,1,52,0.0
+LINEAC,General San Martin,fin_de_semana,5,45,52,0.9
+LINEAC,General San Martin,fin_de_semana,6,413,52,7.9
+LINEAC,General San Martin,fin_de_semana,7,613,52,11.8
+LINEAC,General San Martin,fin_de_semana,8,1279,52,24.6
+LINEAC,General San Martin,fin_de_semana,9,2096,52,40.3
+LINEAC,General San Martin,fin_de_semana,10,2835,52,54.5
+LINEAC,General San Martin,fin_de_semana,11,3599,52,69.2
+LINEAC,General San Martin,fin_de_semana,12,4019,52,77.3
+LINEAC,General San Martin,fin_de_semana,13,3793,52,72.9
+LINEAC,General San Martin,fin_de_semana,14,3773,52,72.6
+LINEAC,General San Martin,fin_de_semana,15,4862,52,93.5
+LINEAC,General San Martin,fin_de_semana,16,5959,52,114.6
+LINEAC,General San Martin,fin_de_semana,17,5421,52,104.2
+LINEAC,General San Martin,fin_de_semana,18,5084,52,97.8
+LINEAC,General San Martin,fin_de_semana,19,4343,52,83.5
+LINEAC,General San Martin,fin_de_semana,20,3677,52,70.7
+LINEAC,General San Martin,fin_de_semana,21,2445,52,47.0
+LINEAC,General San Martin,fin_de_semana,22,873,52,16.8
+LINEAC,General San Martin,fin_de_semana,23,190,52,3.7
+LINEAC,General San Martin,habil,4,25,129,0.2
+LINEAC,General San Martin,habil,5,684,129,5.3
+LINEAC,General San Martin,habil,6,3356,129,26.0
+LINEAC,General San Martin,habil,7,7785,129,60.3
+LINEAC,General San Martin,habil,8,9090,129,70.5
+LINEAC,General San Martin,habil,9,9928,129,77.0
+LINEAC,General San Martin,habil,10,11333,129,87.9
+LINEAC,General San Martin,habil,11,15106,129,117.1
+LINEAC,General San Martin,habil,12,19878,129,154.1
+LINEAC,General San Martin,habil,13,24988,129,193.7
+LINEAC,General San Martin,habil,14,29521,129,228.8
+LINEAC,General San Martin,habil,15,46569,129,361.0
+LINEAC,General San Martin,habil,16,64836,129,502.6
+LINEAC,General San Martin,habil,17,99478,129,771.1
+LINEAC,General San Martin,habil,18,89523,129,694.0
+LINEAC,General San Martin,habil,19,32952,129,255.4
+LINEAC,General San Martin,habil,20,20549,129,159.3
+LINEAC,General San Martin,habil,21,10130,129,78.5
+LINEAC,General San Martin,habil,22,4557,129,35.3
+LINEAC,General San Martin,habil,23,671,129,5.2
+LINEAC,Independencia,fin_de_semana,0,3,52,0.1
+LINEAC,Independencia,fin_de_semana,5,36,52,0.7
+LINEAC,Independencia,fin_de_semana,6,595,52,11.4
+LINEAC,Independencia,fin_de_semana,7,831,52,16.0
+LINEAC,Independencia,fin_de_semana,8,1490,52,28.7
+LINEAC,Independencia,fin_de_semana,9,1672,52,32.2
+LINEAC,Independencia,fin_de_semana,10,2081,52,40.0
+LINEAC,Independencia,fin_de_semana,11,2604,52,50.1
+LINEAC,Independencia,fin_de_semana,12,2965,52,57.0
+LINEAC,Independencia,fin_de_semana,13,2952,52,56.8
+LINEAC,Independencia,fin_de_semana,14,3100,52,59.6
+LINEAC,Independencia,fin_de_semana,15,3329,52,64.0
+LINEAC,Independencia,fin_de_semana,16,3775,52,72.6
+LINEAC,Independencia,fin_de_semana,17,3759,52,72.3
+LINEAC,Independencia,fin_de_semana,18,4091,52,78.7
+LINEAC,Independencia,fin_de_semana,19,3725,52,71.6
+LINEAC,Independencia,fin_de_semana,20,2945,52,56.6
+LINEAC,Independencia,fin_de_semana,21,1892,52,36.4
+LINEAC,Independencia,fin_de_semana,22,759,52,14.6
+LINEAC,Independencia,fin_de_semana,23,171,52,3.3
+LINEAC,Independencia,habil,4,1,129,0.0
+LINEAC,Independencia,habil,5,767,129,5.9
+LINEAC,Independencia,habil,6,4743,129,36.8
+LINEAC,Independencia,habil,7,11393,129,88.3
+LINEAC,Independencia,habil,8,14264,129,110.6
+LINEAC,Independencia,habil,9,10976,129,85.1
+LINEAC,Independencia,habil,10,8672,129,67.2
+LINEAC,Independencia,habil,11,16827,129,130.4
+LINEAC,Independencia,habil,12,24320,129,188.5
+LINEAC,Independencia,habil,13,12619,129,97.8
+LINEAC,Independencia,habil,14,12235,129,94.8
+LINEAC,Independencia,habil,15,14038,129,108.8
+LINEAC,Independencia,habil,16,18514,129,143.5
+LINEAC,Independencia,habil,17,37329,129,289.4
+LINEAC,Independencia,habil,18,26434,129,204.9
+LINEAC,Independencia,habil,19,10767,129,83.5
+LINEAC,Independencia,habil,20,9418,129,73.0
+LINEAC,Independencia,habil,21,16679,129,129.3
+LINEAC,Independencia,habil,22,7191,129,55.7
+LINEAC,Independencia,habil,23,685,129,5.3
+LINEAC,Independencia.C,fin_de_semana,0,10,52,0.2
+LINEAC,Independencia.C,fin_de_semana,2,1,52,0.0
+LINEAC,Independencia.C,fin_de_semana,5,44,52,0.8
+LINEAC,Independencia.C,fin_de_semana,6,522,52,10.0
+LINEAC,Independencia.C,fin_de_semana,7,698,52,13.4
+LINEAC,Independencia.C,fin_de_semana,8,1468,52,28.2
+LINEAC,Independencia.C,fin_de_semana,9,1746,52,33.6
+LINEAC,Independencia.C,fin_de_semana,10,1992,52,38.3
+LINEAC,Independencia.C,fin_de_semana,11,2705,52,52.0
+LINEAC,Independencia.C,fin_de_semana,12,3168,52,60.9
+LINEAC,Independencia.C,fin_de_semana,13,3301,52,63.5
+LINEAC,Independencia.C,fin_de_semana,14,3308,52,63.6
+LINEAC,Independencia.C,fin_de_semana,15,3508,52,67.5
+LINEAC,Independencia.C,fin_de_semana,16,3909,52,75.2
+LINEAC,Independencia.C,fin_de_semana,17,4006,52,77.0
+LINEAC,Independencia.C,fin_de_semana,18,4230,52,81.3
+LINEAC,Independencia.C,fin_de_semana,19,4187,52,80.5
+LINEAC,Independencia.C,fin_de_semana,20,3393,52,65.2
+LINEAC,Independencia.C,fin_de_semana,21,1935,52,37.2
+LINEAC,Independencia.C,fin_de_semana,22,926,52,17.8
+LINEAC,Independencia.C,fin_de_semana,23,299,52,5.8
+LINEAC,Independencia.C,habil,0,1,129,0.0
+LINEAC,Independencia.C,habil,4,34,129,0.3
+LINEAC,Independencia.C,habil,5,736,129,5.7
+LINEAC,Independencia.C,habil,6,5091,129,39.5
+LINEAC,Independencia.C,habil,7,12957,129,100.4
+LINEAC,Independencia.C,habil,8,16948,129,131.4
+LINEAC,Independencia.C,habil,9,14383,129,111.5
+LINEAC,Independencia.C,habil,10,10173,129,78.9
+LINEAC,Independencia.C,habil,11,24782,129,192.1
+LINEAC,Independencia.C,habil,12,38322,129,297.1
+LINEAC,Independencia.C,habil,13,14875,129,115.3
+LINEAC,Independencia.C,habil,14,13215,129,102.4
+LINEAC,Independencia.C,habil,15,16135,129,125.1
+LINEAC,Independencia.C,habil,16,21937,129,170.1
+LINEAC,Independencia.C,habil,17,49722,129,385.4
+LINEAC,Independencia.C,habil,18,36934,129,286.3
+LINEAC,Independencia.C,habil,19,13001,129,100.8
+LINEAC,Independencia.C,habil,20,12520,129,97.1
+LINEAC,Independencia.C,habil,21,30055,129,233.0
+LINEAC,Independencia.C,habil,22,14944,129,115.8
+LINEAC,Independencia.C,habil,23,685,129,5.3
+LINEAC,Lavalle,fin_de_semana,5,41,52,0.8
+LINEAC,Lavalle,fin_de_semana,6,408,52,7.8
+LINEAC,Lavalle,fin_de_semana,7,708,52,13.6
+LINEAC,Lavalle,fin_de_semana,8,1302,52,25.0
+LINEAC,Lavalle,fin_de_semana,9,1903,52,36.6
+LINEAC,Lavalle,fin_de_semana,10,2691,52,51.8
+LINEAC,Lavalle,fin_de_semana,11,3180,52,61.2
+LINEAC,Lavalle,fin_de_semana,12,4231,52,81.4
+LINEAC,Lavalle,fin_de_semana,13,4602,52,88.5
+LINEAC,Lavalle,fin_de_semana,14,4725,52,90.9
+LINEAC,Lavalle,fin_de_semana,15,5412,52,104.1
+LINEAC,Lavalle,fin_de_semana,16,5886,52,113.2
+LINEAC,Lavalle,fin_de_semana,17,5725,52,110.1
+LINEAC,Lavalle,fin_de_semana,18,6050,52,116.3
+LINEAC,Lavalle,fin_de_semana,19,6141,52,118.1
+LINEAC,Lavalle,fin_de_semana,20,5183,52,99.7
+LINEAC,Lavalle,fin_de_semana,21,4055,52,78.0
+LINEAC,Lavalle,fin_de_semana,22,1517,52,29.2
+LINEAC,Lavalle,fin_de_semana,23,343,52,6.6
+LINEAC,Lavalle,habil,1,1,129,0.0
+LINEAC,Lavalle,habil,2,4,129,0.0
+LINEAC,Lavalle,habil,4,28,129,0.2
+LINEAC,Lavalle,habil,5,985,129,7.6
+LINEAC,Lavalle,habil,6,3153,129,24.4
+LINEAC,Lavalle,habil,7,6823,129,52.9
+LINEAC,Lavalle,habil,8,7437,129,57.7
+LINEAC,Lavalle,habil,9,8316,129,64.5
+LINEAC,Lavalle,habil,10,11810,129,91.6
+LINEAC,Lavalle,habil,11,15620,129,121.1
+LINEAC,Lavalle,habil,12,20867,129,161.8
+LINEAC,Lavalle,habil,13,25291,129,196.1
+LINEAC,Lavalle,habil,14,35421,129,274.6
+LINEAC,Lavalle,habil,15,59352,129,460.1
+LINEAC,Lavalle,habil,16,85998,129,666.7
+LINEAC,Lavalle,habil,17,103447,129,801.9
+LINEAC,Lavalle,habil,18,88274,129,684.3
+LINEAC,Lavalle,habil,19,39337,129,304.9
+LINEAC,Lavalle,habil,20,25474,129,197.5
+LINEAC,Lavalle,habil,21,16666,129,129.2
+LINEAC,Lavalle,habil,22,5373,129,41.7
+LINEAC,Lavalle,habil,23,759,129,5.9
+LINEAC,Mariano Moreno,fin_de_semana,0,1,52,0.0
+LINEAC,Mariano Moreno,fin_de_semana,5,14,52,0.3
+LINEAC,Mariano Moreno,fin_de_semana,6,300,52,5.8
+LINEAC,Mariano Moreno,fin_de_semana,7,582,52,11.2
+LINEAC,Mariano Moreno,fin_de_semana,8,1246,52,24.0
+LINEAC,Mariano Moreno,fin_de_semana,9,1645,52,31.6
+LINEAC,Mariano Moreno,fin_de_semana,10,1925,52,37.0
+LINEAC,Mariano Moreno,fin_de_semana,11,2457,52,47.2
+LINEAC,Mariano Moreno,fin_de_semana,12,2969,52,57.1
+LINEAC,Mariano Moreno,fin_de_semana,13,2433,52,46.8
+LINEAC,Mariano Moreno,fin_de_semana,14,2414,52,46.4
+LINEAC,Mariano Moreno,fin_de_semana,15,2255,52,43.4
+LINEAC,Mariano Moreno,fin_de_semana,16,2493,52,47.9
+LINEAC,Mariano Moreno,fin_de_semana,17,2732,52,52.5
+LINEAC,Mariano Moreno,fin_de_semana,18,2730,52,52.5
+LINEAC,Mariano Moreno,fin_de_semana,19,2328,52,44.8
+LINEAC,Mariano Moreno,fin_de_semana,20,1982,52,38.1
+LINEAC,Mariano Moreno,fin_de_semana,21,1184,52,22.8
+LINEAC,Mariano Moreno,fin_de_semana,22,599,52,11.5
+LINEAC,Mariano Moreno,fin_de_semana,23,175,52,3.4
+LINEAC,Mariano Moreno,habil,1,1,129,0.0
+LINEAC,Mariano Moreno,habil,4,7,129,0.1
+LINEAC,Mariano Moreno,habil,5,394,129,3.1
+LINEAC,Mariano Moreno,habil,6,3259,129,25.3
+LINEAC,Mariano Moreno,habil,7,7450,129,57.8
+LINEAC,Mariano Moreno,habil,8,10959,129,85.0
+LINEAC,Mariano Moreno,habil,9,12211,129,94.7
+LINEAC,Mariano Moreno,habil,10,13473,129,104.4
+LINEAC,Mariano Moreno,habil,11,17574,129,136.2
+LINEAC,Mariano Moreno,habil,12,24632,129,190.9
+LINEAC,Mariano Moreno,habil,13,30839,129,239.1
+LINEAC,Mariano Moreno,habil,14,38820,129,300.9
+LINEAC,Mariano Moreno,habil,15,48676,129,377.3
+LINEAC,Mariano Moreno,habil,16,64557,129,500.4
+LINEAC,Mariano Moreno,habil,17,84932,129,658.4
+LINEAC,Mariano Moreno,habil,18,64255,129,498.1
+LINEAC,Mariano Moreno,habil,19,26389,129,204.6
+LINEAC,Mariano Moreno,habil,20,16233,129,125.8
+LINEAC,Mariano Moreno,habil,21,6924,129,53.7
+LINEAC,Mariano Moreno,habil,22,3929,129,30.5
+LINEAC,Mariano Moreno,habil,23,387,129,3.0
+LINEAC,Retiro,fin_de_semana,1,1,52,0.0
+LINEAC,Retiro,fin_de_semana,5,387,52,7.4
+LINEAC,Retiro,fin_de_semana,6,4355,52,83.8
+LINEAC,Retiro,fin_de_semana,7,8294,52,159.5
+LINEAC,Retiro,fin_de_semana,8,12423,52,238.9
+LINEAC,Retiro,fin_de_semana,9,12696,52,244.2
+LINEAC,Retiro,fin_de_semana,10,12340,52,237.3
+LINEAC,Retiro,fin_de_semana,11,12824,52,246.6
+LINEAC,Retiro,fin_de_semana,12,14779,52,284.2
+LINEAC,Retiro,fin_de_semana,13,15058,52,289.6
+LINEAC,Retiro,fin_de_semana,14,15225,52,292.8
+LINEAC,Retiro,fin_de_semana,15,15306,52,294.3
+LINEAC,Retiro,fin_de_semana,16,15151,52,291.4
+LINEAC,Retiro,fin_de_semana,17,16460,52,316.5
+LINEAC,Retiro,fin_de_semana,18,17020,52,327.3
+LINEAC,Retiro,fin_de_semana,19,16264,52,312.8
+LINEAC,Retiro,fin_de_semana,20,11642,52,223.9
+LINEAC,Retiro,fin_de_semana,21,7436,52,143.0
+LINEAC,Retiro,fin_de_semana,22,2680,52,51.5
+LINEAC,Retiro,fin_de_semana,23,358,52,6.9
+LINEAC,Retiro,habil,0,3,129,0.0
+LINEAC,Retiro,habil,1,3,129,0.0
+LINEAC,Retiro,habil,2,5,129,0.0
+LINEAC,Retiro,habil,3,1,129,0.0
+LINEAC,Retiro,habil,5,8546,129,66.2
+LINEAC,Retiro,habil,6,36028,129,279.3
+LINEAC,Retiro,habil,7,77070,129,597.4
+LINEAC,Retiro,habil,8,85774,129,664.9
+LINEAC,Retiro,habil,9,80544,129,624.4
+LINEAC,Retiro,habil,10,54475,129,422.3
+LINEAC,Retiro,habil,11,47679,129,369.6
+LINEAC,Retiro,habil,12,58812,129,455.9
+LINEAC,Retiro,habil,13,70482,129,546.4
+LINEAC,Retiro,habil,14,64964,129,503.6
+LINEAC,Retiro,habil,15,74685,129,579.0
+LINEAC,Retiro,habil,16,98685,129,765.0
+LINEAC,Retiro,habil,17,135294,129,1048.8
+LINEAC,Retiro,habil,18,113301,129,878.3
+LINEAC,Retiro,habil,19,57430,129,445.2
+LINEAC,Retiro,habil,20,30716,129,238.1
+LINEAC,Retiro,habil,21,18450,129,143.0
+LINEAC,Retiro,habil,22,10357,129,80.3
+LINEAC,Retiro,habil,23,734,129,5.7
+LINEAC,Retiro.C,fin_de_semana,1,1,52,0.0
+LINEAC,Retiro.C,fin_de_semana,4,1,52,0.0
+LINEAC,Retiro.C,fin_de_semana,5,232,52,4.5
+LINEAC,Retiro.C,fin_de_semana,6,2399,52,46.1
+LINEAC,Retiro.C,fin_de_semana,7,4719,52,90.8
+LINEAC,Retiro.C,fin_de_semana,8,7605,52,146.2
+LINEAC,Retiro.C,fin_de_semana,9,7310,52,140.6
+LINEAC,Retiro.C,fin_de_semana,10,7166,52,137.8
+LINEAC,Retiro.C,fin_de_semana,11,8649,52,166.3
+LINEAC,Retiro.C,fin_de_semana,12,9311,52,179.1
+LINEAC,Retiro.C,fin_de_semana,13,9671,52,186.0
+LINEAC,Retiro.C,fin_de_semana,14,9110,52,175.2
+LINEAC,Retiro.C,fin_de_semana,15,9484,52,182.4
+LINEAC,Retiro.C,fin_de_semana,16,9677,52,186.1
+LINEAC,Retiro.C,fin_de_semana,17,11490,52,221.0
+LINEAC,Retiro.C,fin_de_semana,18,12052,52,231.8
+LINEAC,Retiro.C,fin_de_semana,19,12133,52,233.3
+LINEAC,Retiro.C,fin_de_semana,20,9481,52,182.3
+LINEAC,Retiro.C,fin_de_semana,21,5561,52,106.9
+LINEAC,Retiro.C,fin_de_semana,22,1679,52,32.3
+LINEAC,Retiro.C,fin_de_semana,23,224,52,4.3
+LINEAC,Retiro.C,habil,0,1,129,0.0
+LINEAC,Retiro.C,habil,1,1,129,0.0
+LINEAC,Retiro.C,habil,2,2,129,0.0
+LINEAC,Retiro.C,habil,3,1,129,0.0
+LINEAC,Retiro.C,habil,4,65,129,0.5
+LINEAC,Retiro.C,habil,5,6111,129,47.4
+LINEAC,Retiro.C,habil,6,24615,129,190.8
+LINEAC,Retiro.C,habil,7,58054,129,450.0
+LINEAC,Retiro.C,habil,8,64902,129,503.1
+LINEAC,Retiro.C,habil,9,60111,129,466.0
+LINEAC,Retiro.C,habil,10,39488,129,306.1
+LINEAC,Retiro.C,habil,11,40366,129,312.9
+LINEAC,Retiro.C,habil,12,49242,129,381.7
+LINEAC,Retiro.C,habil,13,60209,129,466.7
+LINEAC,Retiro.C,habil,14,53100,129,411.6
+LINEAC,Retiro.C,habil,15,58522,129,453.7
+LINEAC,Retiro.C,habil,16,76752,129,595.0
+LINEAC,Retiro.C,habil,17,101089,129,783.6
+LINEAC,Retiro.C,habil,18,82578,129,640.1
+LINEAC,Retiro.C,habil,19,42489,129,329.4
+LINEAC,Retiro.C,habil,20,23960,129,185.7
+LINEAC,Retiro.C,habil,21,14097,129,109.3
+LINEAC,Retiro.C,habil,22,8247,129,63.9
+LINEAC,Retiro.C,habil,23,567,129,4.4
+LINEAC,San Juan,fin_de_semana,5,73,52,1.4
+LINEAC,San Juan,fin_de_semana,6,555,52,10.7
+LINEAC,San Juan,fin_de_semana,7,1149,52,22.1
+LINEAC,San Juan,fin_de_semana,8,2727,52,52.4
+LINEAC,San Juan,fin_de_semana,9,3804,52,73.2
+LINEAC,San Juan,fin_de_semana,10,3803,52,73.1
+LINEAC,San Juan,fin_de_semana,11,4623,52,88.9
+LINEAC,San Juan,fin_de_semana,12,5061,52,97.3
+LINEAC,San Juan,fin_de_semana,13,5064,52,97.4
+LINEAC,San Juan,fin_de_semana,14,4780,52,91.9
+LINEAC,San Juan,fin_de_semana,15,5089,52,97.9
+LINEAC,San Juan,fin_de_semana,16,5194,52,99.9
+LINEAC,San Juan,fin_de_semana,17,4969,52,95.6
+LINEAC,San Juan,fin_de_semana,18,4961,52,95.4
+LINEAC,San Juan,fin_de_semana,19,4253,52,81.8
+LINEAC,San Juan,fin_de_semana,20,3170,52,61.0
+LINEAC,San Juan,fin_de_semana,21,1922,52,37.0
+LINEAC,San Juan,fin_de_semana,22,1027,52,19.8
+LINEAC,San Juan,fin_de_semana,23,162,52,3.1
+LINEAC,San Juan,habil,0,1,129,0.0
+LINEAC,San Juan,habil,1,1,129,0.0
+LINEAC,San Juan,habil,4,33,129,0.3
+LINEAC,San Juan,habil,5,2073,129,16.1
+LINEAC,San Juan,habil,6,8247,129,63.9
+LINEAC,San Juan,habil,7,21859,129,169.4
+LINEAC,San Juan,habil,8,29426,129,228.1
+LINEAC,San Juan,habil,9,28013,129,217.2
+LINEAC,San Juan,habil,10,21537,129,167.0
+LINEAC,San Juan,habil,11,26389,129,204.6
+LINEAC,San Juan,habil,12,32965,129,255.5
+LINEAC,San Juan,habil,13,27062,129,209.8
+LINEAC,San Juan,habil,14,21627,129,167.7
+LINEAC,San Juan,habil,15,24074,129,186.6
+LINEAC,San Juan,habil,16,31956,129,247.7
+LINEAC,San Juan,habil,17,33118,129,256.7
+LINEAC,San Juan,habil,18,24866,129,192.8
+LINEAC,San Juan,habil,19,16804,129,130.3
+LINEAC,San Juan,habil,20,17201,129,133.3
+LINEAC,San Juan,habil,21,19059,129,147.7
+LINEAC,San Juan,habil,22,8614,129,66.8
+LINEAC,San Juan,habil,23,482,129,3.7
+LINEAD,9 de julio,fin_de_semana,0,7,52,0.1
+LINEAD,9 de julio,fin_de_semana,5,7,52,0.1
+LINEAD,9 de julio,fin_de_semana,6,121,52,2.3
+LINEAD,9 de julio,fin_de_semana,7,317,52,6.1
+LINEAD,9 de julio,fin_de_semana,8,904,52,17.4
+LINEAD,9 de julio,fin_de_semana,9,1179,52,22.7
+LINEAD,9 de julio,fin_de_semana,10,1666,52,32.0
+LINEAD,9 de julio,fin_de_semana,11,2205,52,42.4
+LINEAD,9 de julio,fin_de_semana,12,2490,52,47.9
+LINEAD,9 de julio,fin_de_semana,13,2532,52,48.7
+LINEAD,9 de julio,fin_de_semana,14,2504,52,48.2
+LINEAD,9 de julio,fin_de_semana,15,2886,52,55.5
+LINEAD,9 de julio,fin_de_semana,16,3281,52,63.1
+LINEAD,9 de julio,fin_de_semana,17,3181,52,61.2
+LINEAD,9 de julio,fin_de_semana,18,2838,52,54.6
+LINEAD,9 de julio,fin_de_semana,19,2899,52,55.8
+LINEAD,9 de julio,fin_de_semana,20,2206,52,42.4
+LINEAD,9 de julio,fin_de_semana,21,2003,52,38.5
+LINEAD,9 de julio,fin_de_semana,22,1544,52,29.7
+LINEAD,9 de julio,fin_de_semana,23,613,52,11.8
+LINEAD,9 de julio,habil,0,4,129,0.0
+LINEAD,9 de julio,habil,1,1,129,0.0
+LINEAD,9 de julio,habil,4,3,129,0.0
+LINEAD,9 de julio,habil,5,777,129,6.0
+LINEAD,9 de julio,habil,6,3938,129,30.5
+LINEAD,9 de julio,habil,7,22654,129,175.6
+LINEAD,9 de julio,habil,8,29762,129,230.7
+LINEAD,9 de julio,habil,9,26167,129,202.8
+LINEAD,9 de julio,habil,10,25044,129,194.1
+LINEAD,9 de julio,habil,11,29222,129,226.5
+LINEAD,9 de julio,habil,12,35096,129,272.1
+LINEAD,9 de julio,habil,13,39758,129,308.2
+LINEAD,9 de julio,habil,14,38150,129,295.7
+LINEAD,9 de julio,habil,15,47389,129,367.4
+LINEAD,9 de julio,habil,16,55359,129,429.1
+LINEAD,9 de julio,habil,17,62546,129,484.9
+LINEAD,9 de julio,habil,18,37592,129,291.4
+LINEAD,9 de julio,habil,19,11483,129,89.0
+LINEAD,9 de julio,habil,20,8058,129,62.5
+LINEAD,9 de julio,habil,21,5153,129,39.9
+LINEAD,9 de julio,habil,22,2772,129,21.5
+LINEAD,9 de julio,habil,23,791,129,6.1
+LINEAD,Agüero,fin_de_semana,0,5,52,0.1
+LINEAD,Agüero,fin_de_semana,5,29,52,0.6
+LINEAD,Agüero,fin_de_semana,6,402,52,7.7
+LINEAD,Agüero,fin_de_semana,7,1130,52,21.7
+LINEAD,Agüero,fin_de_semana,8,2771,52,53.3
+LINEAD,Agüero,fin_de_semana,9,3670,52,70.6
+LINEAD,Agüero,fin_de_semana,10,5151,52,99.1
+LINEAD,Agüero,fin_de_semana,11,6451,52,124.1
+LINEAD,Agüero,fin_de_semana,12,7413,52,142.6
+LINEAD,Agüero,fin_de_semana,13,7100,52,136.5
+LINEAD,Agüero,fin_de_semana,14,6915,52,133.0
+LINEAD,Agüero,fin_de_semana,15,7438,52,143.0
+LINEAD,Agüero,fin_de_semana,16,8603,52,165.4
+LINEAD,Agüero,fin_de_semana,17,8068,52,155.2
+LINEAD,Agüero,fin_de_semana,18,7616,52,146.5
+LINEAD,Agüero,fin_de_semana,19,8246,52,158.6
+LINEAD,Agüero,fin_de_semana,20,7127,52,137.1
+LINEAD,Agüero,fin_de_semana,21,4056,52,78.0
+LINEAD,Agüero,fin_de_semana,22,1502,52,28.9
+LINEAD,Agüero,fin_de_semana,23,446,52,8.6
+LINEAD,Agüero,habil,0,1,129,0.0
+LINEAD,Agüero,habil,1,1,129,0.0
+LINEAD,Agüero,habil,4,22,129,0.2
+LINEAD,Agüero,habil,5,911,129,7.1
+LINEAD,Agüero,habil,6,9330,129,72.3
+LINEAD,Agüero,habil,7,40143,129,311.2
+LINEAD,Agüero,habil,8,50041,129,387.9
+LINEAD,Agüero,habil,9,43690,129,338.7
+LINEAD,Agüero,habil,10,29977,129,232.4
+LINEAD,Agüero,habil,11,32179,129,249.4
+LINEAD,Agüero,habil,12,38731,129,300.2
+LINEAD,Agüero,habil,13,39629,129,307.2
+LINEAD,Agüero,habil,14,35612,129,276.1
+LINEAD,Agüero,habil,15,38307,129,297.0
+LINEAD,Agüero,habil,16,48425,129,375.4
+LINEAD,Agüero,habil,17,48722,129,377.7
+LINEAD,Agüero,habil,18,43123,129,334.3
+LINEAD,Agüero,habil,19,31429,129,243.6
+LINEAD,Agüero,habil,20,23361,129,181.1
+LINEAD,Agüero,habil,21,11671,129,90.5
+LINEAD,Agüero,habil,22,5674,129,44.0
+LINEAD,Agüero,habil,23,981,129,7.6
+LINEAD,Bulnes,fin_de_semana,0,25,52,0.5
+LINEAD,Bulnes,fin_de_semana,5,69,52,1.3
+LINEAD,Bulnes,fin_de_semana,6,722,52,13.9
+LINEAD,Bulnes,fin_de_semana,7,1977,52,38.0
+LINEAD,Bulnes,fin_de_semana,8,4354,52,83.7
+LINEAD,Bulnes,fin_de_semana,9,6066,52,116.7
+LINEAD,Bulnes,fin_de_semana,10,8850,52,170.2
+LINEAD,Bulnes,fin_de_semana,11,13419,52,258.1
+LINEAD,Bulnes,fin_de_semana,12,16089,52,309.4
+LINEAD,Bulnes,fin_de_semana,13,16536,52,318.0
+LINEAD,Bulnes,fin_de_semana,14,17185,52,330.5
+LINEAD,Bulnes,fin_de_semana,15,19357,52,372.2
+LINEAD,Bulnes,fin_de_semana,16,24998,52,480.7
+LINEAD,Bulnes,fin_de_semana,17,25702,52,494.3
+LINEAD,Bulnes,fin_de_semana,18,26055,52,501.1
+LINEAD,Bulnes,fin_de_semana,19,26370,52,507.1
+LINEAD,Bulnes,fin_de_semana,20,22830,52,439.0
+LINEAD,Bulnes,fin_de_semana,21,15240,52,293.1
+LINEAD,Bulnes,fin_de_semana,22,7707,52,148.2
+LINEAD,Bulnes,fin_de_semana,23,1169,52,22.5
+LINEAD,Bulnes,habil,0,17,129,0.1
+LINEAD,Bulnes,habil,1,2,129,0.0
+LINEAD,Bulnes,habil,4,91,129,0.7
+LINEAD,Bulnes,habil,5,1642,129,12.7
+LINEAD,Bulnes,habil,6,15878,129,123.1
+LINEAD,Bulnes,habil,7,64426,129,499.4
+LINEAD,Bulnes,habil,8,92220,129,714.9
+LINEAD,Bulnes,habil,9,82743,129,641.4
+LINEAD,Bulnes,habil,10,60201,129,466.7
+LINEAD,Bulnes,habil,11,67491,129,523.2
+LINEAD,Bulnes,habil,12,79808,129,618.7
+LINEAD,Bulnes,habil,13,82535,129,639.8
+LINEAD,Bulnes,habil,14,77879,129,603.7
+LINEAD,Bulnes,habil,15,83672,129,648.6
+LINEAD,Bulnes,habil,16,102323,129,793.2
+LINEAD,Bulnes,habil,17,109350,129,847.7
+LINEAD,Bulnes,habil,18,99266,129,769.5
+LINEAD,Bulnes,habil,19,81005,129,627.9
+LINEAD,Bulnes,habil,20,65269,129,506.0
+LINEAD,Bulnes,habil,21,36632,129,284.0
+LINEAD,Bulnes,habil,22,22207,129,172.1
+LINEAD,Bulnes,habil,23,2054,129,15.9
+LINEAD,Callao,fin_de_semana,0,18,52,0.3
+LINEAD,Callao,fin_de_semana,5,25,52,0.5
+LINEAD,Callao,fin_de_semana,6,397,52,7.6
+LINEAD,Callao,fin_de_semana,7,896,52,17.2
+LINEAD,Callao,fin_de_semana,8,1947,52,37.4
+LINEAD,Callao,fin_de_semana,9,2821,52,54.2
+LINEAD,Callao,fin_de_semana,10,3375,52,64.9
+LINEAD,Callao,fin_de_semana,11,4178,52,80.3
+LINEAD,Callao,fin_de_semana,12,5022,52,96.6
+LINEAD,Callao,fin_de_semana,13,5848,52,112.5
+LINEAD,Callao,fin_de_semana,14,5052,52,97.2
+LINEAD,Callao,fin_de_semana,15,5548,52,106.7
+LINEAD,Callao,fin_de_semana,16,6214,52,119.5
+LINEAD,Callao,fin_de_semana,17,5882,52,113.1
+LINEAD,Callao,fin_de_semana,18,5786,52,111.3
+LINEAD,Callao,fin_de_semana,19,5276,52,101.5
+LINEAD,Callao,fin_de_semana,20,4534,52,87.2
+LINEAD,Callao,fin_de_semana,21,2978,52,57.3
+LINEAD,Callao,fin_de_semana,22,1734,52,33.3
+LINEAD,Callao,fin_de_semana,23,609,52,11.7
+LINEAD,Callao,habil,5,875,129,6.8
+LINEAD,Callao,habil,6,4029,129,31.2
+LINEAD,Callao,habil,7,12929,129,100.2
+LINEAD,Callao,habil,8,18205,129,141.1
+LINEAD,Callao,habil,9,21779,129,168.8
+LINEAD,Callao,habil,10,24923,129,193.2
+LINEAD,Callao,habil,11,31495,129,244.1
+LINEAD,Callao,habil,12,42503,129,329.5
+LINEAD,Callao,habil,13,44673,129,346.3
+LINEAD,Callao,habil,14,41897,129,324.8
+LINEAD,Callao,habil,15,49000,129,379.8
+LINEAD,Callao,habil,16,59996,129,465.1
+LINEAD,Callao,habil,17,65419,129,507.1
+LINEAD,Callao,habil,18,55101,129,427.1
+LINEAD,Callao,habil,19,32475,129,251.7
+LINEAD,Callao,habil,20,24547,129,190.3
+LINEAD,Callao,habil,21,15777,129,122.3
+LINEAD,Callao,habil,22,7448,129,57.7
+LINEAD,Callao,habil,23,1243,129,9.6
+LINEAD,Callao.D,fin_de_semana,0,15,52,0.3
+LINEAD,Callao.D,fin_de_semana,5,54,52,1.0
+LINEAD,Callao.D,fin_de_semana,6,468,52,9.0
+LINEAD,Callao.D,fin_de_semana,7,928,52,17.8
+LINEAD,Callao.D,fin_de_semana,8,2173,52,41.8
+LINEAD,Callao.D,fin_de_semana,9,3065,52,58.9
+LINEAD,Callao.D,fin_de_semana,10,3749,52,72.1
+LINEAD,Callao.D,fin_de_semana,11,5761,52,110.8
+LINEAD,Callao.D,fin_de_semana,12,6268,52,120.5
+LINEAD,Callao.D,fin_de_semana,13,7262,52,139.7
+LINEAD,Callao.D,fin_de_semana,14,5868,52,112.8
+LINEAD,Callao.D,fin_de_semana,15,6464,52,124.3
+LINEAD,Callao.D,fin_de_semana,16,7298,52,140.3
+LINEAD,Callao.D,fin_de_semana,17,6905,52,132.8
+LINEAD,Callao.D,fin_de_semana,18,6990,52,134.4
+LINEAD,Callao.D,fin_de_semana,19,7061,52,135.8
+LINEAD,Callao.D,fin_de_semana,20,5885,52,113.2
+LINEAD,Callao.D,fin_de_semana,21,3872,52,74.5
+LINEAD,Callao.D,fin_de_semana,22,2128,52,40.9
+LINEAD,Callao.D,fin_de_semana,23,897,52,17.2
+LINEAD,Callao.D,habil,4,74,129,0.6
+LINEAD,Callao.D,habil,5,956,129,7.4
+LINEAD,Callao.D,habil,6,5547,129,43.0
+LINEAD,Callao.D,habil,7,18738,129,145.3
+LINEAD,Callao.D,habil,8,26921,129,208.7
+LINEAD,Callao.D,habil,9,30010,129,232.6
+LINEAD,Callao.D,habil,10,32129,129,249.1
+LINEAD,Callao.D,habil,11,41388,129,320.8
+LINEAD,Callao.D,habil,12,56827,129,440.5
+LINEAD,Callao.D,habil,13,60039,129,465.4
+LINEAD,Callao.D,habil,14,56160,129,435.3
+LINEAD,Callao.D,habil,15,66354,129,514.4
+LINEAD,Callao.D,habil,16,79623,129,617.2
+LINEAD,Callao.D,habil,17,89209,129,691.5
+LINEAD,Callao.D,habil,18,79261,129,614.4
+LINEAD,Callao.D,habil,19,46949,129,363.9
+LINEAD,Callao.D,habil,20,35496,129,275.2
+LINEAD,Callao.D,habil,21,23835,129,184.8
+LINEAD,Callao.D,habil,22,11298,129,87.6
+LINEAD,Callao.D,habil,23,1876,129,14.5
+LINEAD,Catedral,fin_de_semana,0,8,52,0.2
+LINEAD,Catedral,fin_de_semana,1,2,52,0.0
+LINEAD,Catedral,fin_de_semana,5,153,52,2.9
+LINEAD,Catedral,fin_de_semana,6,1290,52,24.8
+LINEAD,Catedral,fin_de_semana,7,2666,52,51.3
+LINEAD,Catedral,fin_de_semana,8,4370,52,84.0
+LINEAD,Catedral,fin_de_semana,9,4990,52,96.0
+LINEAD,Catedral,fin_de_semana,10,6117,52,117.6
+LINEAD,Catedral,fin_de_semana,11,8265,52,158.9
+LINEAD,Catedral,fin_de_semana,12,11035,52,212.2
+LINEAD,Catedral,fin_de_semana,13,12877,52,247.6
+LINEAD,Catedral,fin_de_semana,14,11451,52,220.2
+LINEAD,Catedral,fin_de_semana,15,13533,52,260.2
+LINEAD,Catedral,fin_de_semana,16,16045,52,308.6
+LINEAD,Catedral,fin_de_semana,17,17327,52,333.2
+LINEAD,Catedral,fin_de_semana,18,17308,52,332.8
+LINEAD,Catedral,fin_de_semana,19,14475,52,278.4
+LINEAD,Catedral,fin_de_semana,20,10960,52,210.8
+LINEAD,Catedral,fin_de_semana,21,6325,52,121.6
+LINEAD,Catedral,fin_de_semana,22,2313,52,44.5
+LINEAD,Catedral,fin_de_semana,23,773,52,14.9
+LINEAD,Catedral,habil,0,14,129,0.1
+LINEAD,Catedral,habil,1,6,129,0.0
+LINEAD,Catedral,habil,2,12,129,0.1
+LINEAD,Catedral,habil,3,9,129,0.1
+LINEAD,Catedral,habil,4,16,129,0.1
+LINEAD,Catedral,habil,5,3499,129,27.1
+LINEAD,Catedral,habil,6,20499,129,158.9
+LINEAD,Catedral,habil,7,37676,129,292.1
+LINEAD,Catedral,habil,8,43018,129,333.5
+LINEAD,Catedral,habil,9,43010,129,333.4
+LINEAD,Catedral,habil,10,48794,129,378.2
+LINEAD,Catedral,habil,11,70339,129,545.3
+LINEAD,Catedral,habil,12,92970,129,720.7
+LINEAD,Catedral,habil,13,114993,129,891.4
+LINEAD,Catedral,habil,14,127018,129,984.6
+LINEAD,Catedral,habil,15,210736,129,1633.6
+LINEAD,Catedral,habil,16,261955,129,2030.7
+LINEAD,Catedral,habil,17,410239,129,3180.1
+LINEAD,Catedral,habil,18,276984,129,2147.2
+LINEAD,Catedral,habil,19,101720,129,788.5
+LINEAD,Catedral,habil,20,61055,129,473.3
+LINEAD,Catedral,habil,21,33800,129,262.0
+LINEAD,Catedral,habil,22,16400,129,127.1
+LINEAD,Catedral,habil,23,3031,129,23.5
+LINEAD,Congreso de Tucuman,fin_de_semana,0,10154,52,195.3
+LINEAD,Congreso de Tucuman,fin_de_semana,1,3293,52,63.3
+LINEAD,Congreso de Tucuman,fin_de_semana,4,4,52,0.1
+LINEAD,Congreso de Tucuman,fin_de_semana,5,239,52,4.6
+LINEAD,Congreso de Tucuman,fin_de_semana,6,2505,52,48.2
+LINEAD,Congreso de Tucuman,fin_de_semana,7,7222,52,138.9
+LINEAD,Congreso de Tucuman,fin_de_semana,8,13354,52,256.8
+LINEAD,Congreso de Tucuman,fin_de_semana,9,16780,52,322.7
+LINEAD,Congreso de Tucuman,fin_de_semana,10,18286,52,351.7
+LINEAD,Congreso de Tucuman,fin_de_semana,11,22737,52,437.2
+LINEAD,Congreso de Tucuman,fin_de_semana,12,25447,52,489.4
+LINEAD,Congreso de Tucuman,fin_de_semana,13,25475,52,489.9
+LINEAD,Congreso de Tucuman,fin_de_semana,14,25523,52,490.8
+LINEAD,Congreso de Tucuman,fin_de_semana,15,27395,52,526.8
+LINEAD,Congreso de Tucuman,fin_de_semana,16,29559,52,568.4
+LINEAD,Congreso de Tucuman,fin_de_semana,17,29030,52,558.3
+LINEAD,Congreso de Tucuman,fin_de_semana,18,28805,52,553.9
+LINEAD,Congreso de Tucuman,fin_de_semana,19,31315,52,602.2
+LINEAD,Congreso de Tucuman,fin_de_semana,20,27407,52,527.1
+LINEAD,Congreso de Tucuman,fin_de_semana,21,16684,52,320.8
+LINEAD,Congreso de Tucuman,fin_de_semana,22,13671,52,262.9
+LINEAD,Congreso de Tucuman,fin_de_semana,23,5432,52,104.5
+LINEAD,Congreso de Tucuman,habil,0,17243,129,133.7
+LINEAD,Congreso de Tucuman,habil,1,1516,129,11.8
+LINEAD,Congreso de Tucuman,habil,4,186,129,1.4
+LINEAD,Congreso de Tucuman,habil,5,12419,129,96.3
+LINEAD,Congreso de Tucuman,habil,6,103648,129,803.5
+LINEAD,Congreso de Tucuman,habil,7,275636,129,2136.7
+LINEAD,Congreso de Tucuman,habil,8,363865,129,2820.7
+LINEAD,Congreso de Tucuman,habil,9,249653,129,1935.3
+LINEAD,Congreso de Tucuman,habil,10,148196,129,1148.8
+LINEAD,Congreso de Tucuman,habil,11,148511,129,1151.2
+LINEAD,Congreso de Tucuman,habil,12,152469,129,1181.9
+LINEAD,Congreso de Tucuman,habil,13,151295,129,1172.8
+LINEAD,Congreso de Tucuman,habil,14,128895,129,999.2
+LINEAD,Congreso de Tucuman,habil,15,140448,129,1088.7
+LINEAD,Congreso de Tucuman,habil,16,180974,129,1402.9
+LINEAD,Congreso de Tucuman,habil,17,230005,129,1783.0
+LINEAD,Congreso de Tucuman,habil,18,204024,129,1581.6
+LINEAD,Congreso de Tucuman,habil,19,99733,129,773.1
+LINEAD,Congreso de Tucuman,habil,20,65457,129,507.4
+LINEAD,Congreso de Tucuman,habil,21,35833,129,277.8
+LINEAD,Congreso de Tucuman,habil,22,20789,129,161.2
+LINEAD,Congreso de Tucuman,habil,23,5196,129,40.3
+LINEAD,Facultad de Medicina,fin_de_semana,0,3,52,0.1
+LINEAD,Facultad de Medicina,fin_de_semana,1,2,52,0.0
+LINEAD,Facultad de Medicina,fin_de_semana,4,1,52,0.0
+LINEAD,Facultad de Medicina,fin_de_semana,5,96,52,1.8
+LINEAD,Facultad de Medicina,fin_de_semana,6,711,52,13.7
+LINEAD,Facultad de Medicina,fin_de_semana,7,1758,52,33.8
+LINEAD,Facultad de Medicina,fin_de_semana,8,3566,52,68.6
+LINEAD,Facultad de Medicina,fin_de_semana,9,5399,52,103.8
+LINEAD,Facultad de Medicina,fin_de_semana,10,6815,52,131.1
+LINEAD,Facultad de Medicina,fin_de_semana,11,9513,52,182.9
+LINEAD,Facultad de Medicina,fin_de_semana,12,10781,52,207.3
+LINEAD,Facultad de Medicina,fin_de_semana,13,10643,52,204.7
+LINEAD,Facultad de Medicina,fin_de_semana,14,9055,52,174.1
+LINEAD,Facultad de Medicina,fin_de_semana,15,9111,52,175.2
+LINEAD,Facultad de Medicina,fin_de_semana,16,9808,52,188.6
+LINEAD,Facultad de Medicina,fin_de_semana,17,9260,52,178.1
+LINEAD,Facultad de Medicina,fin_de_semana,18,8761,52,168.5
+LINEAD,Facultad de Medicina,fin_de_semana,19,8964,52,172.4
+LINEAD,Facultad de Medicina,fin_de_semana,20,7591,52,146.0
+LINEAD,Facultad de Medicina,fin_de_semana,21,5080,52,97.7
+LINEAD,Facultad de Medicina,fin_de_semana,22,2229,52,42.9
+LINEAD,Facultad de Medicina,fin_de_semana,23,626,52,12.0
+LINEAD,Facultad de Medicina,habil,0,5,129,0.0
+LINEAD,Facultad de Medicina,habil,1,3,129,0.0
+LINEAD,Facultad de Medicina,habil,4,41,129,0.3
+LINEAD,Facultad de Medicina,habil,5,1616,129,12.5
+LINEAD,Facultad de Medicina,habil,6,9894,129,76.7
+LINEAD,Facultad de Medicina,habil,7,31968,129,247.8
+LINEAD,Facultad de Medicina,habil,8,52067,129,403.6
+LINEAD,Facultad de Medicina,habil,9,61361,129,475.7
+LINEAD,Facultad de Medicina,habil,10,73661,129,571.0
+LINEAD,Facultad de Medicina,habil,11,94385,129,731.7
+LINEAD,Facultad de Medicina,habil,12,129292,129,1002.3
+LINEAD,Facultad de Medicina,habil,13,109762,129,850.9
+LINEAD,Facultad de Medicina,habil,14,96594,129,748.8
+LINEAD,Facultad de Medicina,habil,15,107776,129,835.5
+LINEAD,Facultad de Medicina,habil,16,131765,129,1021.4
+LINEAD,Facultad de Medicina,habil,17,131587,129,1020.1
+LINEAD,Facultad de Medicina,habil,18,116274,129,901.3
+LINEAD,Facultad de Medicina,habil,19,81941,129,635.2
+LINEAD,Facultad de Medicina,habil,20,82666,129,640.8
+LINEAD,Facultad de Medicina,habil,21,64174,129,497.5
+LINEAD,Facultad de Medicina,habil,22,31498,129,244.2
+LINEAD,Facultad de Medicina,habil,23,3849,129,29.8
+LINEAD,Jose Hernandez,fin_de_semana,0,16,52,0.3
+LINEAD,Jose Hernandez,fin_de_semana,1,1,52,0.0
+LINEAD,Jose Hernandez,fin_de_semana,4,5,52,0.1
+LINEAD,Jose Hernandez,fin_de_semana,5,90,52,1.7
+LINEAD,Jose Hernandez,fin_de_semana,6,835,52,16.1
+LINEAD,Jose Hernandez,fin_de_semana,7,2186,52,42.0
+LINEAD,Jose Hernandez,fin_de_semana,8,4110,52,79.0
+LINEAD,Jose Hernandez,fin_de_semana,9,5703,52,109.7
+LINEAD,Jose Hernandez,fin_de_semana,10,6797,52,130.7
+LINEAD,Jose Hernandez,fin_de_semana,11,9136,52,175.7
+LINEAD,Jose Hernandez,fin_de_semana,12,10202,52,196.2
+LINEAD,Jose Hernandez,fin_de_semana,13,10702,52,205.8
+LINEAD,Jose Hernandez,fin_de_semana,14,10799,52,207.7
+LINEAD,Jose Hernandez,fin_de_semana,15,11116,52,213.8
+LINEAD,Jose Hernandez,fin_de_semana,16,11976,52,230.3
+LINEAD,Jose Hernandez,fin_de_semana,17,11422,52,219.7
+LINEAD,Jose Hernandez,fin_de_semana,18,11783,52,226.6
+LINEAD,Jose Hernandez,fin_de_semana,19,11812,52,227.2
+LINEAD,Jose Hernandez,fin_de_semana,20,9908,52,190.5
+LINEAD,Jose Hernandez,fin_de_semana,21,5898,52,113.4
+LINEAD,Jose Hernandez,fin_de_semana,22,1773,52,34.1
+LINEAD,Jose Hernandez,fin_de_semana,23,442,52,8.5
+LINEAD,Jose Hernandez,habil,0,1,129,0.0
+LINEAD,Jose Hernandez,habil,3,27,129,0.2
+LINEAD,Jose Hernandez,habil,4,157,129,1.2
+LINEAD,Jose Hernandez,habil,5,3799,129,29.4
+LINEAD,Jose Hernandez,habil,6,25068,129,194.3
+LINEAD,Jose Hernandez,habil,7,84521,129,655.2
+LINEAD,Jose Hernandez,habil,8,107112,129,830.3
+LINEAD,Jose Hernandez,habil,9,80359,129,622.9
+LINEAD,Jose Hernandez,habil,10,53084,129,411.5
+LINEAD,Jose Hernandez,habil,11,57948,129,449.2
+LINEAD,Jose Hernandez,habil,12,63934,129,495.6
+LINEAD,Jose Hernandez,habil,13,61773,129,478.9
+LINEAD,Jose Hernandez,habil,14,58156,129,450.8
+LINEAD,Jose Hernandez,habil,15,65874,129,510.7
+LINEAD,Jose Hernandez,habil,16,86087,129,667.3
+LINEAD,Jose Hernandez,habil,17,88499,129,686.0
+LINEAD,Jose Hernandez,habil,18,77947,129,604.2
+LINEAD,Jose Hernandez,habil,19,51466,129,399.0
+LINEAD,Jose Hernandez,habil,20,36226,129,280.8
+LINEAD,Jose Hernandez,habil,21,18871,129,146.3
+LINEAD,Jose Hernandez,habil,22,7340,129,56.9
+LINEAD,Jose Hernandez,habil,23,221,129,1.7
+LINEAD,Juramento,fin_de_semana,0,7,52,0.1
+LINEAD,Juramento,fin_de_semana,1,1,52,0.0
+LINEAD,Juramento,fin_de_semana,4,1,52,0.0
+LINEAD,Juramento,fin_de_semana,5,66,52,1.3
+LINEAD,Juramento,fin_de_semana,6,1076,52,20.7
+LINEAD,Juramento,fin_de_semana,7,2816,52,54.2
+LINEAD,Juramento,fin_de_semana,8,5396,52,103.8
+LINEAD,Juramento,fin_de_semana,9,7886,52,151.7
+LINEAD,Juramento,fin_de_semana,10,9779,52,188.1
+LINEAD,Juramento,fin_de_semana,11,14179,52,272.7
+LINEAD,Juramento,fin_de_semana,12,17565,52,337.8
+LINEAD,Juramento,fin_de_semana,13,19351,52,372.1
+LINEAD,Juramento,fin_de_semana,14,21728,52,417.8
+LINEAD,Juramento,fin_de_semana,15,25552,52,491.4
+LINEAD,Juramento,fin_de_semana,16,30778,52,591.9
+LINEAD,Juramento,fin_de_semana,17,32888,52,632.5
+LINEAD,Juramento,fin_de_semana,18,34356,52,660.7
+LINEAD,Juramento,fin_de_semana,19,33035,52,635.3
+LINEAD,Juramento,fin_de_semana,20,29429,52,565.9
+LINEAD,Juramento,fin_de_semana,21,17254,52,331.8
+LINEAD,Juramento,fin_de_semana,22,5038,52,96.9
+LINEAD,Juramento,fin_de_semana,23,1197,52,23.0
+LINEAD,Juramento,habil,0,2,129,0.0
+LINEAD,Juramento,habil,4,27,129,0.2
+LINEAD,Juramento,habil,5,3357,129,26.0
+LINEAD,Juramento,habil,6,28520,129,221.1
+LINEAD,Juramento,habil,7,93410,129,724.1
+LINEAD,Juramento,habil,8,129080,129,1000.6
+LINEAD,Juramento,habil,9,100329,129,777.7
+LINEAD,Juramento,habil,10,71420,129,553.6
+LINEAD,Juramento,habil,11,79889,129,619.3
+LINEAD,Juramento,habil,12,84623,129,656.0
+LINEAD,Juramento,habil,13,90263,129,699.7
+LINEAD,Juramento,habil,14,80395,129,623.2
+LINEAD,Juramento,habil,15,94536,129,732.8
+LINEAD,Juramento,habil,16,122198,129,947.3
+LINEAD,Juramento,habil,17,139965,129,1085.0
+LINEAD,Juramento,habil,18,130703,129,1013.2
+LINEAD,Juramento,habil,19,90249,129,699.6
+LINEAD,Juramento,habil,20,65302,129,506.2
+LINEAD,Juramento,habil,21,35778,129,277.3
+LINEAD,Juramento,habil,22,17926,129,139.0
+LINEAD,Juramento,habil,23,170,129,1.3
+LINEAD,Ministro Carranza,fin_de_semana,0,11,52,0.2
+LINEAD,Ministro Carranza,fin_de_semana,5,51,52,1.0
+LINEAD,Ministro Carranza,fin_de_semana,6,526,52,10.1
+LINEAD,Ministro Carranza,fin_de_semana,7,1910,52,36.7
+LINEAD,Ministro Carranza,fin_de_semana,8,3943,52,75.8
+LINEAD,Ministro Carranza,fin_de_semana,9,5995,52,115.3
+LINEAD,Ministro Carranza,fin_de_semana,10,7907,52,152.1
+LINEAD,Ministro Carranza,fin_de_semana,11,10181,52,195.8
+LINEAD,Ministro Carranza,fin_de_semana,12,11522,52,221.6
+LINEAD,Ministro Carranza,fin_de_semana,13,11312,52,217.5
+LINEAD,Ministro Carranza,fin_de_semana,14,10874,52,209.1
+LINEAD,Ministro Carranza,fin_de_semana,15,12573,52,241.8
+LINEAD,Ministro Carranza,fin_de_semana,16,13188,52,253.6
+LINEAD,Ministro Carranza,fin_de_semana,17,13104,52,252.0
+LINEAD,Ministro Carranza,fin_de_semana,18,12523,52,240.8
+LINEAD,Ministro Carranza,fin_de_semana,19,11030,52,212.1
+LINEAD,Ministro Carranza,fin_de_semana,20,9506,52,182.8
+LINEAD,Ministro Carranza,fin_de_semana,21,6227,52,119.8
+LINEAD,Ministro Carranza,fin_de_semana,22,1885,52,36.2
+LINEAD,Ministro Carranza,fin_de_semana,23,600,52,11.5
+LINEAD,Ministro Carranza,habil,0,5,129,0.0
+LINEAD,Ministro Carranza,habil,1,1,129,0.0
+LINEAD,Ministro Carranza,habil,4,43,129,0.3
+LINEAD,Ministro Carranza,habil,5,2105,129,16.3
+LINEAD,Ministro Carranza,habil,6,18847,129,146.1
+LINEAD,Ministro Carranza,habil,7,69054,129,535.3
+LINEAD,Ministro Carranza,habil,8,92062,129,713.7
+LINEAD,Ministro Carranza,habil,9,74585,129,578.2
+LINEAD,Ministro Carranza,habil,10,49915,129,386.9
+LINEAD,Ministro Carranza,habil,11,53708,129,416.3
+LINEAD,Ministro Carranza,habil,12,64400,129,499.2
+LINEAD,Ministro Carranza,habil,13,64173,129,497.5
+LINEAD,Ministro Carranza,habil,14,54088,129,419.3
+LINEAD,Ministro Carranza,habil,15,57744,129,447.6
+LINEAD,Ministro Carranza,habil,16,72464,129,561.7
+LINEAD,Ministro Carranza,habil,17,90564,129,702.0
+LINEAD,Ministro Carranza,habil,18,79528,129,616.5
+LINEAD,Ministro Carranza,habil,19,41991,129,325.5
+LINEAD,Ministro Carranza,habil,20,28474,129,220.7
+LINEAD,Ministro Carranza,habil,21,17966,129,139.3
+LINEAD,Ministro Carranza,habil,22,8046,129,62.4
+LINEAD,Ministro Carranza,habil,23,734,129,5.7
+LINEAD,Olleros,fin_de_semana,0,6,52,0.1
+LINEAD,Olleros,fin_de_semana,1,2,52,0.0
+LINEAD,Olleros,fin_de_semana,4,1,52,0.0
+LINEAD,Olleros,fin_de_semana,5,32,52,0.6
+LINEAD,Olleros,fin_de_semana,6,675,52,13.0
+LINEAD,Olleros,fin_de_semana,7,1988,52,38.2
+LINEAD,Olleros,fin_de_semana,8,3876,52,74.5
+LINEAD,Olleros,fin_de_semana,9,5517,52,106.1
+LINEAD,Olleros,fin_de_semana,10,7294,52,140.3
+LINEAD,Olleros,fin_de_semana,11,10550,52,202.9
+LINEAD,Olleros,fin_de_semana,12,11799,52,226.9
+LINEAD,Olleros,fin_de_semana,13,11036,52,212.2
+LINEAD,Olleros,fin_de_semana,14,10949,52,210.6
+LINEAD,Olleros,fin_de_semana,15,11730,52,225.6
+LINEAD,Olleros,fin_de_semana,16,12907,52,248.2
+LINEAD,Olleros,fin_de_semana,17,12903,52,248.1
+LINEAD,Olleros,fin_de_semana,18,12823,52,246.6
+LINEAD,Olleros,fin_de_semana,19,12588,52,242.1
+LINEAD,Olleros,fin_de_semana,20,11206,52,215.5
+LINEAD,Olleros,fin_de_semana,21,7090,52,136.3
+LINEAD,Olleros,fin_de_semana,22,2530,52,48.7
+LINEAD,Olleros,fin_de_semana,23,476,52,9.2
+LINEAD,Olleros,habil,0,4,129,0.0
+LINEAD,Olleros,habil,4,40,129,0.3
+LINEAD,Olleros,habil,5,2217,129,17.2
+LINEAD,Olleros,habil,6,20619,129,159.8
+LINEAD,Olleros,habil,7,68658,129,532.2
+LINEAD,Olleros,habil,8,98454,129,763.2
+LINEAD,Olleros,habil,9,80884,129,627.0
+LINEAD,Olleros,habil,10,52139,129,404.2
+LINEAD,Olleros,habil,11,60332,129,467.7
+LINEAD,Olleros,habil,12,65296,129,506.2
+LINEAD,Olleros,habil,13,62756,129,486.5
+LINEAD,Olleros,habil,14,59603,129,462.0
+LINEAD,Olleros,habil,15,65072,129,504.4
+LINEAD,Olleros,habil,16,90715,129,703.2
+LINEAD,Olleros,habil,17,97708,129,757.4
+LINEAD,Olleros,habil,18,76268,129,591.2
+LINEAD,Olleros,habil,19,50373,129,390.5
+LINEAD,Olleros,habil,20,39302,129,304.7
+LINEAD,Olleros,habil,21,20905,129,162.1
+LINEAD,Olleros,habil,22,9734,129,75.5
+LINEAD,Olleros,habil,23,541,129,4.2
+LINEAD,Palermo,fin_de_semana,0,14,52,0.3
+LINEAD,Palermo,fin_de_semana,4,2,52,0.0
+LINEAD,Palermo,fin_de_semana,5,136,52,2.6
+LINEAD,Palermo,fin_de_semana,6,2694,52,51.8
+LINEAD,Palermo,fin_de_semana,7,4802,52,92.3
+LINEAD,Palermo,fin_de_semana,8,7748,52,149.0
+LINEAD,Palermo,fin_de_semana,9,9732,52,187.2
+LINEAD,Palermo,fin_de_semana,10,12070,52,232.1
+LINEAD,Palermo,fin_de_semana,11,15337,52,294.9
+LINEAD,Palermo,fin_de_semana,12,18290,52,351.7
+LINEAD,Palermo,fin_de_semana,13,19822,52,381.2
+LINEAD,Palermo,fin_de_semana,14,20544,52,395.1
+LINEAD,Palermo,fin_de_semana,15,23129,52,444.8
+LINEAD,Palermo,fin_de_semana,16,28015,52,538.8
+LINEAD,Palermo,fin_de_semana,17,29922,52,575.4
+LINEAD,Palermo,fin_de_semana,18,32789,52,630.6
+LINEAD,Palermo,fin_de_semana,19,29892,52,574.8
+LINEAD,Palermo,fin_de_semana,20,25344,52,487.4
+LINEAD,Palermo,fin_de_semana,21,18680,52,359.2
+LINEAD,Palermo,fin_de_semana,22,6003,52,115.4
+LINEAD,Palermo,fin_de_semana,23,2544,52,48.9
+LINEAD,Palermo,habil,4,45,129,0.3
+LINEAD,Palermo,habil,5,5977,129,46.3
+LINEAD,Palermo,habil,6,27775,129,215.3
+LINEAD,Palermo,habil,7,75511,129,585.4
+LINEAD,Palermo,habil,8,113164,129,877.2
+LINEAD,Palermo,habil,9,96097,129,744.9
+LINEAD,Palermo,habil,10,73877,129,572.7
+LINEAD,Palermo,habil,11,76895,129,596.1
+LINEAD,Palermo,habil,12,84010,129,651.2
+LINEAD,Palermo,habil,13,85769,129,664.9
+LINEAD,Palermo,habil,14,85132,129,659.9
+LINEAD,Palermo,habil,15,95013,129,736.5
+LINEAD,Palermo,habil,16,120366,129,933.1
+LINEAD,Palermo,habil,17,143731,129,1114.2
+LINEAD,Palermo,habil,18,126434,129,980.1
+LINEAD,Palermo,habil,19,76754,129,595.0
+LINEAD,Palermo,habil,20,57625,129,446.7
+LINEAD,Palermo,habil,21,44609,129,345.8
+LINEAD,Palermo,habil,22,17853,129,138.4
+LINEAD,Palermo,habil,23,1646,129,12.8
+LINEAD,Plaza Italia,fin_de_semana,0,195,52,3.8
+LINEAD,Plaza Italia,fin_de_semana,1,398,52,7.7
+LINEAD,Plaza Italia,fin_de_semana,2,2,52,0.0
+LINEAD,Plaza Italia,fin_de_semana,4,1,52,0.0
+LINEAD,Plaza Italia,fin_de_semana,5,65,52,1.2
+LINEAD,Plaza Italia,fin_de_semana,6,554,52,10.7
+LINEAD,Plaza Italia,fin_de_semana,7,1404,52,27.0
+LINEAD,Plaza Italia,fin_de_semana,8,2556,52,49.2
+LINEAD,Plaza Italia,fin_de_semana,9,3808,52,73.2
+LINEAD,Plaza Italia,fin_de_semana,10,5290,52,101.7
+LINEAD,Plaza Italia,fin_de_semana,11,7122,52,137.0
+LINEAD,Plaza Italia,fin_de_semana,12,8722,52,167.7
+LINEAD,Plaza Italia,fin_de_semana,13,10851,52,208.7
+LINEAD,Plaza Italia,fin_de_semana,14,11983,52,230.4
+LINEAD,Plaza Italia,fin_de_semana,15,16135,52,310.3
+LINEAD,Plaza Italia,fin_de_semana,16,22252,52,427.9
+LINEAD,Plaza Italia,fin_de_semana,17,27397,52,526.9
+LINEAD,Plaza Italia,fin_de_semana,18,26142,52,502.7
+LINEAD,Plaza Italia,fin_de_semana,19,21007,52,404.0
+LINEAD,Plaza Italia,fin_de_semana,20,16149,52,310.6
+LINEAD,Plaza Italia,fin_de_semana,21,9137,52,175.7
+LINEAD,Plaza Italia,fin_de_semana,22,4936,52,94.9
+LINEAD,Plaza Italia,fin_de_semana,23,947,52,18.2
+LINEAD,Plaza Italia,habil,0,436,129,3.4
+LINEAD,Plaza Italia,habil,1,2,129,0.0
+LINEAD,Plaza Italia,habil,2,1,129,0.0
+LINEAD,Plaza Italia,habil,4,21,129,0.2
+LINEAD,Plaza Italia,habil,5,1329,129,10.3
+LINEAD,Plaza Italia,habil,6,10961,129,85.0
+LINEAD,Plaza Italia,habil,7,32578,129,252.5
+LINEAD,Plaza Italia,habil,8,40583,129,314.6
+LINEAD,Plaza Italia,habil,9,35101,129,272.1
+LINEAD,Plaza Italia,habil,10,26640,129,206.5
+LINEAD,Plaza Italia,habil,11,30079,129,233.2
+LINEAD,Plaza Italia,habil,12,36377,129,282.0
+LINEAD,Plaza Italia,habil,13,36285,129,281.3
+LINEAD,Plaza Italia,habil,14,35085,129,272.0
+LINEAD,Plaza Italia,habil,15,42455,129,329.1
+LINEAD,Plaza Italia,habil,16,63399,129,491.5
+LINEAD,Plaza Italia,habil,17,68056,129,527.6
+LINEAD,Plaza Italia,habil,18,59204,129,458.9
+LINEAD,Plaza Italia,habil,19,40325,129,312.6
+LINEAD,Plaza Italia,habil,20,31262,129,242.3
+LINEAD,Plaza Italia,habil,21,19314,129,149.7
+LINEAD,Plaza Italia,habil,22,10837,129,84.0
+LINEAD,Plaza Italia,habil,23,1001,129,7.8
+LINEAD,Pueyrredon.D,fin_de_semana,0,6,52,0.1
+LINEAD,Pueyrredon.D,fin_de_semana,5,18,52,0.3
+LINEAD,Pueyrredon.D,fin_de_semana,6,321,52,6.2
+LINEAD,Pueyrredon.D,fin_de_semana,7,914,52,17.6
+LINEAD,Pueyrredon.D,fin_de_semana,8,2205,52,42.4
+LINEAD,Pueyrredon.D,fin_de_semana,9,2970,52,57.1
+LINEAD,Pueyrredon.D,fin_de_semana,10,4010,52,77.1
+LINEAD,Pueyrredon.D,fin_de_semana,11,6040,52,116.2
+LINEAD,Pueyrredon.D,fin_de_semana,12,6869,52,132.1
+LINEAD,Pueyrredon.D,fin_de_semana,13,7080,52,136.2
+LINEAD,Pueyrredon.D,fin_de_semana,14,6651,52,127.9
+LINEAD,Pueyrredon.D,fin_de_semana,15,6526,52,125.5
+LINEAD,Pueyrredon.D,fin_de_semana,16,7451,52,143.3
+LINEAD,Pueyrredon.D,fin_de_semana,17,7045,52,135.5
+LINEAD,Pueyrredon.D,fin_de_semana,18,6748,52,129.8
+LINEAD,Pueyrredon.D,fin_de_semana,19,6833,52,131.4
+LINEAD,Pueyrredon.D,fin_de_semana,20,6081,52,116.9
+LINEAD,Pueyrredon.D,fin_de_semana,21,4121,52,79.2
+LINEAD,Pueyrredon.D,fin_de_semana,22,1297,52,24.9
+LINEAD,Pueyrredon.D,fin_de_semana,23,336,52,6.5
+LINEAD,Pueyrredon.D,habil,0,9,129,0.1
+LINEAD,Pueyrredon.D,habil,1,2,129,0.0
+LINEAD,Pueyrredon.D,habil,4,7,129,0.1
+LINEAD,Pueyrredon.D,habil,5,944,129,7.3
+LINEAD,Pueyrredon.D,habil,6,7669,129,59.4
+LINEAD,Pueyrredon.D,habil,7,34177,129,264.9
+LINEAD,Pueyrredon.D,habil,8,49327,129,382.4
+LINEAD,Pueyrredon.D,habil,9,50219,129,389.3
+LINEAD,Pueyrredon.D,habil,10,38653,129,299.6
+LINEAD,Pueyrredon.D,habil,11,42304,129,327.9
+LINEAD,Pueyrredon.D,habil,12,47904,129,371.3
+LINEAD,Pueyrredon.D,habil,13,49032,129,380.1
+LINEAD,Pueyrredon.D,habil,14,48754,129,377.9
+LINEAD,Pueyrredon.D,habil,15,50403,129,390.7
+LINEAD,Pueyrredon.D,habil,16,60822,129,471.5
+LINEAD,Pueyrredon.D,habil,17,62458,129,484.2
+LINEAD,Pueyrredon.D,habil,18,54948,129,426.0
+LINEAD,Pueyrredon.D,habil,19,39055,129,302.8
+LINEAD,Pueyrredon.D,habil,20,29422,129,228.1
+LINEAD,Pueyrredon.D,habil,21,15243,129,118.2
+LINEAD,Pueyrredon.D,habil,22,6465,129,50.1
+LINEAD,Pueyrredon.D,habil,23,852,129,6.6
+LINEAD,Scalabrini Ortiz,fin_de_semana,0,14,52,0.3
+LINEAD,Scalabrini Ortiz,fin_de_semana,4,1,52,0.0
+LINEAD,Scalabrini Ortiz,fin_de_semana,5,54,52,1.0
+LINEAD,Scalabrini Ortiz,fin_de_semana,6,804,52,15.5
+LINEAD,Scalabrini Ortiz,fin_de_semana,7,1822,52,35.0
+LINEAD,Scalabrini Ortiz,fin_de_semana,8,3824,52,73.5
+LINEAD,Scalabrini Ortiz,fin_de_semana,9,5544,52,106.6
+LINEAD,Scalabrini Ortiz,fin_de_semana,10,7694,52,148.0
+LINEAD,Scalabrini Ortiz,fin_de_semana,11,10045,52,193.2
+LINEAD,Scalabrini Ortiz,fin_de_semana,12,11808,52,227.1
+LINEAD,Scalabrini Ortiz,fin_de_semana,13,12760,52,245.4
+LINEAD,Scalabrini Ortiz,fin_de_semana,14,12734,52,244.9
+LINEAD,Scalabrini Ortiz,fin_de_semana,15,14576,52,280.3
+LINEAD,Scalabrini Ortiz,fin_de_semana,16,17915,52,344.5
+LINEAD,Scalabrini Ortiz,fin_de_semana,17,18518,52,356.1
+LINEAD,Scalabrini Ortiz,fin_de_semana,18,18065,52,347.4
+LINEAD,Scalabrini Ortiz,fin_de_semana,19,16832,52,323.7
+LINEAD,Scalabrini Ortiz,fin_de_semana,20,13647,52,262.4
+LINEAD,Scalabrini Ortiz,fin_de_semana,21,8142,52,156.6
+LINEAD,Scalabrini Ortiz,fin_de_semana,22,3256,52,62.6
+LINEAD,Scalabrini Ortiz,fin_de_semana,23,865,52,16.6
+LINEAD,Scalabrini Ortiz,habil,0,15,129,0.1
+LINEAD,Scalabrini Ortiz,habil,4,39,129,0.3
+LINEAD,Scalabrini Ortiz,habil,5,1834,129,14.2
+LINEAD,Scalabrini Ortiz,habil,6,14440,129,111.9
+LINEAD,Scalabrini Ortiz,habil,7,66102,129,512.4
+LINEAD,Scalabrini Ortiz,habil,8,92004,129,713.2
+LINEAD,Scalabrini Ortiz,habil,9,74698,129,579.1
+LINEAD,Scalabrini Ortiz,habil,10,49076,129,380.4
+LINEAD,Scalabrini Ortiz,habil,11,51962,129,402.8
+LINEAD,Scalabrini Ortiz,habil,12,61846,129,479.4
+LINEAD,Scalabrini Ortiz,habil,13,66054,129,512.0
+LINEAD,Scalabrini Ortiz,habil,14,57285,129,444.1
+LINEAD,Scalabrini Ortiz,habil,15,65654,129,508.9
+LINEAD,Scalabrini Ortiz,habil,16,84947,129,658.5
+LINEAD,Scalabrini Ortiz,habil,17,93782,129,727.0
+LINEAD,Scalabrini Ortiz,habil,18,81067,129,628.4
+LINEAD,Scalabrini Ortiz,habil,19,55689,129,431.7
+LINEAD,Scalabrini Ortiz,habil,20,41080,129,318.4
+LINEAD,Scalabrini Ortiz,habil,21,21499,129,166.7
+LINEAD,Scalabrini Ortiz,habil,22,10852,129,84.1
+LINEAD,Scalabrini Ortiz,habil,23,1574,129,12.2
+LINEAD,Tribunales,fin_de_semana,5,18,52,0.3
+LINEAD,Tribunales,fin_de_semana,6,176,52,3.4
+LINEAD,Tribunales,fin_de_semana,7,357,52,6.9
+LINEAD,Tribunales,fin_de_semana,8,594,52,11.4
+LINEAD,Tribunales,fin_de_semana,9,869,52,16.7
+LINEAD,Tribunales,fin_de_semana,10,1200,52,23.1
+LINEAD,Tribunales,fin_de_semana,11,1643,52,31.6
+LINEAD,Tribunales,fin_de_semana,12,1798,52,34.6
+LINEAD,Tribunales,fin_de_semana,13,2020,52,38.8
+LINEAD,Tribunales,fin_de_semana,14,1820,52,35.0
+LINEAD,Tribunales,fin_de_semana,15,2007,52,38.6
+LINEAD,Tribunales,fin_de_semana,16,1999,52,38.4
+LINEAD,Tribunales,fin_de_semana,17,2043,52,39.3
+LINEAD,Tribunales,fin_de_semana,18,2088,52,40.2
+LINEAD,Tribunales,fin_de_semana,19,2031,52,39.1
+LINEAD,Tribunales,fin_de_semana,20,2011,52,38.7
+LINEAD,Tribunales,fin_de_semana,21,1651,52,31.8
+LINEAD,Tribunales,fin_de_semana,22,1146,52,22.0
+LINEAD,Tribunales,fin_de_semana,23,464,52,8.9
+LINEAD,Tribunales,habil,0,1,129,0.0
+LINEAD,Tribunales,habil,5,290,129,2.2
+LINEAD,Tribunales,habil,6,1198,129,9.3
+LINEAD,Tribunales,habil,7,3860,129,29.9
+LINEAD,Tribunales,habil,8,6213,129,48.2
+LINEAD,Tribunales,habil,9,7581,129,58.8
+LINEAD,Tribunales,habil,10,9302,129,72.1
+LINEAD,Tribunales,habil,11,11895,129,92.2
+LINEAD,Tribunales,habil,12,15240,129,118.1
+LINEAD,Tribunales,habil,13,25702,129,199.2
+LINEAD,Tribunales,habil,14,23356,129,181.1
+LINEAD,Tribunales,habil,15,25578,129,198.3
+LINEAD,Tribunales,habil,16,28110,129,217.9
+LINEAD,Tribunales,habil,17,31858,129,247.0
+LINEAD,Tribunales,habil,18,30239,129,234.4
+LINEAD,Tribunales,habil,19,12712,129,98.5
+LINEAD,Tribunales,habil,20,8016,129,62.1
+LINEAD,Tribunales,habil,21,3909,129,30.3
+LINEAD,Tribunales,habil,22,2665,129,20.7
+LINEAD,Tribunales,habil,23,739,129,5.7
+LINEAE,Avenida La Plata,fin_de_semana,0,6,52,0.1
+LINEAE,Avenida La Plata,fin_de_semana,1,3,52,0.1
+LINEAE,Avenida La Plata,fin_de_semana,4,2,52,0.0
+LINEAE,Avenida La Plata,fin_de_semana,5,84,52,1.6
+LINEAE,Avenida La Plata,fin_de_semana,6,737,52,14.2
+LINEAE,Avenida La Plata,fin_de_semana,7,1665,52,32.0
+LINEAE,Avenida La Plata,fin_de_semana,8,3255,52,62.6
+LINEAE,Avenida La Plata,fin_de_semana,9,4058,52,78.0
+LINEAE,Avenida La Plata,fin_de_semana,10,4454,52,85.7
+LINEAE,Avenida La Plata,fin_de_semana,11,5526,52,106.3
+LINEAE,Avenida La Plata,fin_de_semana,12,6487,52,124.8
+LINEAE,Avenida La Plata,fin_de_semana,13,6310,52,121.3
+LINEAE,Avenida La Plata,fin_de_semana,14,6268,52,120.5
+LINEAE,Avenida La Plata,fin_de_semana,15,6646,52,127.8
+LINEAE,Avenida La Plata,fin_de_semana,16,6804,52,130.8
+LINEAE,Avenida La Plata,fin_de_semana,17,6381,52,122.7
+LINEAE,Avenida La Plata,fin_de_semana,18,6038,52,116.1
+LINEAE,Avenida La Plata,fin_de_semana,19,5774,52,111.0
+LINEAE,Avenida La Plata,fin_de_semana,20,5106,52,98.2
+LINEAE,Avenida La Plata,fin_de_semana,21,3057,52,58.8
+LINEAE,Avenida La Plata,fin_de_semana,22,1192,52,22.9
+LINEAE,Avenida La Plata,fin_de_semana,23,307,52,5.9
+LINEAE,Avenida La Plata,habil,4,46,129,0.4
+LINEAE,Avenida La Plata,habil,5,2599,129,20.1
+LINEAE,Avenida La Plata,habil,6,19455,129,150.8
+LINEAE,Avenida La Plata,habil,7,65595,129,508.5
+LINEAE,Avenida La Plata,habil,8,76686,129,594.5
+LINEAE,Avenida La Plata,habil,9,53776,129,416.9
+LINEAE,Avenida La Plata,habil,10,29341,129,227.4
+LINEAE,Avenida La Plata,habil,11,32946,129,255.4
+LINEAE,Avenida La Plata,habil,12,35032,129,271.6
+LINEAE,Avenida La Plata,habil,13,34000,129,263.6
+LINEAE,Avenida La Plata,habil,14,25033,129,194.1
+LINEAE,Avenida La Plata,habil,15,27598,129,213.9
+LINEAE,Avenida La Plata,habil,16,37480,129,290.5
+LINEAE,Avenida La Plata,habil,17,40164,129,311.3
+LINEAE,Avenida La Plata,habil,18,38319,129,297.0
+LINEAE,Avenida La Plata,habil,19,19421,129,150.6
+LINEAE,Avenida La Plata,habil,20,14565,129,112.9
+LINEAE,Avenida La Plata,habil,21,8879,129,68.8
+LINEAE,Avenida La Plata,habil,22,4215,129,32.7
+LINEAE,Avenida La Plata,habil,23,483,129,3.7
+LINEAE,Boedo,fin_de_semana,5,91,52,1.8
+LINEAE,Boedo,fin_de_semana,6,780,52,15.0
+LINEAE,Boedo,fin_de_semana,7,1867,52,35.9
+LINEAE,Boedo,fin_de_semana,8,3555,52,68.4
+LINEAE,Boedo,fin_de_semana,9,4572,52,87.9
+LINEAE,Boedo,fin_de_semana,10,5013,52,96.4
+LINEAE,Boedo,fin_de_semana,11,6707,52,129.0
+LINEAE,Boedo,fin_de_semana,12,7607,52,146.3
+LINEAE,Boedo,fin_de_semana,13,7385,52,142.0
+LINEAE,Boedo,fin_de_semana,14,7349,52,141.3
+LINEAE,Boedo,fin_de_semana,15,7468,52,143.6
+LINEAE,Boedo,fin_de_semana,16,8282,52,159.3
+LINEAE,Boedo,fin_de_semana,17,8108,52,155.9
+LINEAE,Boedo,fin_de_semana,18,7401,52,142.3
+LINEAE,Boedo,fin_de_semana,19,7355,52,141.4
+LINEAE,Boedo,fin_de_semana,20,6230,52,119.8
+LINEAE,Boedo,fin_de_semana,21,4243,52,81.6
+LINEAE,Boedo,fin_de_semana,22,1642,52,31.6
+LINEAE,Boedo,fin_de_semana,23,314,52,6.0
+LINEAE,Boedo,habil,0,2,129,0.0
+LINEAE,Boedo,habil,1,1,129,0.0
+LINEAE,Boedo,habil,4,26,129,0.2
+LINEAE,Boedo,habil,5,3296,129,25.6
+LINEAE,Boedo,habil,6,15767,129,122.2
+LINEAE,Boedo,habil,7,49301,129,382.2
+LINEAE,Boedo,habil,8,62661,129,485.7
+LINEAE,Boedo,habil,9,48116,129,373.0
+LINEAE,Boedo,habil,10,28319,129,219.5
+LINEAE,Boedo,habil,11,33247,129,257.7
+LINEAE,Boedo,habil,12,39023,129,302.5
+LINEAE,Boedo,habil,13,35986,129,279.0
+LINEAE,Boedo,habil,14,27749,129,215.1
+LINEAE,Boedo,habil,15,29721,129,230.4
+LINEAE,Boedo,habil,16,36220,129,280.8
+LINEAE,Boedo,habil,17,42012,129,325.7
+LINEAE,Boedo,habil,18,34663,129,268.7
+LINEAE,Boedo,habil,19,21196,129,164.3
+LINEAE,Boedo,habil,20,17617,129,136.6
+LINEAE,Boedo,habil,21,12449,129,96.5
+LINEAE,Boedo,habil,22,6453,129,50.0
+LINEAE,Boedo,habil,23,449,129,3.5
+LINEAE,Bolivar,fin_de_semana,0,4,52,0.1
+LINEAE,Bolivar,fin_de_semana,5,74,52,1.4
+LINEAE,Bolivar,fin_de_semana,6,495,52,9.5
+LINEAE,Bolivar,fin_de_semana,7,1081,52,20.8
+LINEAE,Bolivar,fin_de_semana,8,3013,52,57.9
+LINEAE,Bolivar,fin_de_semana,9,2324,52,44.7
+LINEAE,Bolivar,fin_de_semana,10,2837,52,54.6
+LINEAE,Bolivar,fin_de_semana,11,3636,52,69.9
+LINEAE,Bolivar,fin_de_semana,12,4735,52,91.1
+LINEAE,Bolivar,fin_de_semana,13,8518,52,163.8
+LINEAE,Bolivar,fin_de_semana,14,5121,52,98.5
+LINEAE,Bolivar,fin_de_semana,15,5673,52,109.1
+LINEAE,Bolivar,fin_de_semana,16,7219,52,138.8
+LINEAE,Bolivar,fin_de_semana,17,7414,52,142.6
+LINEAE,Bolivar,fin_de_semana,18,7952,52,152.9
+LINEAE,Bolivar,fin_de_semana,19,7386,52,142.0
+LINEAE,Bolivar,fin_de_semana,20,5034,52,96.8
+LINEAE,Bolivar,fin_de_semana,21,2994,52,57.6
+LINEAE,Bolivar,fin_de_semana,22,1277,52,24.6
+LINEAE,Bolivar,fin_de_semana,23,486,52,9.3
+LINEAE,Bolivar,habil,4,12,129,0.1
+LINEAE,Bolivar,habil,5,1755,129,13.6
+LINEAE,Bolivar,habil,6,6523,129,50.6
+LINEAE,Bolivar,habil,7,14815,129,114.8
+LINEAE,Bolivar,habil,8,15092,129,117.0
+LINEAE,Bolivar,habil,9,16187,129,125.5
+LINEAE,Bolivar,habil,10,20104,129,155.8
+LINEAE,Bolivar,habil,11,31378,129,243.2
+LINEAE,Bolivar,habil,12,56685,129,439.4
+LINEAE,Bolivar,habil,13,49900,129,386.8
+LINEAE,Bolivar,habil,14,64409,129,499.3
+LINEAE,Bolivar,habil,15,102644,129,795.7
+LINEAE,Bolivar,habil,16,147367,129,1142.4
+LINEAE,Bolivar,habil,17,190341,129,1475.5
+LINEAE,Bolivar,habil,18,108882,129,844.0
+LINEAE,Bolivar,habil,19,50688,129,392.9
+LINEAE,Bolivar,habil,20,30956,129,240.0
+LINEAE,Bolivar,habil,21,18396,129,142.6
+LINEAE,Bolivar,habil,22,20524,129,159.1
+LINEAE,Bolivar,habil,23,1545,129,12.0
+LINEAE,Catalinas,fin_de_semana,1,2,52,0.0
+LINEAE,Catalinas,fin_de_semana,5,27,52,0.5
+LINEAE,Catalinas,fin_de_semana,6,270,52,5.2
+LINEAE,Catalinas,fin_de_semana,7,293,52,5.6
+LINEAE,Catalinas,fin_de_semana,8,545,52,10.5
+LINEAE,Catalinas,fin_de_semana,9,859,52,16.5
+LINEAE,Catalinas,fin_de_semana,10,1018,52,19.6
+LINEAE,Catalinas,fin_de_semana,11,1560,52,30.0
+LINEAE,Catalinas,fin_de_semana,12,1640,52,31.5
+LINEAE,Catalinas,fin_de_semana,13,1839,52,35.4
+LINEAE,Catalinas,fin_de_semana,14,2107,52,40.5
+LINEAE,Catalinas,fin_de_semana,15,2215,52,42.6
+LINEAE,Catalinas,fin_de_semana,16,2718,52,52.3
+LINEAE,Catalinas,fin_de_semana,17,2542,52,48.9
+LINEAE,Catalinas,fin_de_semana,18,2930,52,56.3
+LINEAE,Catalinas,fin_de_semana,19,2403,52,46.2
+LINEAE,Catalinas,fin_de_semana,20,1770,52,34.0
+LINEAE,Catalinas,fin_de_semana,21,1576,52,30.3
+LINEAE,Catalinas,fin_de_semana,22,707,52,13.6
+LINEAE,Catalinas,fin_de_semana,23,188,52,3.6
+LINEAE,Catalinas,habil,1,1,129,0.0
+LINEAE,Catalinas,habil,4,9,129,0.1
+LINEAE,Catalinas,habil,5,332,129,2.6
+LINEAE,Catalinas,habil,6,1786,129,13.8
+LINEAE,Catalinas,habil,7,4168,129,32.3
+LINEAE,Catalinas,habil,8,4617,129,35.8
+LINEAE,Catalinas,habil,9,5564,129,43.1
+LINEAE,Catalinas,habil,10,6646,129,51.5
+LINEAE,Catalinas,habil,11,10177,129,78.9
+LINEAE,Catalinas,habil,12,19760,129,153.2
+LINEAE,Catalinas,habil,13,25104,129,194.6
+LINEAE,Catalinas,habil,14,24053,129,186.5
+LINEAE,Catalinas,habil,15,37548,129,291.1
+LINEAE,Catalinas,habil,16,74850,129,580.2
+LINEAE,Catalinas,habil,17,163319,129,1266.0
+LINEAE,Catalinas,habil,18,145569,129,1128.4
+LINEAE,Catalinas,habil,19,35507,129,275.2
+LINEAE,Catalinas,habil,20,15806,129,122.5
+LINEAE,Catalinas,habil,21,10551,129,81.8
+LINEAE,Catalinas,habil,22,4588,129,35.6
+LINEAE,Catalinas,habil,23,913,129,7.1
+LINEAE,Correo Central,fin_de_semana,0,22,52,0.4
+LINEAE,Correo Central,fin_de_semana,4,1,52,0.0
+LINEAE,Correo Central,fin_de_semana,5,65,52,1.2
+LINEAE,Correo Central,fin_de_semana,6,635,52,12.2
+LINEAE,Correo Central,fin_de_semana,7,860,52,16.5
+LINEAE,Correo Central,fin_de_semana,8,1468,52,28.2
+LINEAE,Correo Central,fin_de_semana,9,1428,52,27.5
+LINEAE,Correo Central,fin_de_semana,10,1485,52,28.6
+LINEAE,Correo Central,fin_de_semana,11,2112,52,40.6
+LINEAE,Correo Central,fin_de_semana,12,2789,52,53.6
+LINEAE,Correo Central,fin_de_semana,13,2917,52,56.1
+LINEAE,Correo Central,fin_de_semana,14,3507,52,67.4
+LINEAE,Correo Central,fin_de_semana,15,4252,52,81.8
+LINEAE,Correo Central,fin_de_semana,16,5784,52,111.2
+LINEAE,Correo Central,fin_de_semana,17,7160,52,137.7
+LINEAE,Correo Central,fin_de_semana,18,8774,52,168.7
+LINEAE,Correo Central,fin_de_semana,19,8551,52,164.4
+LINEAE,Correo Central,fin_de_semana,20,9185,52,176.6
+LINEAE,Correo Central,fin_de_semana,21,8213,52,157.9
+LINEAE,Correo Central,fin_de_semana,22,2809,52,54.0
+LINEAE,Correo Central,fin_de_semana,23,823,52,15.8
+LINEAE,Correo Central,habil,0,1,129,0.0
+LINEAE,Correo Central,habil,4,44,129,0.3
+LINEAE,Correo Central,habil,5,2120,129,16.4
+LINEAE,Correo Central,habil,6,8553,129,66.3
+LINEAE,Correo Central,habil,7,14070,129,109.1
+LINEAE,Correo Central,habil,8,13086,129,101.4
+LINEAE,Correo Central,habil,9,13909,129,107.8
+LINEAE,Correo Central,habil,10,13953,129,108.2
+LINEAE,Correo Central,habil,11,19106,129,148.1
+LINEAE,Correo Central,habil,12,25429,129,197.1
+LINEAE,Correo Central,habil,13,31543,129,244.5
+LINEAE,Correo Central,habil,14,34950,129,270.9
+LINEAE,Correo Central,habil,15,49882,129,386.7
+LINEAE,Correo Central,habil,16,76350,129,591.9
+LINEAE,Correo Central,habil,17,138852,129,1076.4
+LINEAE,Correo Central,habil,18,110200,129,854.3
+LINEAE,Correo Central,habil,19,40447,129,313.5
+LINEAE,Correo Central,habil,20,26371,129,204.4
+LINEAE,Correo Central,habil,21,18433,129,142.9
+LINEAE,Correo Central,habil,22,7452,129,57.8
+LINEAE,Correo Central,habil,23,1526,129,11.8
+LINEAE,Emilio Mitre,fin_de_semana,0,3,52,0.1
+LINEAE,Emilio Mitre,fin_de_semana,5,68,52,1.3
+LINEAE,Emilio Mitre,fin_de_semana,6,685,52,13.2
+LINEAE,Emilio Mitre,fin_de_semana,7,1595,52,30.7
+LINEAE,Emilio Mitre,fin_de_semana,8,2708,52,52.1
+LINEAE,Emilio Mitre,fin_de_semana,9,3230,52,62.1
+LINEAE,Emilio Mitre,fin_de_semana,10,4028,52,77.5
+LINEAE,Emilio Mitre,fin_de_semana,11,5165,52,99.3
+LINEAE,Emilio Mitre,fin_de_semana,12,6882,52,132.3
+LINEAE,Emilio Mitre,fin_de_semana,13,6160,52,118.5
+LINEAE,Emilio Mitre,fin_de_semana,14,5533,52,106.4
+LINEAE,Emilio Mitre,fin_de_semana,15,6223,52,119.7
+LINEAE,Emilio Mitre,fin_de_semana,16,7502,52,144.3
+LINEAE,Emilio Mitre,fin_de_semana,17,8006,52,154.0
+LINEAE,Emilio Mitre,fin_de_semana,18,8916,52,171.5
+LINEAE,Emilio Mitre,fin_de_semana,19,11171,52,214.8
+LINEAE,Emilio Mitre,fin_de_semana,20,5688,52,109.4
+LINEAE,Emilio Mitre,fin_de_semana,21,3811,52,73.3
+LINEAE,Emilio Mitre,fin_de_semana,22,1438,52,27.7
+LINEAE,Emilio Mitre,fin_de_semana,23,218,52,4.2
+LINEAE,Emilio Mitre,habil,1,1,129,0.0
+LINEAE,Emilio Mitre,habil,4,84,129,0.7
+LINEAE,Emilio Mitre,habil,5,2766,129,21.4
+LINEAE,Emilio Mitre,habil,6,20302,129,157.4
+LINEAE,Emilio Mitre,habil,7,63538,129,492.5
+LINEAE,Emilio Mitre,habil,8,76218,129,590.8
+LINEAE,Emilio Mitre,habil,9,51687,129,400.7
+LINEAE,Emilio Mitre,habil,10,26517,129,205.6
+LINEAE,Emilio Mitre,habil,11,30960,129,240.0
+LINEAE,Emilio Mitre,habil,12,30094,129,233.3
+LINEAE,Emilio Mitre,habil,13,27293,129,211.6
+LINEAE,Emilio Mitre,habil,14,20330,129,157.6
+LINEAE,Emilio Mitre,habil,15,20552,129,159.3
+LINEAE,Emilio Mitre,habil,16,26409,129,204.7
+LINEAE,Emilio Mitre,habil,17,28161,129,218.3
+LINEAE,Emilio Mitre,habil,18,24778,129,192.1
+LINEAE,Emilio Mitre,habil,19,17422,129,135.1
+LINEAE,Emilio Mitre,habil,20,15557,129,120.6
+LINEAE,Emilio Mitre,habil,21,10678,129,82.8
+LINEAE,Emilio Mitre,habil,22,4988,129,38.7
+LINEAE,Emilio Mitre,habil,23,98,129,0.8
+LINEAE,Entre Rios,fin_de_semana,4,1,52,0.0
+LINEAE,Entre Rios,fin_de_semana,5,85,52,1.6
+LINEAE,Entre Rios,fin_de_semana,6,723,52,13.9
+LINEAE,Entre Rios,fin_de_semana,7,1477,52,28.4
+LINEAE,Entre Rios,fin_de_semana,8,3186,52,61.3
+LINEAE,Entre Rios,fin_de_semana,9,3711,52,71.4
+LINEAE,Entre Rios,fin_de_semana,10,3944,52,75.8
+LINEAE,Entre Rios,fin_de_semana,11,4705,52,90.5
+LINEAE,Entre Rios,fin_de_semana,12,4963,52,95.4
+LINEAE,Entre Rios,fin_de_semana,13,5015,52,96.4
+LINEAE,Entre Rios,fin_de_semana,14,4916,52,94.5
+LINEAE,Entre Rios,fin_de_semana,15,5133,52,98.7
+LINEAE,Entre Rios,fin_de_semana,16,5401,52,103.9
+LINEAE,Entre Rios,fin_de_semana,17,5008,52,96.3
+LINEAE,Entre Rios,fin_de_semana,18,4754,52,91.4
+LINEAE,Entre Rios,fin_de_semana,19,4658,52,89.6
+LINEAE,Entre Rios,fin_de_semana,20,3929,52,75.6
+LINEAE,Entre Rios,fin_de_semana,21,2965,52,57.0
+LINEAE,Entre Rios,fin_de_semana,22,1428,52,27.5
+LINEAE,Entre Rios,fin_de_semana,23,246,52,4.7
+LINEAE,Entre Rios,habil,4,28,129,0.2
+LINEAE,Entre Rios,habil,5,2585,129,20.0
+LINEAE,Entre Rios,habil,6,10612,129,82.3
+LINEAE,Entre Rios,habil,7,30601,129,237.2
+LINEAE,Entre Rios,habil,8,36766,129,285.0
+LINEAE,Entre Rios,habil,9,28563,129,221.4
+LINEAE,Entre Rios,habil,10,20381,129,158.0
+LINEAE,Entre Rios,habil,11,22884,129,177.4
+LINEAE,Entre Rios,habil,12,27914,129,216.4
+LINEAE,Entre Rios,habil,13,24833,129,192.5
+LINEAE,Entre Rios,habil,14,22683,129,175.8
+LINEAE,Entre Rios,habil,15,26938,129,208.8
+LINEAE,Entre Rios,habil,16,32734,129,253.8
+LINEAE,Entre Rios,habil,17,33490,129,259.6
+LINEAE,Entre Rios,habil,18,28357,129,219.8
+LINEAE,Entre Rios,habil,19,15692,129,121.6
+LINEAE,Entre Rios,habil,20,12199,129,94.6
+LINEAE,Entre Rios,habil,21,8601,129,66.7
+LINEAE,Entre Rios,habil,22,4800,129,37.2
+LINEAE,Entre Rios,habil,23,523,129,4.1
+LINEAE,General Belgrano,fin_de_semana,0,4,52,0.1
+LINEAE,General Belgrano,fin_de_semana,5,40,52,0.8
+LINEAE,General Belgrano,fin_de_semana,6,455,52,8.8
+LINEAE,General Belgrano,fin_de_semana,7,847,52,16.3
+LINEAE,General Belgrano,fin_de_semana,8,1362,52,26.2
+LINEAE,General Belgrano,fin_de_semana,9,1623,52,31.2
+LINEAE,General Belgrano,fin_de_semana,10,1958,52,37.7
+LINEAE,General Belgrano,fin_de_semana,11,2386,52,45.9
+LINEAE,General Belgrano,fin_de_semana,12,2815,52,54.1
+LINEAE,General Belgrano,fin_de_semana,13,2738,52,52.7
+LINEAE,General Belgrano,fin_de_semana,14,2636,52,50.7
+LINEAE,General Belgrano,fin_de_semana,15,2737,52,52.6
+LINEAE,General Belgrano,fin_de_semana,16,2747,52,52.8
+LINEAE,General Belgrano,fin_de_semana,17,2847,52,54.8
+LINEAE,General Belgrano,fin_de_semana,18,2936,52,56.5
+LINEAE,General Belgrano,fin_de_semana,19,2626,52,50.5
+LINEAE,General Belgrano,fin_de_semana,20,2654,52,51.0
+LINEAE,General Belgrano,fin_de_semana,21,2240,52,43.1
+LINEAE,General Belgrano,fin_de_semana,22,1480,52,28.5
+LINEAE,General Belgrano,fin_de_semana,23,627,52,12.1
+LINEAE,General Belgrano,habil,4,9,129,0.1
+LINEAE,General Belgrano,habil,5,698,129,5.4
+LINEAE,General Belgrano,habil,6,3944,129,30.6
+LINEAE,General Belgrano,habil,7,10674,129,82.7
+LINEAE,General Belgrano,habil,8,13390,129,103.8
+LINEAE,General Belgrano,habil,9,12436,129,96.4
+LINEAE,General Belgrano,habil,10,12548,129,97.3
+LINEAE,General Belgrano,habil,11,16672,129,129.2
+LINEAE,General Belgrano,habil,12,22075,129,171.1
+LINEAE,General Belgrano,habil,13,23283,129,180.5
+LINEAE,General Belgrano,habil,14,30767,129,238.5
+LINEAE,General Belgrano,habil,15,41066,129,318.3
+LINEAE,General Belgrano,habil,16,56269,129,436.2
+LINEAE,General Belgrano,habil,17,60844,129,471.7
+LINEAE,General Belgrano,habil,18,42826,129,332.0
+LINEAE,General Belgrano,habil,19,19786,129,153.4
+LINEAE,General Belgrano,habil,20,13659,129,105.9
+LINEAE,General Belgrano,habil,21,7949,129,61.6
+LINEAE,General Belgrano,habil,22,3537,129,27.4
+LINEAE,General Belgrano,habil,23,625,129,4.8
+LINEAE,Independencia.E,fin_de_semana,0,5,52,0.1
+LINEAE,Independencia.E,fin_de_semana,5,61,52,1.2
+LINEAE,Independencia.E,fin_de_semana,6,465,52,8.9
+LINEAE,Independencia.E,fin_de_semana,7,849,52,16.3
+LINEAE,Independencia.E,fin_de_semana,8,1755,52,33.8
+LINEAE,Independencia.E,fin_de_semana,9,2137,52,41.1
+LINEAE,Independencia.E,fin_de_semana,10,3019,52,58.1
+LINEAE,Independencia.E,fin_de_semana,11,3888,52,74.8
+LINEAE,Independencia.E,fin_de_semana,12,4380,52,84.2
+LINEAE,Independencia.E,fin_de_semana,13,4484,52,86.2
+LINEAE,Independencia.E,fin_de_semana,14,3211,52,61.8
+LINEAE,Independencia.E,fin_de_semana,15,3423,52,65.8
+LINEAE,Independencia.E,fin_de_semana,16,3625,52,69.7
+LINEAE,Independencia.E,fin_de_semana,17,3361,52,64.6
+LINEAE,Independencia.E,fin_de_semana,18,3686,52,70.9
+LINEAE,Independencia.E,fin_de_semana,19,3208,52,61.7
+LINEAE,Independencia.E,fin_de_semana,20,2663,52,51.2
+LINEAE,Independencia.E,fin_de_semana,21,1952,52,37.5
+LINEAE,Independencia.E,fin_de_semana,22,1077,52,20.7
+LINEAE,Independencia.E,fin_de_semana,23,346,52,6.7
+LINEAE,Independencia.E,habil,0,1,129,0.0
+LINEAE,Independencia.E,habil,4,29,129,0.2
+LINEAE,Independencia.E,habil,5,1365,129,10.6
+LINEAE,Independencia.E,habil,6,6379,129,49.4
+LINEAE,Independencia.E,habil,7,13364,129,103.6
+LINEAE,Independencia.E,habil,8,18956,129,146.9
+LINEAE,Independencia.E,habil,9,20602,129,159.7
+LINEAE,Independencia.E,habil,10,23912,129,185.4
+LINEAE,Independencia.E,habil,11,80014,129,620.3
+LINEAE,Independencia.E,habil,12,93146,129,722.1
+LINEAE,Independencia.E,habil,13,24737,129,191.8
+LINEAE,Independencia.E,habil,14,21321,129,165.3
+LINEAE,Independencia.E,habil,15,30331,129,235.1
+LINEAE,Independencia.E,habil,16,37728,129,292.5
+LINEAE,Independencia.E,habil,17,105330,129,816.5
+LINEAE,Independencia.E,habil,18,59552,129,461.6
+LINEAE,Independencia.E,habil,19,26884,129,208.4
+LINEAE,Independencia.E,habil,20,36492,129,282.9
+LINEAE,Independencia.E,habil,21,110500,129,856.6
+LINEAE,Independencia.E,habil,22,35250,129,273.3
+LINEAE,Independencia.E,habil,23,785,129,6.1
+LINEAE,Independencia.H,fin_de_semana,5,22,52,0.4
+LINEAE,Independencia.H,fin_de_semana,6,225,52,4.3
+LINEAE,Independencia.H,fin_de_semana,7,421,52,8.1
+LINEAE,Independencia.H,fin_de_semana,8,713,52,13.7
+LINEAE,Independencia.H,fin_de_semana,9,849,52,16.3
+LINEAE,Independencia.H,fin_de_semana,10,1093,52,21.0
+LINEAE,Independencia.H,fin_de_semana,11,1237,52,23.8
+LINEAE,Independencia.H,fin_de_semana,12,1363,52,26.2
+LINEAE,Independencia.H,fin_de_semana,13,1505,52,28.9
+LINEAE,Independencia.H,fin_de_semana,14,1237,52,23.8
+LINEAE,Independencia.H,fin_de_semana,15,1207,52,23.2
+LINEAE,Independencia.H,fin_de_semana,16,1345,52,25.9
+LINEAE,Independencia.H,fin_de_semana,17,1301,52,25.0
+LINEAE,Independencia.H,fin_de_semana,18,1327,52,25.5
+LINEAE,Independencia.H,fin_de_semana,19,1249,52,24.0
+LINEAE,Independencia.H,fin_de_semana,20,1022,52,19.7
+LINEAE,Independencia.H,fin_de_semana,21,741,52,14.2
+LINEAE,Independencia.H,fin_de_semana,22,372,52,7.2
+LINEAE,Independencia.H,fin_de_semana,23,67,52,1.3
+LINEAE,Independencia.H,habil,5,607,129,4.7
+LINEAE,Independencia.H,habil,6,2704,129,21.0
+LINEAE,Independencia.H,habil,7,5509,129,42.7
+LINEAE,Independencia.H,habil,8,6622,129,51.3
+LINEAE,Independencia.H,habil,9,8009,129,62.1
+LINEAE,Independencia.H,habil,10,8100,129,62.8
+LINEAE,Independencia.H,habil,11,14000,129,108.5
+LINEAE,Independencia.H,habil,12,15922,129,123.4
+LINEAE,Independencia.H,habil,13,7326,129,56.8
+LINEAE,Independencia.H,habil,14,7258,129,56.3
+LINEAE,Independencia.H,habil,15,9973,129,77.3
+LINEAE,Independencia.H,habil,16,11846,129,91.8
+LINEAE,Independencia.H,habil,17,19930,129,154.5
+LINEAE,Independencia.H,habil,18,11565,129,89.7
+LINEAE,Independencia.H,habil,19,7087,129,54.9
+LINEAE,Independencia.H,habil,20,8836,129,68.5
+LINEAE,Independencia.H,habil,21,16697,129,129.4
+LINEAE,Independencia.H,habil,22,5517,129,42.8
+LINEAE,Independencia.H,habil,23,208,129,1.6
+LINEAE,Jose Maria Moreno,fin_de_semana,0,1,52,0.0
+LINEAE,Jose Maria Moreno,fin_de_semana,5,55,52,1.1
+LINEAE,Jose Maria Moreno,fin_de_semana,6,520,52,10.0
+LINEAE,Jose Maria Moreno,fin_de_semana,7,1426,52,27.4
+LINEAE,Jose Maria Moreno,fin_de_semana,8,2538,52,48.8
+LINEAE,Jose Maria Moreno,fin_de_semana,9,3195,52,61.4
+LINEAE,Jose Maria Moreno,fin_de_semana,10,3694,52,71.0
+LINEAE,Jose Maria Moreno,fin_de_semana,11,4623,52,88.9
+LINEAE,Jose Maria Moreno,fin_de_semana,12,5648,52,108.6
+LINEAE,Jose Maria Moreno,fin_de_semana,13,6696,52,128.8
+LINEAE,Jose Maria Moreno,fin_de_semana,14,5416,52,104.2
+LINEAE,Jose Maria Moreno,fin_de_semana,15,5449,52,104.8
+LINEAE,Jose Maria Moreno,fin_de_semana,16,5679,52,109.2
+LINEAE,Jose Maria Moreno,fin_de_semana,17,5116,52,98.4
+LINEAE,Jose Maria Moreno,fin_de_semana,18,5051,52,97.1
+LINEAE,Jose Maria Moreno,fin_de_semana,19,6504,52,125.1
+LINEAE,Jose Maria Moreno,fin_de_semana,20,4483,52,86.2
+LINEAE,Jose Maria Moreno,fin_de_semana,21,2834,52,54.5
+LINEAE,Jose Maria Moreno,fin_de_semana,22,873,52,16.8
+LINEAE,Jose Maria Moreno,fin_de_semana,23,189,52,3.6
+LINEAE,Jose Maria Moreno,habil,2,1,129,0.0
+LINEAE,Jose Maria Moreno,habil,4,48,129,0.4
+LINEAE,Jose Maria Moreno,habil,5,1952,129,15.1
+LINEAE,Jose Maria Moreno,habil,6,16559,129,128.4
+LINEAE,Jose Maria Moreno,habil,7,57558,129,446.2
+LINEAE,Jose Maria Moreno,habil,8,68551,129,531.4
+LINEAE,Jose Maria Moreno,habil,9,48486,129,375.9
+LINEAE,Jose Maria Moreno,habil,10,23985,129,185.9
+LINEAE,Jose Maria Moreno,habil,11,26604,129,206.2
+LINEAE,Jose Maria Moreno,habil,12,27054,129,209.7
+LINEAE,Jose Maria Moreno,habil,13,28392,129,220.1
+LINEAE,Jose Maria Moreno,habil,14,19305,129,149.7
+LINEAE,Jose Maria Moreno,habil,15,20206,129,156.6
+LINEAE,Jose Maria Moreno,habil,16,24498,129,189.9
+LINEAE,Jose Maria Moreno,habil,17,30330,129,235.1
+LINEAE,Jose Maria Moreno,habil,18,27467,129,212.9
+LINEAE,Jose Maria Moreno,habil,19,15711,129,121.8
+LINEAE,Jose Maria Moreno,habil,20,11436,129,88.7
+LINEAE,Jose Maria Moreno,habil,21,7497,129,58.1
+LINEAE,Jose Maria Moreno,habil,22,4126,129,32.0
+LINEAE,Jose Maria Moreno,habil,23,198,129,1.5
+LINEAE,Jujuy,fin_de_semana,0,4,52,0.1
+LINEAE,Jujuy,fin_de_semana,4,2,52,0.0
+LINEAE,Jujuy,fin_de_semana,5,40,52,0.8
+LINEAE,Jujuy,fin_de_semana,6,570,52,11.0
+LINEAE,Jujuy,fin_de_semana,7,1105,52,21.2
+LINEAE,Jujuy,fin_de_semana,8,2096,52,40.3
+LINEAE,Jujuy,fin_de_semana,9,2789,52,53.6
+LINEAE,Jujuy,fin_de_semana,10,3453,52,66.4
+LINEAE,Jujuy,fin_de_semana,11,4369,52,84.0
+LINEAE,Jujuy,fin_de_semana,12,4690,52,90.2
+LINEAE,Jujuy,fin_de_semana,13,4831,52,92.9
+LINEAE,Jujuy,fin_de_semana,14,4659,52,89.6
+LINEAE,Jujuy,fin_de_semana,15,4699,52,90.4
+LINEAE,Jujuy,fin_de_semana,16,4968,52,95.5
+LINEAE,Jujuy,fin_de_semana,17,4601,52,88.5
+LINEAE,Jujuy,fin_de_semana,18,3985,52,76.6
+LINEAE,Jujuy,fin_de_semana,19,4005,52,77.0
+LINEAE,Jujuy,fin_de_semana,20,3618,52,69.6
+LINEAE,Jujuy,fin_de_semana,21,2153,52,41.4
+LINEAE,Jujuy,fin_de_semana,22,944,52,18.2
+LINEAE,Jujuy,fin_de_semana,23,202,52,3.9
+LINEAE,Jujuy,habil,0,1,129,0.0
+LINEAE,Jujuy,habil,4,10,129,0.1
+LINEAE,Jujuy,habil,5,1532,129,11.9
+LINEAE,Jujuy,habil,6,6987,129,54.2
+LINEAE,Jujuy,habil,7,19409,129,150.5
+LINEAE,Jujuy,habil,8,26571,129,206.0
+LINEAE,Jujuy,habil,9,18062,129,140.0
+LINEAE,Jujuy,habil,10,14299,129,110.8
+LINEAE,Jujuy,habil,11,15419,129,119.5
+LINEAE,Jujuy,habil,12,20690,129,160.4
+LINEAE,Jujuy,habil,13,18409,129,142.7
+LINEAE,Jujuy,habil,14,15688,129,121.6
+LINEAE,Jujuy,habil,15,18255,129,141.5
+LINEAE,Jujuy,habil,16,22210,129,172.2
+LINEAE,Jujuy,habil,17,25646,129,198.8
+LINEAE,Jujuy,habil,18,20345,129,157.7
+LINEAE,Jujuy,habil,19,12455,129,96.6
+LINEAE,Jujuy,habil,20,9745,129,75.5
+LINEAE,Jujuy,habil,21,7453,129,57.8
+LINEAE,Jujuy,habil,22,3929,129,30.5
+LINEAE,Jujuy,habil,23,740,129,5.7
+LINEAE,Medalla Milagrosa,fin_de_semana,0,2,52,0.0
+LINEAE,Medalla Milagrosa,fin_de_semana,4,1,52,0.0
+LINEAE,Medalla Milagrosa,fin_de_semana,5,28,52,0.5
+LINEAE,Medalla Milagrosa,fin_de_semana,6,232,52,4.5
+LINEAE,Medalla Milagrosa,fin_de_semana,7,845,52,16.2
+LINEAE,Medalla Milagrosa,fin_de_semana,8,1395,52,26.8
+LINEAE,Medalla Milagrosa,fin_de_semana,9,1768,52,34.0
+LINEAE,Medalla Milagrosa,fin_de_semana,10,1882,52,36.2
+LINEAE,Medalla Milagrosa,fin_de_semana,11,2526,52,48.6
+LINEAE,Medalla Milagrosa,fin_de_semana,12,2748,52,52.8
+LINEAE,Medalla Milagrosa,fin_de_semana,13,2833,52,54.5
+LINEAE,Medalla Milagrosa,fin_de_semana,14,2458,52,47.3
+LINEAE,Medalla Milagrosa,fin_de_semana,15,2872,52,55.2
+LINEAE,Medalla Milagrosa,fin_de_semana,16,3346,52,64.3
+LINEAE,Medalla Milagrosa,fin_de_semana,17,2947,52,56.7
+LINEAE,Medalla Milagrosa,fin_de_semana,18,2705,52,52.0
+LINEAE,Medalla Milagrosa,fin_de_semana,19,2493,52,47.9
+LINEAE,Medalla Milagrosa,fin_de_semana,20,2189,52,42.1
+LINEAE,Medalla Milagrosa,fin_de_semana,21,1246,52,24.0
+LINEAE,Medalla Milagrosa,fin_de_semana,22,354,52,6.8
+LINEAE,Medalla Milagrosa,fin_de_semana,23,81,52,1.6
+LINEAE,Medalla Milagrosa,habil,4,36,129,0.3
+LINEAE,Medalla Milagrosa,habil,5,1416,129,11.0
+LINEAE,Medalla Milagrosa,habil,6,9394,129,72.8
+LINEAE,Medalla Milagrosa,habil,7,30104,129,233.4
+LINEAE,Medalla Milagrosa,habil,8,35815,129,277.6
+LINEAE,Medalla Milagrosa,habil,9,24813,129,192.3
+LINEAE,Medalla Milagrosa,habil,10,11908,129,92.3
+LINEAE,Medalla Milagrosa,habil,11,14721,129,114.1
+LINEAE,Medalla Milagrosa,habil,12,14258,129,110.5
+LINEAE,Medalla Milagrosa,habil,13,14096,129,109.3
+LINEAE,Medalla Milagrosa,habil,14,9364,129,72.6
+LINEAE,Medalla Milagrosa,habil,15,10838,129,84.0
+LINEAE,Medalla Milagrosa,habil,16,13083,129,101.4
+LINEAE,Medalla Milagrosa,habil,17,15334,129,118.9
+LINEAE,Medalla Milagrosa,habil,18,12285,129,95.2
+LINEAE,Medalla Milagrosa,habil,19,6738,129,52.2
+LINEAE,Medalla Milagrosa,habil,20,5339,129,41.4
+LINEAE,Medalla Milagrosa,habil,21,3747,129,29.0
+LINEAE,Medalla Milagrosa,habil,22,1644,129,12.7
+LINEAE,Medalla Milagrosa,habil,23,26,129,0.2
+LINEAE,Pichincha,fin_de_semana,0,9,52,0.2
+LINEAE,Pichincha,fin_de_semana,4,1,52,0.0
+LINEAE,Pichincha,fin_de_semana,5,42,52,0.8
+LINEAE,Pichincha,fin_de_semana,6,539,52,10.4
+LINEAE,Pichincha,fin_de_semana,7,893,52,17.2
+LINEAE,Pichincha,fin_de_semana,8,1844,52,35.5
+LINEAE,Pichincha,fin_de_semana,9,2408,52,46.3
+LINEAE,Pichincha,fin_de_semana,10,2920,52,56.2
+LINEAE,Pichincha,fin_de_semana,11,3404,52,65.5
+LINEAE,Pichincha,fin_de_semana,12,3586,52,69.0
+LINEAE,Pichincha,fin_de_semana,13,3890,52,74.8
+LINEAE,Pichincha,fin_de_semana,14,3746,52,72.0
+LINEAE,Pichincha,fin_de_semana,15,3980,52,76.5
+LINEAE,Pichincha,fin_de_semana,16,4047,52,77.8
+LINEAE,Pichincha,fin_de_semana,17,3789,52,72.9
+LINEAE,Pichincha,fin_de_semana,18,3592,52,69.1
+LINEAE,Pichincha,fin_de_semana,19,3079,52,59.2
+LINEAE,Pichincha,fin_de_semana,20,2511,52,48.3
+LINEAE,Pichincha,fin_de_semana,21,1701,52,32.7
+LINEAE,Pichincha,fin_de_semana,22,754,52,14.5
+LINEAE,Pichincha,fin_de_semana,23,200,52,3.8
+LINEAE,Pichincha,habil,4,14,129,0.1
+LINEAE,Pichincha,habil,5,1708,129,13.2
+LINEAE,Pichincha,habil,6,8163,129,63.3
+LINEAE,Pichincha,habil,7,25097,129,194.6
+LINEAE,Pichincha,habil,8,29650,129,229.8
+LINEAE,Pichincha,habil,9,22318,129,173.0
+LINEAE,Pichincha,habil,10,15152,129,117.5
+LINEAE,Pichincha,habil,11,16980,129,131.6
+LINEAE,Pichincha,habil,12,17556,129,136.1
+LINEAE,Pichincha,habil,13,16551,129,128.3
+LINEAE,Pichincha,habil,14,12977,129,100.6
+LINEAE,Pichincha,habil,15,15124,129,117.2
+LINEAE,Pichincha,habil,16,20296,129,157.3
+LINEAE,Pichincha,habil,17,18576,129,144.0
+LINEAE,Pichincha,habil,18,15464,129,119.9
+LINEAE,Pichincha,habil,19,10611,129,82.3
+LINEAE,Pichincha,habil,20,7912,129,61.3
+LINEAE,Pichincha,habil,21,6882,129,53.3
+LINEAE,Pichincha,habil,22,2714,129,21.0
+LINEAE,Pichincha,habil,23,466,129,3.6
+LINEAE,Pza. de los Virreyes,fin_de_semana,0,1,52,0.0
+LINEAE,Pza. de los Virreyes,fin_de_semana,1,1,52,0.0
+LINEAE,Pza. de los Virreyes,fin_de_semana,4,3,52,0.1
+LINEAE,Pza. de los Virreyes,fin_de_semana,5,530,52,10.2
+LINEAE,Pza. de los Virreyes,fin_de_semana,6,3809,52,73.2
+LINEAE,Pza. de los Virreyes,fin_de_semana,7,6715,52,129.1
+LINEAE,Pza. de los Virreyes,fin_de_semana,8,9471,52,182.1
+LINEAE,Pza. de los Virreyes,fin_de_semana,9,9721,52,186.9
+LINEAE,Pza. de los Virreyes,fin_de_semana,10,8650,52,166.3
+LINEAE,Pza. de los Virreyes,fin_de_semana,11,9444,52,181.6
+LINEAE,Pza. de los Virreyes,fin_de_semana,12,9976,52,191.8
+LINEAE,Pza. de los Virreyes,fin_de_semana,13,10004,52,192.4
+LINEAE,Pza. de los Virreyes,fin_de_semana,14,9585,52,184.3
+LINEAE,Pza. de los Virreyes,fin_de_semana,15,9929,52,190.9
+LINEAE,Pza. de los Virreyes,fin_de_semana,16,10388,52,199.8
+LINEAE,Pza. de los Virreyes,fin_de_semana,17,8968,52,172.5
+LINEAE,Pza. de los Virreyes,fin_de_semana,18,8129,52,156.3
+LINEAE,Pza. de los Virreyes,fin_de_semana,19,7110,52,136.7
+LINEAE,Pza. de los Virreyes,fin_de_semana,20,5567,52,107.1
+LINEAE,Pza. de los Virreyes,fin_de_semana,21,3180,52,61.2
+LINEAE,Pza. de los Virreyes,fin_de_semana,22,900,52,17.3
+LINEAE,Pza. de los Virreyes,fin_de_semana,23,164,52,3.2
+LINEAE,Pza. de los Virreyes,habil,4,304,129,2.4
+LINEAE,Pza. de los Virreyes,habil,5,19348,129,150.0
+LINEAE,Pza. de los Virreyes,habil,6,79533,129,616.5
+LINEAE,Pza. de los Virreyes,habil,7,156887,129,1216.2
+LINEAE,Pza. de los Virreyes,habil,8,159352,129,1235.3
+LINEAE,Pza. de los Virreyes,habil,9,92874,129,720.0
+LINEAE,Pza. de los Virreyes,habil,10,52655,129,408.2
+LINEAE,Pza. de los Virreyes,habil,11,61612,129,477.6
+LINEAE,Pza. de los Virreyes,habil,12,61451,129,476.4
+LINEAE,Pza. de los Virreyes,habil,13,54020,129,418.8
+LINEAE,Pza. de los Virreyes,habil,14,35408,129,274.5
+LINEAE,Pza. de los Virreyes,habil,15,34920,129,270.7
+LINEAE,Pza. de los Virreyes,habil,16,37647,129,291.8
+LINEAE,Pza. de los Virreyes,habil,17,42419,129,328.8
+LINEAE,Pza. de los Virreyes,habil,18,27924,129,216.5
+LINEAE,Pza. de los Virreyes,habil,19,16367,129,126.9
+LINEAE,Pza. de los Virreyes,habil,20,11993,129,93.0
+LINEAE,Pza. de los Virreyes,habil,21,8158,129,63.2
+LINEAE,Pza. de los Virreyes,habil,22,3514,129,27.2
+LINEAE,Pza. de los Virreyes,habil,23,3,129,0.0
+LINEAE,Retiro E,fin_de_semana,5,33,52,0.6
+LINEAE,Retiro E,fin_de_semana,6,380,52,7.3
+LINEAE,Retiro E,fin_de_semana,7,881,52,16.9
+LINEAE,Retiro E,fin_de_semana,8,1244,52,23.9
+LINEAE,Retiro E,fin_de_semana,9,1372,52,26.4
+LINEAE,Retiro E,fin_de_semana,10,1425,52,27.4
+LINEAE,Retiro E,fin_de_semana,11,1685,52,32.4
+LINEAE,Retiro E,fin_de_semana,12,1961,52,37.7
+LINEAE,Retiro E,fin_de_semana,13,2089,52,40.2
+LINEAE,Retiro E,fin_de_semana,14,1854,52,35.7
+LINEAE,Retiro E,fin_de_semana,15,2025,52,38.9
+LINEAE,Retiro E,fin_de_semana,16,2269,52,43.6
+LINEAE,Retiro E,fin_de_semana,17,2305,52,44.3
+LINEAE,Retiro E,fin_de_semana,18,2167,52,41.7
+LINEAE,Retiro E,fin_de_semana,19,1980,52,38.1
+LINEAE,Retiro E,fin_de_semana,20,1709,52,32.9
+LINEAE,Retiro E,fin_de_semana,21,1016,52,19.5
+LINEAE,Retiro E,fin_de_semana,22,451,52,8.7
+LINEAE,Retiro E,fin_de_semana,23,68,52,1.3
+LINEAE,Retiro E,habil,5,600,129,4.7
+LINEAE,Retiro E,habil,6,3786,129,29.3
+LINEAE,Retiro E,habil,7,10599,129,82.2
+LINEAE,Retiro E,habil,8,14283,129,110.7
+LINEAE,Retiro E,habil,9,12401,129,96.1
+LINEAE,Retiro E,habil,10,8543,129,66.2
+LINEAE,Retiro E,habil,11,8224,129,63.8
+LINEAE,Retiro E,habil,12,10866,129,84.2
+LINEAE,Retiro E,habil,13,11676,129,90.5
+LINEAE,Retiro E,habil,14,11639,129,90.2
+LINEAE,Retiro E,habil,15,13685,129,106.1
+LINEAE,Retiro E,habil,16,19993,129,155.0
+LINEAE,Retiro E,habil,17,27834,129,215.8
+LINEAE,Retiro E,habil,18,23907,129,185.3
+LINEAE,Retiro E,habil,19,9422,129,73.0
+LINEAE,Retiro E,habil,20,5434,129,42.1
+LINEAE,Retiro E,habil,21,3115,129,24.1
+LINEAE,Retiro E,habil,22,1486,129,11.5
+LINEAE,Retiro E,habil,23,207,129,1.6
+LINEAE,Retiro.E,fin_de_semana,4,2,52,0.0
+LINEAE,Retiro.E,fin_de_semana,5,33,52,0.6
+LINEAE,Retiro.E,fin_de_semana,6,281,52,5.4
+LINEAE,Retiro.E,fin_de_semana,7,629,52,12.1
+LINEAE,Retiro.E,fin_de_semana,8,992,52,19.1
+LINEAE,Retiro.E,fin_de_semana,9,1101,52,21.2
+LINEAE,Retiro.E,fin_de_semana,10,1189,52,22.9
+LINEAE,Retiro.E,fin_de_semana,11,1515,52,29.1
+LINEAE,Retiro.E,fin_de_semana,12,1514,52,29.1
+LINEAE,Retiro.E,fin_de_semana,13,1639,52,31.5
+LINEAE,Retiro.E,fin_de_semana,14,1566,52,30.1
+LINEAE,Retiro.E,fin_de_semana,15,1670,52,32.1
+LINEAE,Retiro.E,fin_de_semana,16,1892,52,36.4
+LINEAE,Retiro.E,fin_de_semana,17,2038,52,39.2
+LINEAE,Retiro.E,fin_de_semana,18,2162,52,41.6
+LINEAE,Retiro.E,fin_de_semana,19,2291,52,44.1
+LINEAE,Retiro.E,fin_de_semana,20,1718,52,33.0
+LINEAE,Retiro.E,fin_de_semana,21,1061,52,20.4
+LINEAE,Retiro.E,fin_de_semana,22,412,52,7.9
+LINEAE,Retiro.E,fin_de_semana,23,99,52,1.9
+LINEAE,Retiro.E,habil,0,1,129,0.0
+LINEAE,Retiro.E,habil,4,11,129,0.1
+LINEAE,Retiro.E,habil,5,573,129,4.4
+LINEAE,Retiro.E,habil,6,3423,129,26.5
+LINEAE,Retiro.E,habil,7,9968,129,77.3
+LINEAE,Retiro.E,habil,8,14183,129,109.9
+LINEAE,Retiro.E,habil,9,12221,129,94.7
+LINEAE,Retiro.E,habil,10,8482,129,65.8
+LINEAE,Retiro.E,habil,11,9246,129,71.7
+LINEAE,Retiro.E,habil,12,11699,129,90.7
+LINEAE,Retiro.E,habil,13,12173,129,94.4
+LINEAE,Retiro.E,habil,14,12795,129,99.2
+LINEAE,Retiro.E,habil,15,15701,129,121.7
+LINEAE,Retiro.E,habil,16,24753,129,191.9
+LINEAE,Retiro.E,habil,17,36294,129,281.3
+LINEAE,Retiro.E,habil,18,32980,129,255.7
+LINEAE,Retiro.E,habil,19,11644,129,90.3
+LINEAE,Retiro.E,habil,20,6575,129,51.0
+LINEAE,Retiro.E,habil,21,3288,129,25.5
+LINEAE,Retiro.E,habil,22,1400,129,10.9
+LINEAE,Retiro.E,habil,23,193,129,1.5
+LINEAE,San Jose,fin_de_semana,0,2,52,0.0
+LINEAE,San Jose,fin_de_semana,4,1,52,0.0
+LINEAE,San Jose,fin_de_semana,5,46,52,0.9
+LINEAE,San Jose,fin_de_semana,6,544,52,10.5
+LINEAE,San Jose,fin_de_semana,7,1134,52,21.8
+LINEAE,San Jose,fin_de_semana,8,2136,52,41.1
+LINEAE,San Jose,fin_de_semana,9,2705,52,52.0
+LINEAE,San Jose,fin_de_semana,10,2658,52,51.1
+LINEAE,San Jose,fin_de_semana,11,3078,52,59.2
+LINEAE,San Jose,fin_de_semana,12,3348,52,64.4
+LINEAE,San Jose,fin_de_semana,13,3843,52,73.9
+LINEAE,San Jose,fin_de_semana,14,3371,52,64.8
+LINEAE,San Jose,fin_de_semana,15,3380,52,65.0
+LINEAE,San Jose,fin_de_semana,16,3763,52,72.4
+LINEAE,San Jose,fin_de_semana,17,3813,52,73.3
+LINEAE,San Jose,fin_de_semana,18,4097,52,78.8
+LINEAE,San Jose,fin_de_semana,19,3233,52,62.2
+LINEAE,San Jose,fin_de_semana,20,2494,52,48.0
+LINEAE,San Jose,fin_de_semana,21,1318,52,25.3
+LINEAE,San Jose,fin_de_semana,22,556,52,10.7
+LINEAE,San Jose,fin_de_semana,23,131,52,2.5
+LINEAE,San Jose,habil,0,2,129,0.0
+LINEAE,San Jose,habil,4,16,129,0.1
+LINEAE,San Jose,habil,5,2158,129,16.7
+LINEAE,San Jose,habil,6,7557,129,58.6
+LINEAE,San Jose,habil,7,19295,129,149.6
+LINEAE,San Jose,habil,8,22658,129,175.6
+LINEAE,San Jose,habil,9,16216,129,125.7
+LINEAE,San Jose,habil,10,13456,129,104.3
+LINEAE,San Jose,habil,11,16408,129,127.2
+LINEAE,San Jose,habil,12,19450,129,150.8
+LINEAE,San Jose,habil,13,19734,129,153.0
+LINEAE,San Jose,habil,14,13877,129,107.6
+LINEAE,San Jose,habil,15,15319,129,118.8
+LINEAE,San Jose,habil,16,19254,129,149.3
+LINEAE,San Jose,habil,17,20689,129,160.4
+LINEAE,San Jose,habil,18,18937,129,146.8
+LINEAE,San Jose,habil,19,18013,129,139.6
+LINEAE,San Jose,habil,20,17944,129,139.1
+LINEAE,San Jose,habil,21,15760,129,122.2
+LINEAE,San Jose,habil,22,4854,129,37.6
+LINEAE,San Jose,habil,23,526,129,4.1
+LINEAE,Urquiza,fin_de_semana,0,4,52,0.1
+LINEAE,Urquiza,fin_de_semana,4,1,52,0.0
+LINEAE,Urquiza,fin_de_semana,5,47,52,0.9
+LINEAE,Urquiza,fin_de_semana,6,544,52,10.5
+LINEAE,Urquiza,fin_de_semana,7,1150,52,22.1
+LINEAE,Urquiza,fin_de_semana,8,2233,52,42.9
+LINEAE,Urquiza,fin_de_semana,9,2704,52,52.0
+LINEAE,Urquiza,fin_de_semana,10,2855,52,54.9
+LINEAE,Urquiza,fin_de_semana,11,4012,52,77.2
+LINEAE,Urquiza,fin_de_semana,12,4265,52,82.0
+LINEAE,Urquiza,fin_de_semana,13,4207,52,80.9
+LINEAE,Urquiza,fin_de_semana,14,3910,52,75.2
+LINEAE,Urquiza,fin_de_semana,15,4055,52,78.0
+LINEAE,Urquiza,fin_de_semana,16,4328,52,83.2
+LINEAE,Urquiza,fin_de_semana,17,3864,52,74.3
+LINEAE,Urquiza,fin_de_semana,18,3762,52,72.3
+LINEAE,Urquiza,fin_de_semana,19,3727,52,71.7
+LINEAE,Urquiza,fin_de_semana,20,2650,52,51.0
+LINEAE,Urquiza,fin_de_semana,21,2180,52,41.9
+LINEAE,Urquiza,fin_de_semana,22,715,52,13.8
+LINEAE,Urquiza,fin_de_semana,23,133,52,2.6
+LINEAE,Urquiza,habil,2,1,129,0.0
+LINEAE,Urquiza,habil,4,48,129,0.4
+LINEAE,Urquiza,habil,5,2397,129,18.6
+LINEAE,Urquiza,habil,6,10402,129,80.6
+LINEAE,Urquiza,habil,7,36280,129,281.2
+LINEAE,Urquiza,habil,8,49727,129,385.5
+LINEAE,Urquiza,habil,9,33710,129,261.3
+LINEAE,Urquiza,habil,10,20807,129,161.3
+LINEAE,Urquiza,habil,11,24378,129,189.0
+LINEAE,Urquiza,habil,12,28812,129,223.3
+LINEAE,Urquiza,habil,13,25463,129,197.4
+LINEAE,Urquiza,habil,14,20581,129,159.5
+LINEAE,Urquiza,habil,15,20307,129,157.4
+LINEAE,Urquiza,habil,16,32113,129,248.9
+LINEAE,Urquiza,habil,17,24549,129,190.3
+LINEAE,Urquiza,habil,18,19702,129,152.7
+LINEAE,Urquiza,habil,19,14757,129,114.4
+LINEAE,Urquiza,habil,20,10242,129,79.4
+LINEAE,Urquiza,habil,21,8945,129,69.3
+LINEAE,Urquiza,habil,22,3007,129,23.3
+LINEAE,Urquiza,habil,23,271,129,2.1
+LINEAE,Varela,fin_de_semana,5,59,52,1.1
+LINEAE,Varela,fin_de_semana,6,535,52,10.3
+LINEAE,Varela,fin_de_semana,7,1412,52,27.2
+LINEAE,Varela,fin_de_semana,8,1867,52,35.9
+LINEAE,Varela,fin_de_semana,9,2165,52,41.6
+LINEAE,Varela,fin_de_semana,10,2128,52,40.9
+LINEAE,Varela,fin_de_semana,11,2317,52,44.6
+LINEAE,Varela,fin_de_semana,12,2580,52,49.6
+LINEAE,Varela,fin_de_semana,13,2629,52,50.6
+LINEAE,Varela,fin_de_semana,14,2711,52,52.1
+LINEAE,Varela,fin_de_semana,15,2909,52,55.9
+LINEAE,Varela,fin_de_semana,16,2673,52,51.4
+LINEAE,Varela,fin_de_semana,17,2424,52,46.6
+LINEAE,Varela,fin_de_semana,18,2320,52,44.6
+LINEAE,Varela,fin_de_semana,19,2148,52,41.3
+LINEAE,Varela,fin_de_semana,20,1685,52,32.4
+LINEAE,Varela,fin_de_semana,21,1105,52,21.2
+LINEAE,Varela,fin_de_semana,22,365,52,7.0
+LINEAE,Varela,fin_de_semana,23,41,52,0.8
+LINEAE,Varela,habil,4,60,129,0.5
+LINEAE,Varela,habil,5,2324,129,18.0
+LINEAE,Varela,habil,6,14118,129,109.4
+LINEAE,Varela,habil,7,39074,129,302.9
+LINEAE,Varela,habil,8,40679,129,315.3
+LINEAE,Varela,habil,9,26406,129,204.7
+LINEAE,Varela,habil,10,15122,129,117.2
+LINEAE,Varela,habil,11,17382,129,134.7
+LINEAE,Varela,habil,12,17121,129,132.7
+LINEAE,Varela,habil,13,16055,129,124.5
+LINEAE,Varela,habil,14,10799,129,83.7
+LINEAE,Varela,habil,15,11215,129,86.9
+LINEAE,Varela,habil,16,11705,129,90.7
+LINEAE,Varela,habil,17,14349,129,111.2
+LINEAE,Varela,habil,18,9474,129,73.4
+LINEAE,Varela,habil,19,5794,129,44.9
+LINEAE,Varela,habil,20,4294,129,33.3
+LINEAE,Varela,habil,21,3030,129,23.5
+LINEAE,Varela,habil,22,1229,129,9.5
+LINEAH,#N/D,habil,10,1,129,0.0
+LINEAH,Caseros,fin_de_semana,0,18,52,0.3
+LINEAH,Caseros,fin_de_semana,4,1,52,0.0
+LINEAH,Caseros,fin_de_semana,5,103,52,2.0
+LINEAH,Caseros,fin_de_semana,6,1087,52,20.9
+LINEAH,Caseros,fin_de_semana,7,2324,52,44.7
+LINEAH,Caseros,fin_de_semana,8,4998,52,96.1
+LINEAH,Caseros,fin_de_semana,9,5262,52,101.2
+LINEAH,Caseros,fin_de_semana,10,5876,52,113.0
+LINEAH,Caseros,fin_de_semana,11,6412,52,123.3
+LINEAH,Caseros,fin_de_semana,12,6890,52,132.5
+LINEAH,Caseros,fin_de_semana,13,6849,52,131.7
+LINEAH,Caseros,fin_de_semana,14,6380,52,122.7
+LINEAH,Caseros,fin_de_semana,15,6459,52,124.2
+LINEAH,Caseros,fin_de_semana,16,6669,52,128.2
+LINEAH,Caseros,fin_de_semana,17,6159,52,118.4
+LINEAH,Caseros,fin_de_semana,18,5604,52,107.8
+LINEAH,Caseros,fin_de_semana,19,6021,52,115.8
+LINEAH,Caseros,fin_de_semana,20,4979,52,95.8
+LINEAH,Caseros,fin_de_semana,21,3218,52,61.9
+LINEAH,Caseros,fin_de_semana,22,1617,52,31.1
+LINEAH,Caseros,fin_de_semana,23,1758,52,33.8
+LINEAH,Caseros,habil,0,1517,129,11.8
+LINEAH,Caseros,habil,4,63,129,0.5
+LINEAH,Caseros,habil,5,3528,129,27.3
+LINEAH,Caseros,habil,6,18489,129,143.3
+LINEAH,Caseros,habil,7,59667,129,462.5
+LINEAH,Caseros,habil,8,62429,129,483.9
+LINEAH,Caseros,habil,9,42384,129,328.6
+LINEAH,Caseros,habil,10,31792,129,246.4
+LINEAH,Caseros,habil,11,39572,129,306.8
+LINEAH,Caseros,habil,12,52145,129,404.2
+LINEAH,Caseros,habil,13,49797,129,386.0
+LINEAH,Caseros,habil,14,43706,129,338.8
+LINEAH,Caseros,habil,15,44173,129,342.4
+LINEAH,Caseros,habil,16,52277,129,405.2
+LINEAH,Caseros,habil,17,65043,129,504.2
+LINEAH,Caseros,habil,18,62242,129,482.5
+LINEAH,Caseros,habil,19,24451,129,189.5
+LINEAH,Caseros,habil,20,19989,129,155.0
+LINEAH,Caseros,habil,21,12161,129,94.3
+LINEAH,Caseros,habil,22,7286,129,56.5
+LINEAH,Caseros,habil,23,2183,129,16.9
+LINEAH,Cordoba,fin_de_semana,0,14,52,0.3
+LINEAH,Cordoba,fin_de_semana,4,2,52,0.0
+LINEAH,Cordoba,fin_de_semana,5,53,52,1.0
+LINEAH,Cordoba,fin_de_semana,6,702,52,13.5
+LINEAH,Cordoba,fin_de_semana,7,1522,52,29.3
+LINEAH,Cordoba,fin_de_semana,8,2950,52,56.7
+LINEAH,Cordoba,fin_de_semana,9,3447,52,66.3
+LINEAH,Cordoba,fin_de_semana,10,4416,52,84.9
+LINEAH,Cordoba,fin_de_semana,11,5654,52,108.7
+LINEAH,Cordoba,fin_de_semana,12,6303,52,121.2
+LINEAH,Cordoba,fin_de_semana,13,6557,52,126.1
+LINEAH,Cordoba,fin_de_semana,14,6069,52,116.7
+LINEAH,Cordoba,fin_de_semana,15,5919,52,113.8
+LINEAH,Cordoba,fin_de_semana,16,6037,52,116.1
+LINEAH,Cordoba,fin_de_semana,17,5662,52,108.9
+LINEAH,Cordoba,fin_de_semana,18,5618,52,108.0
+LINEAH,Cordoba,fin_de_semana,19,5667,52,109.0
+LINEAH,Cordoba,fin_de_semana,20,5677,52,109.2
+LINEAH,Cordoba,fin_de_semana,21,4049,52,77.9
+LINEAH,Cordoba,fin_de_semana,22,1964,52,37.8
+LINEAH,Cordoba,fin_de_semana,23,436,52,8.4
+LINEAH,Cordoba,habil,0,10,129,0.1
+LINEAH,Cordoba,habil,4,24,129,0.2
+LINEAH,Cordoba,habil,5,1259,129,9.8
+LINEAH,Cordoba,habil,6,7720,129,59.8
+LINEAH,Cordoba,habil,7,26721,129,207.1
+LINEAH,Cordoba,habil,8,32233,129,249.9
+LINEAH,Cordoba,habil,9,27208,129,210.9
+LINEAH,Cordoba,habil,10,28824,129,223.4
+LINEAH,Cordoba,habil,11,36540,129,283.3
+LINEAH,Cordoba,habil,12,50155,129,388.8
+LINEAH,Cordoba,habil,13,52160,129,404.3
+LINEAH,Cordoba,habil,14,52264,129,405.1
+LINEAH,Cordoba,habil,15,54429,129,421.9
+LINEAH,Cordoba,habil,16,69493,129,538.7
+LINEAH,Cordoba,habil,17,75960,129,588.8
+LINEAH,Cordoba,habil,18,68605,129,531.8
+LINEAH,Cordoba,habil,19,42689,129,330.9
+LINEAH,Cordoba,habil,20,36226,129,280.8
+LINEAH,Cordoba,habil,21,24107,129,186.9
+LINEAH,Cordoba,habil,22,11297,129,87.6
+LINEAH,Cordoba,habil,23,1858,129,14.4
+LINEAH,Corrientes,fin_de_semana,0,23,52,0.4
+LINEAH,Corrientes,fin_de_semana,4,1,52,0.0
+LINEAH,Corrientes,fin_de_semana,5,18,52,0.3
+LINEAH,Corrientes,fin_de_semana,6,247,52,4.8
+LINEAH,Corrientes,fin_de_semana,7,873,52,16.8
+LINEAH,Corrientes,fin_de_semana,8,1943,52,37.4
+LINEAH,Corrientes,fin_de_semana,9,2749,52,52.9
+LINEAH,Corrientes,fin_de_semana,10,3616,52,69.5
+LINEAH,Corrientes,fin_de_semana,11,5914,52,113.7
+LINEAH,Corrientes,fin_de_semana,12,7958,52,153.0
+LINEAH,Corrientes,fin_de_semana,13,9100,52,175.0
+LINEAH,Corrientes,fin_de_semana,14,7759,52,149.2
+LINEAH,Corrientes,fin_de_semana,15,7624,52,146.6
+LINEAH,Corrientes,fin_de_semana,16,7808,52,150.2
+LINEAH,Corrientes,fin_de_semana,17,7340,52,141.2
+LINEAH,Corrientes,fin_de_semana,18,6857,52,131.9
+LINEAH,Corrientes,fin_de_semana,19,6081,52,116.9
+LINEAH,Corrientes,fin_de_semana,20,4915,52,94.5
+LINEAH,Corrientes,fin_de_semana,21,3579,52,68.8
+LINEAH,Corrientes,fin_de_semana,22,2448,52,47.1
+LINEAH,Corrientes,fin_de_semana,23,647,52,12.4
+LINEAH,Corrientes,habil,0,4,129,0.0
+LINEAH,Corrientes,habil,4,37,129,0.3
+LINEAH,Corrientes,habil,5,837,129,6.5
+LINEAH,Corrientes,habil,6,4788,129,37.1
+LINEAH,Corrientes,habil,7,16831,129,130.5
+LINEAH,Corrientes,habil,8,21578,129,167.3
+LINEAH,Corrientes,habil,9,18089,129,140.2
+LINEAH,Corrientes,habil,10,18286,129,141.8
+LINEAH,Corrientes,habil,11,25417,129,197.0
+LINEAH,Corrientes,habil,12,31525,129,244.4
+LINEAH,Corrientes,habil,13,36533,129,283.2
+LINEAH,Corrientes,habil,14,34174,129,264.9
+LINEAH,Corrientes,habil,15,39977,129,309.9
+LINEAH,Corrientes,habil,16,49107,129,380.7
+LINEAH,Corrientes,habil,17,58776,129,455.6
+LINEAH,Corrientes,habil,18,47838,129,370.8
+LINEAH,Corrientes,habil,19,25593,129,198.4
+LINEAH,Corrientes,habil,20,18478,129,143.2
+LINEAH,Corrientes,habil,21,9353,129,72.5
+LINEAH,Corrientes,habil,22,6056,129,46.9
+LINEAH,Corrientes,habil,23,1631,129,12.6
+LINEAH,Facultad de Derecho,fin_de_semana,0,10,52,0.2
+LINEAH,Facultad de Derecho,fin_de_semana,1,1,52,0.0
+LINEAH,Facultad de Derecho,fin_de_semana,4,3,52,0.1
+LINEAH,Facultad de Derecho,fin_de_semana,5,33,52,0.6
+LINEAH,Facultad de Derecho,fin_de_semana,6,250,52,4.8
+LINEAH,Facultad de Derecho,fin_de_semana,7,539,52,10.4
+LINEAH,Facultad de Derecho,fin_de_semana,8,704,52,13.5
+LINEAH,Facultad de Derecho,fin_de_semana,9,847,52,16.3
+LINEAH,Facultad de Derecho,fin_de_semana,10,1802,52,34.7
+LINEAH,Facultad de Derecho,fin_de_semana,11,3119,52,60.0
+LINEAH,Facultad de Derecho,fin_de_semana,12,5210,52,100.2
+LINEAH,Facultad de Derecho,fin_de_semana,13,6265,52,120.5
+LINEAH,Facultad de Derecho,fin_de_semana,14,5598,52,107.7
+LINEAH,Facultad de Derecho,fin_de_semana,15,6989,52,134.4
+LINEAH,Facultad de Derecho,fin_de_semana,16,10287,52,197.8
+LINEAH,Facultad de Derecho,fin_de_semana,17,14758,52,283.8
+LINEAH,Facultad de Derecho,fin_de_semana,18,18319,52,352.3
+LINEAH,Facultad de Derecho,fin_de_semana,19,20830,52,400.6
+LINEAH,Facultad de Derecho,fin_de_semana,20,14111,52,271.4
+LINEAH,Facultad de Derecho,fin_de_semana,21,6127,52,117.8
+LINEAH,Facultad de Derecho,fin_de_semana,22,3295,52,63.4
+LINEAH,Facultad de Derecho,fin_de_semana,23,1130,52,21.7
+LINEAH,Facultad de Derecho,habil,0,10,129,0.1
+LINEAH,Facultad de Derecho,habil,1,3,129,0.0
+LINEAH,Facultad de Derecho,habil,4,21,129,0.2
+LINEAH,Facultad de Derecho,habil,5,330,129,2.6
+LINEAH,Facultad de Derecho,habil,6,2318,129,18.0
+LINEAH,Facultad de Derecho,habil,7,5982,129,46.4
+LINEAH,Facultad de Derecho,habil,8,12149,129,94.2
+LINEAH,Facultad de Derecho,habil,9,16634,129,128.9
+LINEAH,Facultad de Derecho,habil,10,27496,129,213.1
+LINEAH,Facultad de Derecho,habil,11,42464,129,329.2
+LINEAH,Facultad de Derecho,habil,12,31424,129,243.6
+LINEAH,Facultad de Derecho,habil,13,33202,129,257.4
+LINEAH,Facultad de Derecho,habil,14,27996,129,217.0
+LINEAH,Facultad de Derecho,habil,15,41333,129,320.4
+LINEAH,Facultad de Derecho,habil,16,53174,129,412.2
+LINEAH,Facultad de Derecho,habil,17,70761,129,548.5
+LINEAH,Facultad de Derecho,habil,18,90217,129,699.4
+LINEAH,Facultad de Derecho,habil,19,61469,129,476.5
+LINEAH,Facultad de Derecho,habil,20,72057,129,558.6
+LINEAH,Facultad de Derecho,habil,21,51196,129,396.9
+LINEAH,Facultad de Derecho,habil,22,12317,129,95.5
+LINEAH,Facultad de Derecho,habil,23,2722,129,21.1
+LINEAH,Hospitales,fin_de_semana,0,33,52,0.6
+LINEAH,Hospitales,fin_de_semana,1,2,52,0.0
+LINEAH,Hospitales,fin_de_semana,4,3,52,0.1
+LINEAH,Hospitales,fin_de_semana,5,503,52,9.7
+LINEAH,Hospitales,fin_de_semana,6,5925,52,113.9
+LINEAH,Hospitales,fin_de_semana,7,12511,52,240.6
+LINEAH,Hospitales,fin_de_semana,8,20000,52,384.6
+LINEAH,Hospitales,fin_de_semana,9,17604,52,338.5
+LINEAH,Hospitales,fin_de_semana,10,13815,52,265.7
+LINEAH,Hospitales,fin_de_semana,11,15489,52,297.9
+LINEAH,Hospitales,fin_de_semana,12,14900,52,286.5
+LINEAH,Hospitales,fin_de_semana,13,14019,52,269.6
+LINEAH,Hospitales,fin_de_semana,14,12416,52,238.8
+LINEAH,Hospitales,fin_de_semana,15,13674,52,263.0
+LINEAH,Hospitales,fin_de_semana,16,12677,52,243.8
+LINEAH,Hospitales,fin_de_semana,17,11326,52,217.8
+LINEAH,Hospitales,fin_de_semana,18,10768,52,207.1
+LINEAH,Hospitales,fin_de_semana,19,10027,52,192.8
+LINEAH,Hospitales,fin_de_semana,20,7865,52,151.2
+LINEAH,Hospitales,fin_de_semana,21,4981,52,95.8
+LINEAH,Hospitales,fin_de_semana,22,1926,52,37.0
+LINEAH,Hospitales,fin_de_semana,23,468,52,9.0
+LINEAH,Hospitales,habil,0,1,129,0.0
+LINEAH,Hospitales,habil,4,123,129,1.0
+LINEAH,Hospitales,habil,5,16752,129,129.9
+LINEAH,Hospitales,habil,6,110073,129,853.3
+LINEAH,Hospitales,habil,7,245228,129,1901.0
+LINEAH,Hospitales,habil,8,241759,129,1874.1
+LINEAH,Hospitales,habil,9,144730,129,1121.9
+LINEAH,Hospitales,habil,10,79601,129,617.1
+LINEAH,Hospitales,habil,11,85460,129,662.5
+LINEAH,Hospitales,habil,12,91541,129,709.6
+LINEAH,Hospitales,habil,13,82227,129,637.4
+LINEAH,Hospitales,habil,14,59720,129,462.9
+LINEAH,Hospitales,habil,15,62865,129,487.3
+LINEAH,Hospitales,habil,16,65424,129,507.2
+LINEAH,Hospitales,habil,17,68006,129,527.2
+LINEAH,Hospitales,habil,18,49775,129,385.9
+LINEAH,Hospitales,habil,19,25887,129,200.7
+LINEAH,Hospitales,habil,20,18456,129,143.1
+LINEAH,Hospitales,habil,21,11121,129,86.2
+LINEAH,Hospitales,habil,22,4777,129,37.0
+LINEAH,Hospitales,habil,23,1954,129,15.1
+LINEAH,Humberto I,fin_de_semana,0,38,52,0.7
+LINEAH,Humberto I,fin_de_semana,5,142,52,2.7
+LINEAH,Humberto I,fin_de_semana,6,862,52,16.6
+LINEAH,Humberto I,fin_de_semana,7,2159,52,41.5
+LINEAH,Humberto I,fin_de_semana,8,4379,52,84.2
+LINEAH,Humberto I,fin_de_semana,9,6064,52,116.6
+LINEAH,Humberto I,fin_de_semana,10,6054,52,116.4
+LINEAH,Humberto I,fin_de_semana,11,7835,52,150.7
+LINEAH,Humberto I,fin_de_semana,12,7787,52,149.8
+LINEAH,Humberto I,fin_de_semana,13,8360,52,160.8
+LINEAH,Humberto I,fin_de_semana,14,7536,52,144.9
+LINEAH,Humberto I,fin_de_semana,15,8012,52,154.1
+LINEAH,Humberto I,fin_de_semana,16,8556,52,164.5
+LINEAH,Humberto I,fin_de_semana,17,7442,52,143.1
+LINEAH,Humberto I,fin_de_semana,18,7155,52,137.6
+LINEAH,Humberto I,fin_de_semana,19,6537,52,125.7
+LINEAH,Humberto I,fin_de_semana,20,5751,52,110.6
+LINEAH,Humberto I,fin_de_semana,21,3716,52,71.5
+LINEAH,Humberto I,fin_de_semana,22,2048,52,39.4
+LINEAH,Humberto I,fin_de_semana,23,585,52,11.2
+LINEAH,Humberto I,habil,0,4,129,0.0
+LINEAH,Humberto I,habil,4,89,129,0.7
+LINEAH,Humberto I,habil,5,3825,129,29.7
+LINEAH,Humberto I,habil,6,15774,129,122.3
+LINEAH,Humberto I,habil,7,49588,129,384.4
+LINEAH,Humberto I,habil,8,54102,129,419.4
+LINEAH,Humberto I,habil,9,41927,129,325.0
+LINEAH,Humberto I,habil,10,30745,129,238.3
+LINEAH,Humberto I,habil,11,34903,129,270.6
+LINEAH,Humberto I,habil,12,39284,129,304.5
+LINEAH,Humberto I,habil,13,36895,129,286.0
+LINEAH,Humberto I,habil,14,30958,129,240.0
+LINEAH,Humberto I,habil,15,34982,129,271.2
+LINEAH,Humberto I,habil,16,42812,129,331.9
+LINEAH,Humberto I,habil,17,44959,129,348.5
+LINEAH,Humberto I,habil,18,39474,129,306.0
+LINEAH,Humberto I,habil,19,23595,129,182.9
+LINEAH,Humberto I,habil,20,16892,129,130.9
+LINEAH,Humberto I,habil,21,11164,129,86.5
+LINEAH,Humberto I,habil,22,6169,129,47.8
+LINEAH,Humberto I,habil,23,2589,129,20.1
+LINEAH,Inclan,fin_de_semana,0,27,52,0.5
+LINEAH,Inclan,fin_de_semana,1,1,52,0.0
+LINEAH,Inclan,fin_de_semana,5,87,52,1.7
+LINEAH,Inclan,fin_de_semana,6,948,52,18.2
+LINEAH,Inclan,fin_de_semana,7,2490,52,47.9
+LINEAH,Inclan,fin_de_semana,8,5313,52,102.2
+LINEAH,Inclan,fin_de_semana,9,5925,52,113.9
+LINEAH,Inclan,fin_de_semana,10,5981,52,115.0
+LINEAH,Inclan,fin_de_semana,11,6971,52,134.1
+LINEAH,Inclan,fin_de_semana,12,7280,52,140.0
+LINEAH,Inclan,fin_de_semana,13,6775,52,130.3
+LINEAH,Inclan,fin_de_semana,14,6580,52,126.5
+LINEAH,Inclan,fin_de_semana,15,6854,52,131.8
+LINEAH,Inclan,fin_de_semana,16,7224,52,138.9
+LINEAH,Inclan,fin_de_semana,17,6285,52,120.9
+LINEAH,Inclan,fin_de_semana,18,5601,52,107.7
+LINEAH,Inclan,fin_de_semana,19,5336,52,102.6
+LINEAH,Inclan,fin_de_semana,20,4806,52,92.4
+LINEAH,Inclan,fin_de_semana,21,3557,52,68.4
+LINEAH,Inclan,fin_de_semana,22,1486,52,28.6
+LINEAH,Inclan,fin_de_semana,23,415,52,8.0
+LINEAH,Inclan,habil,0,1,129,0.0
+LINEAH,Inclan,habil,4,157,129,1.2
+LINEAH,Inclan,habil,5,3516,129,27.3
+LINEAH,Inclan,habil,6,17090,129,132.5
+LINEAH,Inclan,habil,7,57380,129,444.8
+LINEAH,Inclan,habil,8,56965,129,441.6
+LINEAH,Inclan,habil,9,40137,129,311.1
+LINEAH,Inclan,habil,10,27664,129,214.4
+LINEAH,Inclan,habil,11,29647,129,229.8
+LINEAH,Inclan,habil,12,31067,129,240.8
+LINEAH,Inclan,habil,13,30634,129,237.5
+LINEAH,Inclan,habil,14,26722,129,207.1
+LINEAH,Inclan,habil,15,36528,129,283.2
+LINEAH,Inclan,habil,16,48392,129,375.1
+LINEAH,Inclan,habil,17,39980,129,309.9
+LINEAH,Inclan,habil,18,28653,129,222.1
+LINEAH,Inclan,habil,19,16333,129,126.6
+LINEAH,Inclan,habil,20,12253,129,95.0
+LINEAH,Inclan,habil,21,7474,129,57.9
+LINEAH,Inclan,habil,22,5268,129,40.8
+LINEAH,Inclan,habil,23,839,129,6.5
+LINEAH,Las Heras,fin_de_semana,0,1,52,0.0
+LINEAH,Las Heras,fin_de_semana,1,2,52,0.0
+LINEAH,Las Heras,fin_de_semana,5,41,52,0.8
+LINEAH,Las Heras,fin_de_semana,6,725,52,13.9
+LINEAH,Las Heras,fin_de_semana,7,1681,52,32.3
+LINEAH,Las Heras,fin_de_semana,8,3270,52,62.9
+LINEAH,Las Heras,fin_de_semana,9,4589,52,88.2
+LINEAH,Las Heras,fin_de_semana,10,6327,52,121.7
+LINEAH,Las Heras,fin_de_semana,11,7746,52,149.0
+LINEAH,Las Heras,fin_de_semana,12,10123,52,194.7
+LINEAH,Las Heras,fin_de_semana,13,10111,52,194.4
+LINEAH,Las Heras,fin_de_semana,14,9801,52,188.5
+LINEAH,Las Heras,fin_de_semana,15,10579,52,203.4
+LINEAH,Las Heras,fin_de_semana,16,13130,52,252.5
+LINEAH,Las Heras,fin_de_semana,17,15071,52,289.8
+LINEAH,Las Heras,fin_de_semana,18,17314,52,333.0
+LINEAH,Las Heras,fin_de_semana,19,18414,52,354.1
+LINEAH,Las Heras,fin_de_semana,20,15734,52,302.6
+LINEAH,Las Heras,fin_de_semana,21,10407,52,200.1
+LINEAH,Las Heras,fin_de_semana,22,5194,52,99.9
+LINEAH,Las Heras,fin_de_semana,23,1201,52,23.1
+LINEAH,Las Heras,habil,0,3,129,0.0
+LINEAH,Las Heras,habil,1,2,129,0.0
+LINEAH,Las Heras,habil,4,40,129,0.3
+LINEAH,Las Heras,habil,5,1385,129,10.7
+LINEAH,Las Heras,habil,6,9223,129,71.5
+LINEAH,Las Heras,habil,7,32024,129,248.2
+LINEAH,Las Heras,habil,8,39281,129,304.5
+LINEAH,Las Heras,habil,9,39234,129,304.1
+LINEAH,Las Heras,habil,10,37290,129,289.1
+LINEAH,Las Heras,habil,11,45643,129,353.8
+LINEAH,Las Heras,habil,12,58606,129,454.3
+LINEAH,Las Heras,habil,13,58864,129,456.3
+LINEAH,Las Heras,habil,14,61232,129,474.7
+LINEAH,Las Heras,habil,15,77883,129,603.7
+LINEAH,Las Heras,habil,16,101331,129,785.5
+LINEAH,Las Heras,habil,17,108968,129,844.7
+LINEAH,Las Heras,habil,18,90310,129,700.1
+LINEAH,Las Heras,habil,19,64218,129,497.8
+LINEAH,Las Heras,habil,20,53128,129,411.8
+LINEAH,Las Heras,habil,21,37936,129,294.1
+LINEAH,Las Heras,habil,22,19804,129,153.5
+LINEAH,Las Heras,habil,23,3459,129,26.8
+LINEAH,Once,fin_de_semana,0,8,52,0.2
+LINEAH,Once,fin_de_semana,1,1,52,0.0
+LINEAH,Once,fin_de_semana,4,2,52,0.0
+LINEAH,Once,fin_de_semana,5,122,52,2.3
+LINEAH,Once,fin_de_semana,6,1904,52,36.6
+LINEAH,Once,fin_de_semana,7,3760,52,72.3
+LINEAH,Once,fin_de_semana,8,7116,52,136.8
+LINEAH,Once,fin_de_semana,9,9183,52,176.6
+LINEAH,Once,fin_de_semana,10,10911,52,209.8
+LINEAH,Once,fin_de_semana,11,14658,52,281.9
+LINEAH,Once,fin_de_semana,12,18068,52,347.5
+LINEAH,Once,fin_de_semana,13,20457,52,393.4
+LINEAH,Once,fin_de_semana,14,19937,52,383.4
+LINEAH,Once,fin_de_semana,15,18009,52,346.3
+LINEAH,Once,fin_de_semana,16,16600,52,319.2
+LINEAH,Once,fin_de_semana,17,15343,52,295.1
+LINEAH,Once,fin_de_semana,18,13368,52,257.1
+LINEAH,Once,fin_de_semana,19,11467,52,220.5
+LINEAH,Once,fin_de_semana,20,9337,52,179.6
+LINEAH,Once,fin_de_semana,21,6751,52,129.8
+LINEAH,Once,fin_de_semana,22,3095,52,59.5
+LINEAH,Once,fin_de_semana,23,768,52,14.8
+LINEAH,Once,habil,4,36,129,0.3
+LINEAH,Once,habil,5,5757,129,44.6
+LINEAH,Once,habil,6,34002,129,263.6
+LINEAH,Once,habil,7,70325,129,545.2
+LINEAH,Once,habil,8,89244,129,691.8
+LINEAH,Once,habil,9,75956,129,588.8
+LINEAH,Once,habil,10,58759,129,455.5
+LINEAH,Once,habil,11,64395,129,499.2
+LINEAH,Once,habil,12,73784,129,572.0
+LINEAH,Once,habil,13,75434,129,584.8
+LINEAH,Once,habil,14,66827,129,518.0
+LINEAH,Once,habil,15,68303,129,529.5
+LINEAH,Once,habil,16,72615,129,562.9
+LINEAH,Once,habil,17,76902,129,596.1
+LINEAH,Once,habil,18,73050,129,566.3
+LINEAH,Once,habil,19,36808,129,285.3
+LINEAH,Once,habil,20,22344,129,173.2
+LINEAH,Once,habil,21,14456,129,112.1
+LINEAH,Once,habil,22,7007,129,54.3
+LINEAH,Once,habil,23,1501,129,11.6
+LINEAH,Patricios,fin_de_semana,0,17,52,0.3
+LINEAH,Patricios,fin_de_semana,4,1,52,0.0
+LINEAH,Patricios,fin_de_semana,5,254,52,4.9
+LINEAH,Patricios,fin_de_semana,6,2683,52,51.6
+LINEAH,Patricios,fin_de_semana,7,6107,52,117.4
+LINEAH,Patricios,fin_de_semana,8,10266,52,197.4
+LINEAH,Patricios,fin_de_semana,9,9440,52,181.5
+LINEAH,Patricios,fin_de_semana,10,9087,52,174.8
+LINEAH,Patricios,fin_de_semana,11,10611,52,204.1
+LINEAH,Patricios,fin_de_semana,12,11137,52,214.2
+LINEAH,Patricios,fin_de_semana,13,11094,52,213.3
+LINEAH,Patricios,fin_de_semana,14,10268,52,197.5
+LINEAH,Patricios,fin_de_semana,15,11355,52,218.4
+LINEAH,Patricios,fin_de_semana,16,11348,52,218.2
+LINEAH,Patricios,fin_de_semana,17,10664,52,205.1
+LINEAH,Patricios,fin_de_semana,18,9846,52,189.3
+LINEAH,Patricios,fin_de_semana,19,9752,52,187.5
+LINEAH,Patricios,fin_de_semana,20,7573,52,145.6
+LINEAH,Patricios,fin_de_semana,21,4377,52,84.2
+LINEAH,Patricios,fin_de_semana,22,2022,52,38.9
+LINEAH,Patricios,fin_de_semana,23,570,52,11.0
+LINEAH,Patricios,habil,0,1,129,0.0
+LINEAH,Patricios,habil,4,184,129,1.4
+LINEAH,Patricios,habil,5,9010,129,69.8
+LINEAH,Patricios,habil,6,50339,129,390.2
+LINEAH,Patricios,habil,7,111198,129,862.0
+LINEAH,Patricios,habil,8,106290,129,824.0
+LINEAH,Patricios,habil,9,70686,129,548.0
+LINEAH,Patricios,habil,10,45524,129,352.9
+LINEAH,Patricios,habil,11,53371,129,413.7
+LINEAH,Patricios,habil,12,62362,129,483.4
+LINEAH,Patricios,habil,13,62962,129,488.1
+LINEAH,Patricios,habil,14,49259,129,381.9
+LINEAH,Patricios,habil,15,59344,129,460.0
+LINEAH,Patricios,habil,16,88752,129,688.0
+LINEAH,Patricios,habil,17,107269,129,831.5
+LINEAH,Patricios,habil,18,87336,129,677.0
+LINEAH,Patricios,habil,19,36429,129,282.4
+LINEAH,Patricios,habil,20,27145,129,210.4
+LINEAH,Patricios,habil,21,16812,129,130.3
+LINEAH,Patricios,habil,22,9187,129,71.2
+LINEAH,Patricios,habil,23,2495,129,19.3
+LINEAH,Santa Fe,fin_de_semana,0,37,52,0.7
+LINEAH,Santa Fe,fin_de_semana,4,1,52,0.0
+LINEAH,Santa Fe,fin_de_semana,5,62,52,1.2
+LINEAH,Santa Fe,fin_de_semana,6,741,52,14.2
+LINEAH,Santa Fe,fin_de_semana,7,2131,52,41.0
+LINEAH,Santa Fe,fin_de_semana,8,3896,52,74.9
+LINEAH,Santa Fe,fin_de_semana,9,5316,52,102.2
+LINEAH,Santa Fe,fin_de_semana,10,7430,52,142.9
+LINEAH,Santa Fe,fin_de_semana,11,9961,52,191.6
+LINEAH,Santa Fe,fin_de_semana,12,11704,52,225.1
+LINEAH,Santa Fe,fin_de_semana,13,11882,52,228.5
+LINEAH,Santa Fe,fin_de_semana,14,11359,52,218.4
+LINEAH,Santa Fe,fin_de_semana,15,11274,52,216.8
+LINEAH,Santa Fe,fin_de_semana,16,11868,52,228.2
+LINEAH,Santa Fe,fin_de_semana,17,11906,52,229.0
+LINEAH,Santa Fe,fin_de_semana,18,11921,52,229.2
+LINEAH,Santa Fe,fin_de_semana,19,13013,52,250.2
+LINEAH,Santa Fe,fin_de_semana,20,12297,52,236.5
+LINEAH,Santa Fe,fin_de_semana,21,8405,52,161.6
+LINEAH,Santa Fe,fin_de_semana,22,3054,52,58.7
+LINEAH,Santa Fe,fin_de_semana,23,795,52,15.3
+LINEAH,Santa Fe,habil,0,7,129,0.1
+LINEAH,Santa Fe,habil,1,2,129,0.0
+LINEAH,Santa Fe,habil,4,36,129,0.3
+LINEAH,Santa Fe,habil,5,1481,129,11.5
+LINEAH,Santa Fe,habil,6,8987,129,69.7
+LINEAH,Santa Fe,habil,7,33125,129,256.8
+LINEAH,Santa Fe,habil,8,43049,129,333.7
+LINEAH,Santa Fe,habil,9,40121,129,311.0
+LINEAH,Santa Fe,habil,10,43780,129,339.4
+LINEAH,Santa Fe,habil,11,56389,129,437.1
+LINEAH,Santa Fe,habil,12,65014,129,504.0
+LINEAH,Santa Fe,habil,13,66436,129,515.0
+LINEAH,Santa Fe,habil,14,78151,129,605.8
+LINEAH,Santa Fe,habil,15,86815,129,673.0
+LINEAH,Santa Fe,habil,16,106523,129,825.8
+LINEAH,Santa Fe,habil,17,113734,129,881.7
+LINEAH,Santa Fe,habil,18,103083,129,799.1
+LINEAH,Santa Fe,habil,19,74617,129,578.4
+LINEAH,Santa Fe,habil,20,55583,129,430.9
+LINEAH,Santa Fe,habil,21,31400,129,243.4
+LINEAH,Santa Fe,habil,22,13340,129,103.4
+LINEAH,Santa Fe,habil,23,3192,129,24.7
+LINEAH,Venezuela,fin_de_semana,0,30,52,0.6
+LINEAH,Venezuela,fin_de_semana,1,2,52,0.0
+LINEAH,Venezuela,fin_de_semana,4,1,52,0.0
+LINEAH,Venezuela,fin_de_semana,5,143,52,2.8
+LINEAH,Venezuela,fin_de_semana,6,1350,52,26.0
+LINEAH,Venezuela,fin_de_semana,7,2794,52,53.7
+LINEAH,Venezuela,fin_de_semana,8,6231,52,119.8
+LINEAH,Venezuela,fin_de_semana,9,7493,52,144.1
+LINEAH,Venezuela,fin_de_semana,10,7571,52,145.6
+LINEAH,Venezuela,fin_de_semana,11,9594,52,184.5
+LINEAH,Venezuela,fin_de_semana,12,9547,52,183.6
+LINEAH,Venezuela,fin_de_semana,13,9666,52,185.9
+LINEAH,Venezuela,fin_de_semana,14,9609,52,184.8
+LINEAH,Venezuela,fin_de_semana,15,10169,52,195.6
+LINEAH,Venezuela,fin_de_semana,16,10495,52,201.8
+LINEAH,Venezuela,fin_de_semana,17,9670,52,186.0
+LINEAH,Venezuela,fin_de_semana,18,8890,52,171.0
+LINEAH,Venezuela,fin_de_semana,19,8078,52,155.3
+LINEAH,Venezuela,fin_de_semana,20,7007,52,134.8
+LINEAH,Venezuela,fin_de_semana,21,4367,52,84.0
+LINEAH,Venezuela,fin_de_semana,22,2193,52,42.2
+LINEAH,Venezuela,fin_de_semana,23,511,52,9.8
+LINEAH,Venezuela,habil,0,3,129,0.0
+LINEAH,Venezuela,habil,4,50,129,0.4
+LINEAH,Venezuela,habil,5,3603,129,27.9
+LINEAH,Venezuela,habil,6,17196,129,133.3
+LINEAH,Venezuela,habil,7,55551,129,430.6
+LINEAH,Venezuela,habil,8,62568,129,485.0
+LINEAH,Venezuela,habil,9,49619,129,384.6
+LINEAH,Venezuela,habil,10,38393,129,297.6
+LINEAH,Venezuela,habil,11,45011,129,348.9
+LINEAH,Venezuela,habil,12,60292,129,467.4
+LINEAH,Venezuela,habil,13,50389,129,390.6
+LINEAH,Venezuela,habil,14,41895,129,324.8
+LINEAH,Venezuela,habil,15,43702,129,338.8
+LINEAH,Venezuela,habil,16,49454,129,383.4
+LINEAH,Venezuela,habil,17,57729,129,447.5
+LINEAH,Venezuela,habil,18,50841,129,394.1
+LINEAH,Venezuela,habil,19,30791,129,238.7
+LINEAH,Venezuela,habil,20,24188,129,187.5
+LINEAH,Venezuela,habil,21,19832,129,153.7
+LINEAH,Venezuela,habil,22,9082,129,70.4
+LINEAH,Venezuela,habil,23,1871,129,14.5
+LINEAPM,CochePM,fin_de_semana,0,3,52,0.1
+LINEAPM,CochePM,fin_de_semana,4,4,52,0.1
+LINEAPM,CochePM,fin_de_semana,5,10,52,0.2
+LINEAPM,CochePM,fin_de_semana,6,816,52,15.7
+LINEAPM,CochePM,fin_de_semana,7,2132,52,41.0
+LINEAPM,CochePM,fin_de_semana,8,3491,52,67.1
+LINEAPM,CochePM,fin_de_semana,9,5355,52,103.0
+LINEAPM,CochePM,fin_de_semana,10,6635,52,127.6
+LINEAPM,CochePM,fin_de_semana,11,8097,52,155.7
+LINEAPM,CochePM,fin_de_semana,12,8703,52,167.4
+LINEAPM,CochePM,fin_de_semana,13,9088,52,174.8
+LINEAPM,CochePM,fin_de_semana,14,9061,52,174.2
+LINEAPM,CochePM,fin_de_semana,15,9438,52,181.5
+LINEAPM,CochePM,fin_de_semana,16,9689,52,186.3
+LINEAPM,CochePM,fin_de_semana,17,9744,52,187.4
+LINEAPM,CochePM,fin_de_semana,18,9795,52,188.4
+LINEAPM,CochePM,fin_de_semana,19,9376,52,180.3
+LINEAPM,CochePM,fin_de_semana,20,6606,52,127.0
+LINEAPM,CochePM,fin_de_semana,21,2368,52,45.5
+LINEAPM,CochePM,fin_de_semana,22,227,52,4.4
+LINEAPM,CochePM,fin_de_semana,23,113,52,2.2
+LINEAPM,CochePM,habil,0,3,129,0.0
+LINEAPM,CochePM,habil,1,7,129,0.1
+LINEAPM,CochePM,habil,4,32,129,0.2
+LINEAPM,CochePM,habil,5,1923,129,14.9
+LINEAPM,CochePM,habil,6,19572,129,151.7
+LINEAPM,CochePM,habil,7,35101,129,272.1
+LINEAPM,CochePM,habil,8,32427,129,251.4
+LINEAPM,CochePM,habil,9,27728,129,214.9
+LINEAPM,CochePM,habil,10,29482,129,228.5
+LINEAPM,CochePM,habil,11,31956,129,247.7
+LINEAPM,CochePM,habil,12,40522,129,314.1
+LINEAPM,CochePM,habil,13,33958,129,263.2
+LINEAPM,CochePM,habil,14,29297,129,227.1
+LINEAPM,CochePM,habil,15,30674,129,237.8
+LINEAPM,CochePM,habil,16,37244,129,288.7
+LINEAPM,CochePM,habil,17,38256,129,296.6
+LINEAPM,CochePM,habil,18,36411,129,282.3
+LINEAPM,CochePM,habil,19,26210,129,203.2
+LINEAPM,CochePM,habil,20,17982,129,139.4
+LINEAPM,CochePM,habil,21,4595,129,35.6
+LINEAPM,CochePM,habil,22,615,129,4.8
+LINEAPM,CochePM,habil,23,254,129,2.0
+LINEAPM,Saguier,fin_de_semana,5,1,52,0.0
+LINEAPM,Saguier,fin_de_semana,6,88,52,1.7
+LINEAPM,Saguier,fin_de_semana,7,722,52,13.9
+LINEAPM,Saguier,fin_de_semana,8,717,52,13.8
+LINEAPM,Saguier,fin_de_semana,9,985,52,18.9
+LINEAPM,Saguier,fin_de_semana,10,965,52,18.6
+LINEAPM,Saguier,fin_de_semana,11,1112,52,21.4
+LINEAPM,Saguier,fin_de_semana,12,1092,52,21.0
+LINEAPM,Saguier,fin_de_semana,13,1049,52,20.2
+LINEAPM,Saguier,fin_de_semana,14,922,52,17.7
+LINEAPM,Saguier,fin_de_semana,15,1090,52,21.0
+LINEAPM,Saguier,fin_de_semana,16,1371,52,26.4
+LINEAPM,Saguier,fin_de_semana,17,1169,52,22.5
+LINEAPM,Saguier,fin_de_semana,18,1057,52,20.3
+LINEAPM,Saguier,fin_de_semana,19,960,52,18.5
+LINEAPM,Saguier,fin_de_semana,20,696,52,13.4
+LINEAPM,Saguier,fin_de_semana,21,342,52,6.6
+LINEAPM,Saguier,fin_de_semana,22,5,52,0.1
+LINEAPM,Saguier,habil,5,148,129,1.1
+LINEAPM,Saguier,habil,6,5998,129,46.5
+LINEAPM,Saguier,habil,7,11863,129,92.0
+LINEAPM,Saguier,habil,8,9194,129,71.3
+LINEAPM,Saguier,habil,9,6423,129,49.8
+LINEAPM,Saguier,habil,10,3952,129,30.6
+LINEAPM,Saguier,habil,11,4611,129,35.7
+LINEAPM,Saguier,habil,12,5562,129,43.1
+LINEAPM,Saguier,habil,13,4315,129,33.4
+LINEAPM,Saguier,habil,14,2879,129,22.3
+LINEAPM,Saguier,habil,15,3048,129,23.6
+LINEAPM,Saguier,habil,16,2975,129,23.1
+LINEAPM,Saguier,habil,17,2983,129,23.1
+LINEAPM,Saguier,habil,18,2133,129,16.5
+LINEAPM,Saguier,habil,19,1697,129,13.2
+LINEAPM,Saguier,habil,20,1317,129,10.2
+LINEAPM,Saguier,habil,21,543,129,4.2
+LINEAPM,Saguier,habil,22,3,129,0.0
+PRUEBA,Prueba,habil,12,2,129,0.0
