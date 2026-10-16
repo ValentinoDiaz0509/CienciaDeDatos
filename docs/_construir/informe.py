@@ -14,23 +14,36 @@ R = json.loads((P / "resumen.json").read_text(encoding="utf-8"))
 met = pd.read_csv(P / "metricas_modelos.csv")
 esp = met[met["validación"].str.startswith("espacial")].set_index("modelo")
 ale = met[met["validación"] == "aleatoria"].set_index("modelo")
+metc = pd.read_csv(P / "metricas_clasificacion.csv")
+espc = metc[metc["validación"].str.startswith("espacial")].set_index("modelo")
+alec = metc[metc["validación"] == "aleatoria"].set_index("modelo")
 coef = pd.read_csv(P / "coeficientes_glm.csv").set_index("variable")
 perfil = pd.read_csv(P / "clusters_perfil.csv").set_index("tipo_zona")
 ex = pd.read_csv(P / "recomendaciones_exactas_20.csv")
 comp = pd.read_csv(P / "goloso_vs_exacto.csv")
 res = pd.read_parquet(P / "resultados_hex.parquet")
+bp = pd.read_csv(P / "barrios_prediccion.csv", index_col="barrio")
+curva = pd.read_csv(P / "curva_profundidad.csv")
+oob = pd.read_csv(P / "oob_vs_validacion.csv").set_index("modelo")
+imp = pd.read_csv(P / "importancia_variables.csv")
+gini = pd.read_csv(P / "importancia_gini.csv")
+cm = pd.read_csv(P / "matriz_confusion.csv", index_col=0)
+val = pd.read_csv(P / "validacion_temporal.csv").set_index("puntaje")
 cam = R["metodo_distancia"] == "caminando"
 dist = "caminando por las calles" if cam else "en línea recta"
 
-pb = (res.groupby("barrio").agg(r=("poblacion", "sum"), l=("term_link", "sum"), b=("term_banelco", "sum"),
-                                f=("brecha_link", lambda s: s.clip(lower=0).sum() / 7)).sort_values("f", ascending=False))
-pb["cuota"] = pb["l"] / (pb["l"] + pb["b"])
-top = pb.head(5)
-
-orden = esp.sort_values("D² Poisson", ascending=False).index
+D2 = "D² Poisson (promedio por partición)"
+top = bp[bp["diferencia_link"] > 0].head(5)
+sin_link = bp[(bp["tiene_link"] == 0) & (bp["corresponden_link"] >= 1.5)].sort_values("corresponden_link", ascending=False)
+sobra = bp.sort_values("diferencia_link").head(3)
+orden = esp.sort_values(D2, ascending=False).index
 tabla_modelos = "\n".join(
-    f"| {mo} | {n(esp.loc[mo, 'D² Poisson'], 3)} | {n(ale.loc[mo, 'D² Poisson'], 3)} | {n(esp.loc[mo, 'MAE'], 2)} | {n(esp.loc[mo, 'R²'], 3)} |"
-    for mo in orden)
+    f"| {mo} | {n(esp.loc[mo, D2], 2)} ± {n(esp.loc[mo, 'D² Poisson (desvío entre particiones)'], 2)} | "
+    f"{n(ale.loc[mo, D2], 2)} | {n(esp.loc[mo, 'MAE'], 2)} |" for mo in orden)
+orden_c = espc.sort_values("AUC (promedio por partición)", ascending=False).index
+tabla_clasif = "\n".join(
+    f"| {mo} | {n(espc.loc[mo, 'AUC (promedio por partición)'], 3)} | {n(espc.loc[mo, 'PR-AUC'], 3)} | "
+    f"{n(espc.loc[mo, 'Precisión'], 3)} | {n(alec.loc[mo, 'AUC'], 3)} |" for mo in orden_c)
 tabla_comp = "\n".join(
     f"| {int(r.cajeros)} | {n(r.goloso)} | {n(r.exacto)} | {n(r.diferencia_pct, 2)} % | {int(r.sitios_en_comun)} | {n(r.seg_exacto, 2)} |"
     for r in comp.itertuples())
@@ -38,8 +51,27 @@ zonas = [z for z in perfil.index if not z.startswith("Zonas sin")]
 tabla_zonas = "\n".join(
     f"| {z} | {n(perfil.loc[z, 'residentes'])} | {n(perfil.loc[z, 'pax_subte'])} | {n(perfil.loc[z, 'terminales_cada_10mil'], 1)} | "
     f"{n(perfil.loc[z, 'link_cada_10mil'], 1)} | {n(100 * perfil.loc[z, 'pct_nbi_k1'], 1)} % |" for z in zonas)
-tabla_top = "\n".join(f"| {b} | {n(r.r)} | {n(r.l)} | {n(r.b)} | {n(100 * r.cuota)} % | {n(r.f)} |" for b, r in top.iterrows())
+tabla_top = "\n".join(f"| {b} | {n(r.residentes)} | {n(r.tiene_link)} | {n(r.corresponden_link)} | **+{n(r.diferencia_link)}** | "
+                       f"{n(100 * r.cuota_link)} % |" for b, r in top.iterrows())
 tabla_ex = "\n".join(f"| {int(r.orden)} | {r.barrio} | {int(r.comuna)} | {r.tipo_zona} | {n(r.personas_nuevas)} |" for r in ex.itertuples())
+
+# Zonas de ejemplo (las mismas reglas que el notebook 02)
+rr = res[res["esperado_total_k1"].notna()].set_index("h3")
+za = rr.loc[rr[rr["term_link_k1"] == 0]["esperado_link_k1"].idxmax()]
+_uno = rr[(rr["term_total_k1"] == 0) & rr["esperado_link_k1"].between(0.5, 1.5) & (rr["tipo_zona"] == "Residencial denso")]
+zu = rr.loc[_uno["poblacion_k1"].idxmax()]
+zb = rr.loc[rr[rr["poblacion_k1"] >= 15_000]["esperado_total_k1"].idxmin()]
+mejor_prof = curva.loc[curva["validación espacial"].idxmax()]
+op = res[res["deberia_tener_cajero"].fillna(False).astype(bool) & (res["term_total"] == 0)]
+op_barrios = ", ".join(op["barrio"].value_counts().head(4).index)
+est = pd.read_csv(P / "estaciones_subte.csv")
+minus = lambda t: t[0].lower() + t[1:]  # noqa: E731
+
+
+def cerca(z):
+    d = ((est["lat"] - z["lat"]) * 111_000) ** 2 + ((est["lon"] - z["lon"]) * 92_000) ** 2
+    i = d.idxmin()
+    return f"a {n(round(d[i] ** 0.5, -2))} m de la estación {est.loc[i, 'estacion']} ({est.loc[i, 'linea']})"
 ef = lambda v: n(coef.loc[v, "efecto"], 2)
 bar_tipo = lambda z: ", ".join(ex[ex["tipo_zona"] == z]["barrio"].value_counts().index[:3])
 cubrir_txt = f"los barrios residenciales ({bar_tipo('Residencial denso')}) y el sur ({bar_tipo('Mayor vulnerabilidad social')})"
@@ -83,9 +115,15 @@ Este informe se genera a partir de los resultados del pipeline (`python docs/_co
 - Los cajeros **siguen al comercio, no a los vecinos**: en los corredores comerciales hay
   {n(perfil.loc['Corredores comerciales con subte', 'terminales_cada_10mil'], 1)} terminales cada 10.000 vecinos; en los barrios
   residenciales, {n(perfil.loc['Residencial denso', 'terminales_cada_10mil'], 1)}.
-- Hay **dos oportunidades**. **Competir** en los corredores comerciales del norte y el centro ({", ".join(top.index[:3])}),
-  donde la demanda justifica más terminales Link de las que hay. **Cubrir** {cubrir_txt},
-  donde no hay un Link a distancia caminable.
+- Un modelo de **machine learning**, un ensamble de regresión de Poisson y XGBoost elegido entre 7 con validación cruzada
+  espacial anidada (D² = {n(R['d2_espacial_promedio'], 2)}; error medio de {n(R['mae_espacial'], 1)} terminales por zona), estima cuántos
+  cajeros le corresponden a cada zona según su demanda. A Link le faltan terminales sobre todo en **{top.index[0]}** (le corresponden
+  {n(top.iloc[0]['corresponden_link'])}, tiene {n(top.iloc[0]['tiene_link'])}) y **{top.index[1]}** ({n(top.iloc[1]['corresponden_link'])} contra
+  {n(top.iloc[1]['tiene_link'])}). Un clasificador **{R['clasificador_elegido']}** (AUC = {n(R['auc_clasificador'], 2)}) encuentra
+  **{n(R['zonas_sin_cajero_que_deberian'])} zonas sin ningún cajero** que, por su demanda, deberían tener uno: viven ahí
+  {n(R['residentes_zonas_sin_cajero_que_deberian'])} personas.
+- Hay **dos estrategias**. **Competir** donde la demanda justifica más terminales Link de las que hay ({", ".join(top.index[:3])}).
+  **Cubrir** {cubrir_txt}, donde no hay un Link a distancia caminable.
 - Con **20 cajeros** en las ubicaciones óptimas, Link suma **{n(R['nuevos_20_exacto'])} vecinos** y pasa al
   **{n(100 * R['cobertura_link_con_20'], 1)} %**. La diferencia con Banelco baja de {n(dif_ini)} a {n(dif_fin)} puntos{igualar_txt}. Al promedio
   nacional de {n(3242)} extracciones por terminal por mes (BCRA, 2025), son unas **{n(20 * 3242)} operaciones mensuales**.
@@ -159,37 +197,92 @@ OpenStreetMap está incompleto para cajeros ({R['cajeros_osm_2026']} contra {n(R
 
 ## 4. Modelado
 
-### 4.1 Regresión de conteos: ¿cuántas terminales tienen las zonas con esta demanda?
-Objetivo: terminales (todas las redes) en el área de influencia. Seis modelos más un ensamble definido de antemano,
-evaluados con **validación cruzada espacial** (GroupKFold por comuna, 5 particiones) y, a modo de comparación, aleatoria.
+Seguimos los cuatro niveles de análisis de la materia: el EDA es el **descriptivo**; los modelos de esta sección son el
+**predictivo** (4.1 y 4.2) y el **diagnóstico** que lo explica (4.3); la segmentación y la optimización son el
+**prescriptivo** (4.4 a 4.6).
 
-| Modelo | D² Poisson espacial | D² Poisson aleatoria | MAE espacial | R² espacial |
-|---|---|---|---|---|
+### 4.1 Regresión: ¿cuántas terminales le corresponden a cada zona? (`notebooks/02_machine_learning.ipynb`)
+Objetivo: terminales de todas las redes en el área de influencia. Es un conteo con muchos ceros y cola larga, así que
+usamos pérdida de Poisson y medimos con la **devianza de Poisson (D²)**, el equivalente del R² para conteos, y el **error
+absoluto medio (MAE)**.
+
+**Validación cruzada espacial anidada.** Las zonas vecinas se parecen y comparten área de influencia: si se mezclan al azar
+entrenamiento y prueba, el modelo "ve" la respuesta en los vecinos. Por eso se mide siempre en **comunas que el modelo no vio**
+(GroupKFold por comuna, 5 particiones), y los hiperparámetros se eligen con GridSearchCV **adentro** de cada partición de
+entrenamiento, también dejando comunas afuera (4 particiones internas). La regla de elección se fijó antes de ver los
+resultados: el mayor D² promedio entre particiones.
+
+| Modelo | D² espacial (promedio ± desvío) | D² aleatoria | MAE espacial |
+|---|---|---|---|
 {tabla_modelos}
 
-**Elección: {R['modelo_elegido']}.** Con validación aleatoria habría ganado {R['modelo_mejor_aleatoria']}
-(D² = {n(ale.loc[R['modelo_mejor_aleatoria'], 'D² Poisson'], 2)}), pero en zonas no vistas cae a
-{n(esp.loc[R['modelo_mejor_aleatoria'], 'D² Poisson'], 2)}: los modelos de árboles memorizan la geografía (autocorrelación espacial).
-El GLM generaliza mejor (D² = {n(R['d2_espacial'], 2)}) y además se puede explicar: subir un desvío las parcelas comerciales multiplica
+**Elección: {R['modelo_elegido']}** (promedio geométrico de la regresión de Poisson y XGBoost): el D² más alto y más estable, y
+el menor error. Con validación aleatoria habría ganado {R['modelo_mejor_aleatoria']} (D² = {n(ale.loc[R['modelo_mejor_aleatoria'], D2], 2)}),
+que en comunas no vistas cae a {n(esp.loc[R['modelo_mejor_aleatoria'], D2], 2)}: los árboles memorizan la geografía
+(autocorrelación espacial). La regla "más vecinos, más cajeros" (Poisson solo con población) es peor que predecir el promedio.
+
+**Sobreajuste y OOB (clases 6 y 8).** Un árbol de decisión mejora siempre en entrenamiento (D² = {n(curva.iloc[-1]['entrenamiento'], 2)}
+con {int(curva.iloc[-1]['profundidad'])} niveles), pero en comunas no vistas el mejor resultado está en {int(mejor_prof['profundidad'])} niveles
+(D² = {n(mejor_prof['validación espacial'], 2)}) y después empeora. El error OOB del Random Forest da R² = {n(oob.loc['Random Forest (regresión)', 'OOB'], 2)},
+pero en comunas no vistas el R² es {n(oob.loc['Random Forest (regresión)', 'comunas no vistas'], 2)}: con datos espaciales el OOB es
+optimista, por la misma razón que la validación aleatoria.
+
+**Brecha** = terminales que le corresponden (predicción fuera de muestra) − terminales que tiene. Para Link, lo que le
+corresponde es la predicción por la participación de Link en la ciudad ({n(100 * R['cuota_link'], 1)} %). Por barrio, la predicción
+de cada área de influencia se reparte entre sus 7 hexágonos para no contar cada terminal siete veces.
+
+| Barrio | Residentes | Terminales Link | Le corresponden | Faltan | Participación Link |
+|---|---|---|---|---|---|
+{tabla_top}
+
+Hay barrios sin ninguna terminal Link a los que les corresponde alguna: {", ".join(f"{b} ({n(r.corresponden_link)})" for b, r in sin_link.iterrows())}.
+En el otro extremo, el microcentro ({"; ".join(f"{b}: tiene {n(r.tiene_link)} terminales Link y le corresponden {n(r.corresponden_link)}" for b, r in sobra.iterrows())})
+concentra las casas centrales de los bancos públicos de la red y gente que llega en colectivo y tren, que el modelo ve solo
+en parte: lo leemos como sobreoferta a revisar, no como cajeros que sobran.
+
+### 4.2 Clasificación: ¿a esta zona le corresponde al menos un cajero?
+Objetivo: el hexágono tiene o no al menos una terminal de cualquier red. Misma validación espacial anidada; el umbral marca
+tantas zonas como las que hoy tienen cajero (tasa base), así que precisión y recall coinciden.
+
+| Modelo | AUC espacial (promedio) | PR-AUC | Precisión = recall | AUC aleatoria |
+|---|---|---|---|---|
+{tabla_clasif}
+
+Elegimos **{R['clasificador_elegido']}**: AUC de {n(R['auc_clasificador_promedio'], 2)} en promedio por grupo de comunas
+({n(R['auc_clasificador'], 2)} con todas las zonas juntas). En la matriz de confusión, los falsos positivos son
+**oportunidades**: {n(cm.loc['Real: sin cajero', 'Predicho: con cajero'])} zonas sin ningún cajero que, por su demanda, deberían tener uno,
+donde viven {n(R['residentes_zonas_sin_cajero_que_deberian'])} personas (sobre todo en {op_barrios}). Un árbol de 3 niveles, entrenado solo
+para leer las reglas, empieza preguntando por la cantidad de comercios del hexágono.
+
+### 4.3 Diagnóstico: por qué el modelo predice lo que predice
+El modelo elegido es aditivo en escala logarítmica, así que la predicción de cada zona se descompone **exactamente** en el
+aporte de cada variable (valores **SHAP**: TreeSHAP en XGBoost y coeficiente × valor en la regresión de Poisson). Según SHAP lo
+que más pesa es {", ".join(minus(v) for v in imp["nombre"].head(3))}; según la importancia de **Gini** del Random Forest,
+{", ".join(minus(v) for v in gini["nombre"].head(3))}. En la regresión de Poisson, subir un desvío las parcelas comerciales multiplica
 las terminales esperadas por {ef('parcelas_comercio_k1')}; los comercios de OSM, por {ef('actividad_osm_k1')}; el % de 65+, por
 {ef('pct_65_k1')}; los pasajeros de subte, por {ef('pax_subte_habil_k1')}; las parcelas residenciales, por {ef('parcelas_residencial_k1')};
 y el % de hogares con NBI, por {ef('pct_nbi_k1')}.
 
-**Brecha** = terminales esperadas (predicción fuera de muestra) − terminales reales. **Brecha Link** = lo esperado × participación
-de Link en la ciudad ({n(100 * R['cuota_link'], 1)} %) − terminales Link reales. Barrios con más terminales Link faltantes:
+Tres zonas, tres decisiones:
 
-| Barrio | Residentes | Terminales Link | Terminales Banelco | Participación Link | Link faltantes |
-|---|---|---|---|---|---|
-{tabla_top}
+| Zona | Demanda en ≈400 m | Le corresponden | Tiene | Decisión |
+|---|---|---|---|---|
+| {za['barrio']}, {cerca(za)} | {n(za['poblacion_k1'])} vecinos, {n(za['actividad_osm_k1'])} comercios | {n(za['esperado_total_k1'], 1)} ({n(za['esperado_link_k1'], 1)} Link) | {n(za['term_total_k1'])} (ninguna Link) | **Competir** |
+| {zu['barrio']}, {cerca(zu)} | {n(zu['poblacion_k1'])} vecinos, {n(zu['actividad_osm_k1'])} comercios, sin subte | {n(zu['esperado_total_k1'], 1)} ({n(zu['esperado_link_k1'], 1)} Link) | {n(zu['term_total_k1'])} | **Un solo cajero Link** |
+| {zb['barrio']} | {n(zb['poblacion_k1'])} vecinos, {n(zb['actividad_osm_k1'])} comercios | {n(zb['esperado_total_k1'], 1)} | {n(zb['term_total_k1'])} | **Cubrir**, no competir |
 
-### 4.2 K-Means: tipos de zona
+En {zu['barrio']} viven muchas personas pero el flujo de gente es bajo (pocos comercios y sin subte): le corresponde un solo
+cajero Link ({n(zu['esperado_link_k1'], 1)} terminales), y hoy no tiene ninguno de ninguna red. En {zb['barrio']} el mercado no pondría un cajero; si el objetivo es acercar el
+efectivo a quienes más lo usan, entra por la estrategia de cobertura.
+
+### 4.4 K-Means: tipos de zona (`notebooks/03_optimizacion.ipynb`)
 k = {R['k_clusters']} por silueta ({n(R['silueta'], 2)}) y codo, sobre variables de demanda estandarizadas (conteos en escala log).
 
 | Tipo de zona | Residentes | Pasajeros de subte/día | Terminales cada 10 mil | Link cada 10 mil | NBI (mediana) |
 |---|---|---|---|---|---|
 {tabla_zonas}
 
-### 4.3 Optimización: dónde sumar cajeros
+### 4.5 Optimización: dónde sumar cajeros
 **Problema de cobertura máxima** (MCLP; Church y ReVelle, 1974): elegir N sitios (hexágonos con comercio) que maximicen los
 vecinos que pasan a tener un Link a menos de 500 m. Se resuelve con el **algoritmo goloso** (garantía de 1 − 1/e del óptimo por
 submodularidad; Nemhauser, Wolsey y Fisher, 1978) y de forma **exacta** como programa lineal entero con HiGHS.
@@ -204,7 +297,7 @@ El goloso queda a menos del {n(R['goloso_max_diferencia_pct'], 1)} % del óptimo
 |---|---|---|---|---|
 {tabla_ex}
 
-### 4.4 Demanda por hora
+### 4.6 Demanda por hora (`notebooks/04_demanda_por_hora.ipynb`)
 Con los molinetes 2025 ({n(R['pax_subte_habil'])} entradas por día hábil), los picos son a las **{R['hora_pico_manana']}:00** y las
 **{R['hora_pico_tarde']}:00**. Un K-Means sobre la forma de la curva horaria de cada estación separa estaciones de **origen** (pico a la
 mañana, barrios) y de **destino** (pico a la tarde, centro). {R['estaciones'] - R['estaciones_sin_link']} de {R['estaciones']}
@@ -212,21 +305,25 @@ estaciones ya tienen un Link a menos de 500 m; {robustez_txt}: el faltante grand
 
 ## 5. Evaluación
 
-- **Generalización:** D² espacial = {n(R['d2_espacial'], 2)}, MAE = {n(R['mae_espacial'], 1)} terminales por área de influencia.
+- **Generalización (regresión):** D² espacial = {n(R['d2_espacial_promedio'], 2)} ± {n(R['d2_espacial_desvio'], 2)} entre grupos de
+  comunas; MAE = {n(R['mae_espacial'], 1)} terminales por área de influencia.
+- **Generalización (clasificación):** AUC espacial = {n(R['auc_clasificador'], 2)}; PR-AUC = {n(R['pr_auc_clasificador'], 2)} (la tasa base
+  es {n(100 * R['base_positivos_clasificador'])} %).
 - **Validación temporal:** de los {R['cajeros_osm_2026']} cajeros que OpenStreetMap tiene mapeados en 2026, {R['cajeros_nuevos_osm']} no
   estaban en el listado 2017. Cayeron, en promedio, en zonas con más brecha que el {n(100 * R['percentil_cajeros_nuevos'])} % de la
-  ciudad (p = {n(R['p_valor_cajeros_nuevos'], 3)}, Monte Carlo). El AUC es {n(R['auc_validacion'], 2)}, contra 0,51 de usar solo la población.
-  Es una evidencia a favor, pero modesta, por la cantidad de casos.
+  ciudad (p = {n(R['p_valor_cajeros_nuevos'], 3)}, Monte Carlo). El AUC de la brecha es {n(R['auc_validacion'], 2)} y el de la probabilidad
+  del clasificador, {n(val.loc['Probabilidad de cajero (clasificador)', 'AUC'], 2)}, contra {n(val.loc['Solo residentes', 'AUC'], 2)} de usar solo la
+  población. Es una evidencia a favor, pero modesta, por la cantidad de casos.
 - **Robustez:** {robustez_txt}. El goloso queda a menos del {n(R['goloso_max_diferencia_pct'], 1)} % del óptimo exacto, y medir
   con otra regla de conexión a la red cambia la cobertura en poco más de un punto.
 
 **Limitaciones.**
 - La oferta es de ≈2017.
 - No hay transacciones: la demanda se aproxima con residentes, comercio y pasajeros.
-- La brecha compara contra el promedio del mercado, así que no detecta zonas que el mercado entero desatiende (la
-  optimización por cobertura cubre ese caso).
+- Lo que le "corresponde" a una zona compara contra cómo está repartido hoy el mercado, así que no detecta zonas que el
+  mercado entero desatiende (la optimización por cobertura cubre ese caso).
 - OpenStreetMap varía en completitud entre barrios.
-- Los feriados en día de semana cuentan como hábiles.
+- Los feriados en día de semana cuentan como hábiles en el promedio horario.
 - Las distancias se miden desde el centro de cada hexágono y la red peatonal no tiene en cuenta semáforos, pendientes ni
   la percepción de seguridad de cada cuadra.
 
@@ -234,6 +331,8 @@ estaciones ya tienen un Link a menos de 500 m; {robustez_txt}: el faltante grand
 
 App en Streamlit con mapas de deck.gl (`streamlit run app/app.py`). Funciona sin internet. Incluye:
 - mapa 3D de la brecha;
+- predicción por zona: para cada barrio, cuántas terminales tiene y cuántas le corresponden, el porqué de cada zona (SHAP)
+  y las oportunidades del clasificador;
 - simulador de N cajeros (exacto o goloso, distancia caminando o en línea recta, con o sin pasajeros por franja horaria);
 - demanda por hora;
 - tipos de zona;
@@ -243,15 +342,23 @@ Una terminal nueva que alcance el promedio nacional suma unas 3.242 extracciones
 promedio de julio 2025). El ingreso por operación es un dato interno: la app lo recibe como parámetro.
 
 **Próximos pasos:**
+- pronosticar la demanda de paso día por día con la serie 2022-2026 de los molinetes (`notebooks/05_pronostico_subte.ipynb`);
 - correr el modelo con el listado actual y las transacciones por terminal;
 - sumar restricciones de costo y de seguridad por sitio a la optimización;
 - validar la hipótesis horaria (carga de efectivo antes de los picos) con transacciones por hora.
+
+## Uso de herramientas de IA
+
+Usamos asistentes de inteligencia artificial como apoyo para programar, revisar el código y redactar. El grupo definió el
+problema, eligió las fuentes y los métodos, y revisó el código y los resultados.
 
 ## Referencias
 
 - BCRA (2025). *Informe Mensual de Pagos Minoristas*, agosto de 2025 (datos de julio de 2025).
 - Boeing, G. (2017). OSMnx: New methods for acquiring, constructing, analyzing, and visualizing complex street networks. *Computers, Environment and Urban Systems*, 65, 126-139.
 - Breiman, L. (2001). Random Forests. *Machine Learning*, 45(1), 5-32.
+- Breiman, L., Friedman, J., Olshen, R. y Stone, C. (1984). *Classification and Regression Trees*. Wadsworth.
+- Chen, T. y Guestrin, C. (2016). XGBoost: A scalable tree boosting system. *Proceedings of KDD 2016*, 785-794.
 - Chapman, P. et al. (2000). *CRISP-DM 1.0: Step-by-step data mining guide*.
 - Church, R. y ReVelle, C. (1974). The maximal covering location problem. *Papers of the Regional Science Association*, 32, 101-118.
 - Dijkstra, E. W. (1959). A note on two problems in connexion with graphs. *Numerische Mathematik*, 1, 269-271.
@@ -259,11 +366,14 @@ promedio de julio 2025). El ingreso por operación es un dato interno: la app lo
 - Friedman, J. (2001). Greedy function approximation: a gradient boosting machine. *Annals of Statistics*, 29(5).
 - Huangfu, Q. y Hall, J. (2018). Parallelizing the dual revised simplex method. *Mathematical Programming Computation*, 10, 119-142.
 - INDEC (2024). *Censo Nacional de Población, Hogares y Viviendas 2022*, base por radio censal.
+- Lundberg, S. y Lee, S.-I. (2017). A unified approach to interpreting model predictions. *NeurIPS 2017*.
+- Lundberg, S. et al. (2020). From local explanations to global understanding with explainable AI for trees. *Nature Machine Intelligence*, 2, 56-67.
 - McCullagh, P. y Nelder, J. (1989). *Generalized Linear Models* (2.ª ed.). Chapman & Hall.
 - Nemhauser, G., Wolsey, L. y Fisher, M. (1978). An analysis of approximations for maximizing submodular set functions. *Mathematical Programming*, 14, 265-294.
 - Openshaw, S. (1984). *The Modifiable Areal Unit Problem*. Geo Books.
 - Roberts, D. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. *Ecography*, 40(8), 913-929.
 - Uber Technologies (2018). *H3: Uber's Hexagonal Hierarchical Spatial Index*.
+- Varma, S. y Simon, R. (2006). Bias in error estimation when using cross-validation for model selection. *BMC Bioinformatics*, 7, 91.
 - Wang, R. y Strong, D. (1996). Beyond accuracy: what data quality means to data consumers. *Journal of Management Information Systems*, 12(4).
 - Fuentes de datos: GCBA (BA Data), INDEC, SBASE, © colaboradores de OpenStreetMap.
 """

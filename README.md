@@ -15,11 +15,16 @@ Cruzamos dónde vive y circula la gente con dónde están los cajeros automátic
 | Vecinos sin un Link a distancia caminable | **1.507.883** |
 | Con **20 cajeros** en las ubicaciones óptimas | Link pasa al **59,8 %** (+265.929 vecinos) |
 | Cajeros nuevos para igualar la cobertura de Banelco | **35** |
-| Modelo elegido (validación espacial) | Regresión de Poisson (GLM), D² = 0,62 |
+| Terminales Link que faltan según su demanda (machine learning) | Palermo (36), Belgrano (22), Recoleta (9) |
+| Zonas sin ningún cajero que deberían tener uno (clasificador) | **254**, con 480.545 vecinos |
+| Modelo de regresión elegido (validación espacial anidada) | Ensamble (Poisson + XGBoost): D² = 0,57, error medio de 4,2 terminales por zona |
+| Clasificador elegido | Random Forest: AUC = 0,84 |
 
-Los cajeros **siguen al comercio, no a los vecinos**. Hay dos oportunidades: **competir** en los corredores comerciales del
-norte y el centro, donde la demanda justifica más terminales Link de las que hay, y **cubrir** los barrios residenciales
-(Belgrano, Villa Urquiza, Almagro) y el sur (Villa Lugano, Barracas, Villa Soldati), donde no hay un Link a distancia caminable. El detalle está en el [informe técnico](docs/informe.md).
+Los cajeros **siguen al comercio, no a los vecinos**. Un modelo de machine learning (árboles, Random Forest y XGBoost,
+validados en comunas que no vieron) estima cuántos cajeros le corresponden a cada zona según su demanda. Hay dos
+oportunidades: **competir** donde la demanda justifica más terminales Link de las que hay (Palermo, Belgrano, Recoleta), y
+**cubrir** los barrios residenciales (Belgrano, Villa Urquiza, Almagro) y el sur (Villa Lugano, Barracas, Villa Soldati),
+donde no hay un Link a distancia caminable. El detalle está en el [informe técnico](docs/informe.md).
 
 ## Cómo ver la app
 
@@ -76,8 +81,11 @@ Después, abrir `http://localhost:8501` en el navegador. Para correr también lo
 2. *Create app* → elegí el repositorio `ValentinoDiaz0509/CienciaDeDatos`, la rama `main` y el archivo `app/app.py`.
 3. *Deploy*. En unos minutos queda una dirección pública para abrir desde cualquier navegador.
 
-La app tiene seis secciones: panorama (mapa 3D de la brecha), simulador de cajeros nuevos, demanda por hora, tipos de zona,
-"usá tus datos" (cargar el listado actual de cajeros) y cómo funciona.
+La app tiene siete secciones: panorama (mapa 3D de la brecha), predicción por zona (cuántas terminales tiene cada barrio,
+cuántas le corresponden y por qué), simulador de cajeros nuevos, demanda por hora, tipos de zona, "usá tus datos" (cargar el
+listado actual de cajeros) y cómo funciona.
+
+![Predicción por zona: Belgrano tiene 30 terminales Link y le corresponden 52; el mapa marca sus zonas y a la derecha está el porqué de la zona elegida](docs/figuras/app_prediccion.png)
 
 ![Simulador de expansión: elegís cuántos cajeros sumar y a qué distancia, y la app devuelve dónde ponerlos](docs/figuras/app_simulador.png)
 
@@ -92,8 +100,8 @@ La app tiene seis secciones: panorama (mapa 3D de la brecha), simulador de cajer
 | 1 | Dominio y problema | [informe §1](docs/informe.md#1-comprensión-del-negocio) |
 | 2 | Arquitectura de la solución | [diagrama](docs/figuras/arquitectura.png) e [informe §3](docs/informe.md#3-preparación-de-los-datos) |
 | 3 | Análisis exploratorio | [`notebooks/01_calidad_y_eda.ipynb`](notebooks/01_calidad_y_eda.ipynb) |
-| 4 | Técnica de minería y por qué | [`notebooks/02_modelos.ipynb`](notebooks/02_modelos.ipynb) y [`03_demanda_por_hora.ipynb`](notebooks/03_demanda_por_hora.ipynb) |
-| 5 | Conclusión con visualización | [informe](docs/informe.md#resumen-ejecutivo), notebook 02 §8 y la presentación |
+| 4 | Técnica de minería y por qué | [`02_machine_learning.ipynb`](notebooks/02_machine_learning.ipynb), [`03_optimizacion.ipynb`](notebooks/03_optimizacion.ipynb), [`04_demanda_por_hora.ipynb`](notebooks/04_demanda_por_hora.ipynb) y [`05_pronostico_subte.ipynb`](notebooks/05_pronostico_subte.ipynb) |
+| 5 | Conclusión con visualización | [informe](docs/informe.md#resumen-ejecutivo), notebooks 02 §9 y 03, y la presentación |
 | 6 | Aplicación funcional | [`app/app.py`](app/app.py) |
 
 La [guía de defensa](docs/defensa.md) repasa la consigna punto por punto e incluye roles, guion de 15 minutos, checklist y
@@ -107,11 +115,16 @@ preguntas probables.
    Calidad medida con las seis dimensiones de DAMA.
 2. **Preparación:** grilla de 2.793 hexágonos H3 (≈3 × 3 manzanas), interpolación areal del censo y áreas de
    influencia de ≈400 m. Distancias caminando por la red peatonal de OpenStreetMap (Dijkstra).
-3. **Modelos:**
-   - regresión de conteos con validación cruzada espacial (seis modelos y un ensamble), para medir la brecha;
-   - K-Means, para los tipos de zona y de estación de subte;
-   - cobertura máxima resuelta de forma exacta (programación lineal entera con HiGHS) y con un algoritmo goloso.
-4. **Evaluación:** validación temporal con los cajeros que aparecieron en OpenStreetMap después de 2017.
+3. **Modelos**, siguiendo los cuatro niveles de análisis:
+   - **predictivo (machine learning):** regresión (7 modelos: de una línea de base a árbol de decisión, Random Forest,
+     XGBoost y un ensamble) y clasificación (4 modelos) con **validación cruzada espacial anidada**: GroupKFold por comuna
+     y GridSearchCV adentro; curva de sobreajuste y error OOB;
+   - **diagnóstico:** valores SHAP, importancia de Gini y coeficientes de la regresión de Poisson;
+   - **prescriptivo:** K-Means para los tipos de zona y de estación, y cobertura máxima resuelta de forma exacta
+     (programación lineal entera con HiGHS) y con un algoritmo goloso;
+   - **pronóstico:** Random Forest y XGBoost sobre el calendario para la demanda diaria del subte (notebook 05).
+4. **Evaluación:** métricas en comunas no vistas (D² de Poisson, MAE, AUC) y validación temporal con los cajeros que
+   aparecieron en OpenStreetMap después de 2017.
 5. **Despliegue:** app de Streamlit con mapas de deck.gl, que funciona sin conexión.
 
 ## Estructura del repositorio
@@ -129,11 +142,14 @@ preguntas probables.
 ├── notebooks/
 │   ├── 00_descarga_datos.ipynb     # baja todas las fuentes (Colab)
 │   ├── 00b_red_peatonal.ipynb      # baja la red de calles (Colab)
+│   ├── 00c_serie_diaria_subte.ipynb # baja la serie diaria del subte 2022-2026 (Colab)
 │   ├── 01_calidad_y_eda.ipynb      # calidad de datos y análisis exploratorio
-│   ├── 02_modelos.ipynb            # regresión, clustering, optimización, validación
-│   └── 03_demanda_por_hora.ipynb   # perfiles horarios del subte
+│   ├── 02_machine_learning.ipynb   # regresión y clasificación: árboles, Random Forest, XGBoost, SHAP
+│   ├── 03_optimizacion.ipynb       # tipos de zona (K-Means) y dónde sumar cajeros
+│   ├── 04_demanda_por_hora.ipynb   # perfiles horarios del subte
+│   └── 05_pronostico_subte.ipynb   # pronóstico diario de pasajeros
 ├── src/
-│   ├── descarga.py  features.py  modelos.py  red.py  horario.py  pipeline.py  estilo.py
+│   ├── descarga.py  features.py  modelos.py  ml.py  pronostico.py  red.py  horario.py  pipeline.py
 └── requirements.txt
 ```
 
@@ -141,13 +157,14 @@ preguntas probables.
 
 ```bash
 pip install -r requirements.txt
-python -m src.pipeline                      # variables, modelos y resultados (≈1 minuto)
+python -m src.pipeline                      # variables, modelos y resultados (≈6 minutos)
 for f in notebooks/_construir/nb0*.py; do python "$f"; done   # regenera los notebooks (textos con los números nuevos)
 python docs/_construir/informe.py && python docs/_construir/readme.py
 ```
 
-Para volver a bajar las fuentes: [00 · Descarga](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00_descarga_datos.ipynb) y [00b · Red peatonal](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00b_red_peatonal.ipynb)
-en Colab (*Entorno de ejecución → Ejecutar todo*).
+Para volver a bajar las fuentes: [00 · Descarga](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00_descarga_datos.ipynb), [00b · Red peatonal](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00b_red_peatonal.ipynb)
+y [00c · Serie diaria del subte](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00c_serie_diaria_subte.ipynb) en Colab (*Entorno de ejecución → Ejecutar todo*).
+El pronóstico ([05](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/05_pronostico_subte.ipynb)) también corre directo en Colab: si no encuentra la serie, la baja.
 
 ## Fuentes y licencias
 
@@ -158,3 +175,6 @@ en Colab (*Entorno de ejecución → Ejecutar todo*).
 
 **Aviso:** el listado público de cajeros corresponde a un relevamiento de alrededor de 2017. Solo se usan datos públicos;
 ningún dato interno de Red Link.
+
+**Uso de IA:** usamos asistentes de inteligencia artificial como apoyo para programar, revisar el código y redactar. El grupo
+definió el problema, eligió las fuentes y los métodos, y revisó el código y los resultados.

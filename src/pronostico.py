@@ -20,13 +20,14 @@ predecibles con el calendario.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 
-from .features import DIR_BASE
+from .features import _ALIAS_ESTACIONES, DIR_BASE, RAIZ, normalizar
 
 SEMILLA = 42
 ARCHIVO_DIARIO = "subte-diario-estacion.parquet"
@@ -54,9 +55,21 @@ def cargar(base: Path = DIR_BASE) -> tuple[pd.DataFrame, pd.DataFrame | None]:
 # --------------------------------------------------------------------------
 # Serie y calendario
 # --------------------------------------------------------------------------
+MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre",
+         "noviembre", "diciembre"]
+
+
+def nombre_mes(fecha) -> str:
+    return f"{MESES[fecha.month - 1]} {fecha.year}"
+
+
+def _sin_pruebas(diario: pd.DataFrame) -> pd.DataFrame:
+    return diario[~diario["linea"].isin(["PRUEBA"]) & ~diario["estacion"].isin(["#N/D", "Prueba", "CochePM"])]
+
+
 def serie_red(diario: pd.DataFrame) -> pd.Series:
     """Pasajeros por día en toda la red, con todas las fechas (las que faltan quedan vacías)."""
-    s = diario.groupby("fecha")["pasajeros"].sum().astype(float)
+    s = _sin_pruebas(diario).groupby("fecha")["pasajeros"].sum().astype(float)
     s.index = pd.to_datetime(s.index)
     return s.reindex(pd.date_range(s.index.min(), s.index.max(), freq="D")).rename("pasajeros")
 
@@ -165,6 +178,24 @@ def metricas(real: np.ndarray, pred: np.ndarray) -> dict:
             "error del total (%)": float((p.sum() - r.sum()) / r.sum() * 100), "días evaluados": int(ok.sum())}
 
 
+def cortes_validacion(fin, meses: int = 6) -> list[tuple[str, str, str]]:
+    """
+    Los dos períodos de prueba más recientes, de `meses` meses cada uno. Para cada uno se entrena con todo lo
+    anterior: (nombre, último día de entrenamiento, último día de prueba).
+    """
+    fin = pd.Timestamp(fin)
+    c2 = fin + pd.Timedelta(days=1) - pd.DateOffset(months=meses) - pd.Timedelta(days=1)
+    c1 = c2 + pd.Timedelta(days=1) - pd.DateOffset(months=meses) - pd.Timedelta(days=1)
+    nombre = lambda a, b: f"{nombre_mes(a + pd.Timedelta(days=1))} a {nombre_mes(b)}"  # noqa: E731
+    return [(nombre(c1, c2), str(c1.date()), str(c2.date())), (nombre(c2, fin), str(c2.date()), str(fin.date()))]
+
+
+def horizonte(fin) -> pd.Timestamp:
+    """Hasta fin de año y, como mínimo, tres meses después del último dato."""
+    fin = pd.Timestamp(fin)
+    return max(pd.Timestamp(year=fin.year, month=12, day=31), fin + pd.DateOffset(months=3) + pd.offsets.MonthEnd(0))
+
+
 def validar(s: pd.Series, anomalia: pd.Series, cortes: list[tuple[str, str, str]]) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Validación hacia adelante. Cada corte es (nombre, último día de entrenamiento, último día de prueba).
@@ -234,3 +265,83 @@ def perfil_horario(hora: pd.DataFrame, meses: int = 6) -> pd.DataFrame:
     h = h[h["tipo_dia"] != "otro"]
     tot = h.groupby(["tipo_dia", "hora"])["pasajeros"].sum()
     return (tot / tot.groupby(level=0).transform("sum")).rename("parte").reset_index()
+
+
+# --------------------------------------------------------------------------
+# Estaciones: cuánta gente va a pasar por cada una
+# --------------------------------------------------------------------------
+def por_estacion(diario: pd.DataFrame, anomalia: pd.Series, meses: int = 3) -> pd.DataFrame:
+    """Entradas por día hábil de cada estación en los últimos meses y su parte del total de la red."""
+    d = _sin_pruebas(diario).copy()
+    d["fecha"] = pd.to_datetime(d["fecha"])
+    d = d[d["fecha"] > d["fecha"].max() - pd.DateOffset(months=meses)]
+    cal = calendario(pd.DatetimeIndex(sorted(d["fecha"].unique())))
+    habiles = cal.index[(cal["fin_de_semana"] == 0) & (cal[["feriado", "puente", "no_laborable"]].sum(axis=1) == 0)]
+    normales = anomalia.index[~anomalia.to_numpy()]
+    d = d[d["fecha"].isin(habiles) & d["fecha"].isin(normales)]
+    d["letra"] = d["linea"].str.replace("LINEA", "", regex=False).str[0]
+    d["base"] = d["estacion"].str.replace(r"\.[A-H]$", "", regex=True).map(normalizar).replace(_ALIAS_ESTACIONES)
+    out = (d.groupby(["letra", "base"])["pasajeros"].sum() / d["fecha"].nunique()).rename("pax_habil_reciente").reset_index()
+    out["parte"] = out["pax_habil_reciente"] / out["pax_habil_reciente"].sum()
+    return out
+
+
+# --------------------------------------------------------------------------
+# Todo junto: python -m src.pronostico
+# --------------------------------------------------------------------------
+def resultados(base: Path = DIR_BASE, salida: Path = RAIZ / "data" / "processed") -> dict:
+    """Valida, pronostica y guarda las tablas que usan el notebook 05, la app y la presentación."""
+    diario, hora = cargar(base)
+    s = serie_red(diario)
+    anomalia = marcar_anomalias(s)
+    fin = s.dropna().index.max()
+    met, _ = validar(s, anomalia, cortes_validacion(fin))
+    promedio = met.groupby("modelo")["MAPE (%)"].mean().sort_values()
+    elegido = next(m for m in promedio.index if m != "Mismo día del año anterior")
+    pron = pronosticar(s, anomalia, horizonte(fin), elegido)
+    mensual = por_mes(s, anomalia, pron)
+    imp = importancia(s, anomalia)
+
+    est = por_estacion(diario, anomalia)
+    ref = pd.read_csv(salida / "estaciones_subte.csv")
+    est = est.merge(ref[["linea", "base", "estacion", "perfil", "link_cerca"]], left_on=["letra", "base"],
+                    right_on=["linea", "base"], how="inner").drop(columns="letra")
+    primer_mes = mensual.index[0] if mensual.index[0].to_timestamp() > fin else mensual.index[min(1, len(mensual) - 1)]
+    est["pax_habil_pronostico"] = est["parte"] * mensual.loc[primer_mes, "pronostico"]
+
+    salida.mkdir(parents=True, exist_ok=True)
+    met.to_csv(salida / "pronostico_validacion.csv", index=False)
+    pron.to_csv(salida / "pronostico_diario.csv", index=False)
+    mensual.assign(mes=mensual.index.astype(str)).to_csv(salida / "pronostico_mensual.csv", index=False)
+    imp.rename("importancia").rename_axis("variable").reset_index().assign(
+        nombre=lambda d: d["variable"].map(NOMBRES)).to_csv(salida / "pronostico_importancia.csv", index=False)
+    est.sort_values("pax_habil_pronostico", ascending=False).to_csv(salida / "pronostico_estaciones.csv", index=False)
+    if hora is not None:
+        perfil_horario(hora).to_csv(salida / "pronostico_perfil_horario.csv", index=False)
+
+    sin_link = est[~est["link_cerca"].astype(bool)]
+    ultimo = met[met["período de prueba"] == met["período de prueba"].iloc[-1]].set_index("modelo")
+    resumen = {
+        "desde": str(s.dropna().index.min().date()), "hasta": str(fin.date()), "dias": int(s.notna().sum()),
+        "dias_anomalos": int((anomalia & s.notna()).sum()), "dias_sin_dato": int(s.isna().sum()),
+        "modelo_elegido": elegido, "mape_promedio": {k: float(v) for k, v in promedio.items()},
+        "periodos_prueba": list(met["período de prueba"].unique()),
+        "mape_ultimo_periodo": {k: float(v) for k, v in ultimo["MAPE (%)"].items()},
+        "error_total_ultimo_periodo": {k: float(v) for k, v in ultimo["error del total (%)"].items()},
+        "pronostico_hasta": str(pron["fecha"].max().date()), "primer_mes": str(primer_mes),
+        "primer_mes_nombre": nombre_mes(primer_mes.to_timestamp()),
+        "pax_habil_primer_mes": float(mensual.loc[primer_mes, "pronostico"]),
+        "variacion_primer_mes_pct": float(mensual.loc[primer_mes, "variacion_%"]),
+        "estaciones_sin_link": int(len(sin_link)),
+        "pax_habil_estaciones_sin_link": float(sin_link["pax_habil_pronostico"].sum()),
+        "variable_principal": NOMBRES[imp.index[0]],
+    }
+    (salida / "pronostico_resumen.json").write_text(json.dumps(resumen, ensure_ascii=False, indent=2), encoding="utf-8")
+    return resumen
+
+
+if __name__ == "__main__":
+    if not hay_serie():
+        raise SystemExit("Falta la serie diaria: correr notebooks/00c_serie_diaria_subte.ipynb en Colab y copiar "
+                         f"{ARCHIVO_DIARIO} y {ARCHIVO_HORA} a data/base/")
+    print(json.dumps(resultados(), ensure_ascii=False, indent=2))

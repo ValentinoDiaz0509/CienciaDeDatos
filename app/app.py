@@ -64,6 +64,14 @@ def cargar():
         "cobertura": pd.read_csv(PROC / "cobertura_redes.csv"),
         "barrios": json.loads((BASE / "barrios.geojson").read_text(encoding="utf-8")),
     }
+    if (PROC / "pronostico_resumen.json").exists():   # pronóstico del subte (notebook 05), si se corrió
+        datos["pronostico"] = {
+            "resumen": json.loads((PROC / "pronostico_resumen.json").read_text(encoding="utf-8")),
+            "diario": pd.read_csv(PROC / "pronostico_diario.csv", parse_dates=["fecha"]),
+            "mensual": pd.read_csv(PROC / "pronostico_mensual.csv"),
+            "validacion": pd.read_csv(PROC / "pronostico_validacion.csv"),
+            "estaciones": pd.read_csv(PROC / "pronostico_estaciones.csv"),
+        }
     return datos
 
 
@@ -215,6 +223,27 @@ def grafico_explicacion(t: pd.DataFrame):
         .encode(x=x, y=y, text="factor_txt:N")
     cero = alt.Chart(pd.DataFrame({"aporte_log": [0.0]})).mark_rule(color=e.TINTA_SUAVE).encode(x=x)
     return (barras + sube + baja + cero).properties(height=46 * len(d))
+
+
+def grafico_pronostico(d: pd.DataFrame):
+    """Pronóstico diario de entradas al subte con su intervalo del 80 %."""
+    import altair as alt
+
+    d = d.copy()
+    d["dia"] = d["fecha"].dt.strftime("%d/%m/%Y") + " · " + d["tipo_dia"]
+    for c in ("pronostico", "p10", "p90"):
+        d[c + "_txt"] = d[c].map(lambda v: fmt(v))
+    meses = "['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']"
+    x = alt.X("fecha:T", title=None,
+              axis=alt.Axis(labelExpr=f"{meses}[month(datum.value)] + ' ' + timeFormat(datum.value, '%y')", tickCount="month"))
+    banda = alt.Chart(d).mark_area(color=e.SECUENCIAL[0]).encode(
+        x=x, y=alt.Y("p10:Q", title="entradas por día",
+                     axis=alt.Axis(labelExpr="replace(format(datum.value, ',.0f'), regexp(',', 'g'), '.')")), y2="p90:Q")
+    linea = alt.Chart(d).mark_line(color=e.LINK, strokeWidth=2).encode(
+        x=x, y="pronostico:Q",
+        tooltip=[alt.Tooltip("dia:N", title="Día"), alt.Tooltip("pronostico_txt:N", title="Pronóstico"),
+                 alt.Tooltip("p10_txt:N", title="Mínimo probable"), alt.Tooltip("p90_txt:N", title="Máximo probable")])
+    return (banda + linea).properties(height=300)
 
 
 def grafico_tiene_corresponden(b: pd.DataFrame):
@@ -548,6 +577,25 @@ elif pagina == "Demanda por hora":
     st.caption("Los molinetes cuentan entradas: en las estaciones de origen la gente entra a la mañana (sale de su "
                "casa); en las de destino entra a la tarde (vuelve del trabajo). Por eso conviene mirar a qué hora "
                "pasa la gente por cada zona antes de elegir dónde y con qué horario instalar un cajero.")
+
+    if "pronostico" in D:
+        P = D["pronostico"]
+        R = P["resumen"]
+        st.subheader("Pronóstico: cuánta gente va a entrar al subte en los próximos meses")
+        mape = R["mape_promedio"]
+        st.markdown(
+            f"Con la serie diaria de los molinetes ({pd.Timestamp(R['desde']):%m/%Y} a {pd.Timestamp(R['hasta']):%m/%Y}) "
+            f"entrenamos **{R['modelo_elegido']}** con variables de calendario (día de la semana, mes, feriados y puentes). "
+            f"En meses que el modelo no vio erra en promedio un **{fmt(mape[R['modelo_elegido']], 1)} %** por día, contra "
+            f"{fmt(mape['Mismo día del año anterior'], 1)} % de la referencia ingenua (el mismo día del año anterior).")
+        p1, p2, p3 = st.columns(3)
+        p1.metric(f"Día hábil promedio en {R['primer_mes_nombre']}", fmt(R["pax_habil_primer_mes"]),
+                  f"{'+' if R['variacion_primer_mes_pct'] >= 0 else ''}{fmt(R['variacion_primer_mes_pct'], 1)} % vs. un año antes")
+        p2.metric("Entradas por día hábil en estaciones sin Link cerca", fmt(R["pax_habil_estaciones_sin_link"]),
+                  help=f"{R['estaciones_sin_link']} estaciones sin un Link a distancia caminable, en {R['primer_mes_nombre']}.")
+        p3.metric("Pronóstico hasta", f"{pd.Timestamp(R['pronostico_hasta']):%d/%m/%Y}")
+        st.altair_chart(grafico_pronostico(P["diario"]))
+        st.caption("La banda es un intervalo del 80 %: dos modelos XGBoost de cuantiles (10 y 90). Detalle en el notebook 05.")
 
 
 # --------------------------------------------------------------------------

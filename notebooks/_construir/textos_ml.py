@@ -131,7 +131,8 @@ zonas = f"""
    tiene {_n(_za["term_total_k1"])}, **ninguna de Link**.
 2. **Alcanza con uno.** En una zona residencial de {_zu["barrio"]}, {_cerca(_zona_uno)}, viven {_n(_zu["poblacion_k1"])} personas pero
    hay solo {_n(_zu["actividad_osm_k1"])} comercios y no pasa el subte: el flujo de gente es bajo. Le corresponden
-   {_n(_zu["esperado_total_k1"], 1)} terminales, o sea **un solo cajero Link**, y hoy no tiene ninguno de ninguna red.
+   {_n(_zu["esperado_total_k1"], 1)} terminales entre todas las redes, {_n(_zu["esperado_link_k1"], 1)} de Link: **un solo cajero Link**. Hoy no tiene
+   ninguno de ninguna red.
 3. **Mucha gente, poco flujo.** En {_zb["barrio"]}, {_cerca(_zona_baja)}, viven {_n(_zb["poblacion_k1"])} personas pero hay solo
    {_n(_zb["actividad_osm_k1"])} comercios: lo que más resta es {_factores(_zona_baja, -1)}. Le corresponden
    {_n(_zb["esperado_total_k1"], 1)} terminales. Por demanda comercial no le corresponde un cajero; si el objetivo es acercar el

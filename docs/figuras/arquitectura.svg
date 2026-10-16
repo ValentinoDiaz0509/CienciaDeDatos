@@ -40,7 +40,7 @@
   <rect x="40" y="324" width="260" height="78" rx="10" class="fuente"/>
   <text x="56" y="352" class="titulo">Molinetes del subte</text>
   <text x="56" y="374" class="sub">SBASE · entradas cada 15 minutos</text>
-  <text x="56" y="391" class="sub">2025 completo (y 2026 para validar)</text>
+  <text x="56" y="391" class="sub">2025 por hora · 2022-2026 por día</text>
 
   <rect x="40" y="416" width="260" height="78" rx="10" class="fuente"/>
   <text x="56" y="444" class="titulo">Usos del suelo</text>
@@ -58,7 +58,7 @@
 
   <!-- 2. Ingesta -->
   <rect x="350" y="250" width="240" height="250" rx="12" class="caja"/>
-  <text x="368" y="280" class="titulo">00 y 00b · Descarga</text>
+  <text x="368" y="280" class="titulo">00, 00b y 00c · Descarga</text>
   <text x="368" y="302" class="sub">notebooks (Colab) + src/descarga.py</text>
   <text x="368" y="336" class="texto">• reintentos ante errores</text>
   <text x="368" y="358" class="texto">  del servidor</text>
@@ -81,46 +81,55 @@
   <text x="658" y="474" class="texto">• distancias caminando (Dijkstra)</text>
 
   <!-- 4. Modelos -->
-  <rect x="960" y="150" width="280" height="132" rx="12" class="modelo"/>
-  <text x="978" y="180" class="titulo">Regresión de conteos</text>
-  <text x="978" y="202" class="sub">supervisado · 6 modelos comparados</text>
-  <text x="978" y="230" class="texto">validación espacial por comuna</text>
-  <text x="978" y="254" class="texto">→ brecha: esperado − real</text>
+  <rect x="960" y="140" width="280" height="150" rx="12" class="modelo"/>
+  <text x="978" y="168" class="titulo">Machine learning supervisado</text>
+  <text x="978" y="189" class="sub">árbol, Random Forest, XGBoost, ensamble</text>
+  <text x="978" y="214" class="texto">validación espacial anidada</text>
+  <text x="978" y="234" class="sub">por comuna, con GridSearchCV adentro</text>
+  <text x="978" y="258" class="texto">→ cajeros que le corresponden</text>
+  <text x="978" y="278" class="texto">  a cada zona y oportunidades</text>
 
-  <rect x="960" y="308" width="280" height="132" rx="12" class="modelo"/>
-  <text x="978" y="338" class="titulo">K-Means</text>
-  <text x="978" y="360" class="sub">no supervisado · silueta y codo</text>
-  <text x="978" y="388" class="texto">→ tipos de zona (dónde está la brecha)</text>
-  <text x="978" y="412" class="texto">→ estaciones de origen y destino</text>
+  <rect x="960" y="304" width="280" height="100" rx="12" class="modelo"/>
+  <text x="978" y="332" class="titulo">K-Means</text>
+  <text x="978" y="353" class="sub">no supervisado · silueta y codo</text>
+  <text x="978" y="376" class="texto">→ tipos de zona y estaciones</text>
+  <text x="978" y="395" class="texto">  de origen y destino</text>
 
-  <rect x="960" y="466" width="280" height="132" rx="12" class="modelo"/>
-  <text x="978" y="496" class="titulo">Cobertura máxima (MCLP)</text>
-  <text x="978" y="518" class="sub">optimización · exacta (MILP) y golosa</text>
-  <text x="978" y="546" class="texto">→ N ubicaciones que suman más</text>
-  <text x="978" y="570" class="texto">  vecinos con un Link a 500 m a pie</text>
+  <rect x="960" y="418" width="280" height="100" rx="12" class="modelo"/>
+  <text x="978" y="446" class="titulo">Cobertura máxima (MCLP)</text>
+  <text x="978" y="467" class="sub">optimización · exacta (MILP) y golosa</text>
+  <text x="978" y="490" class="texto">→ N ubicaciones que suman más</text>
+  <text x="978" y="509" class="texto">  vecinos con un Link a 500 m a pie</text>
 
-  <rect x="960" y="624" width="280" height="62" rx="10" class="caja"/>
-  <text x="978" y="651" class="titulo">Validación temporal de la brecha</text>
-  <text x="978" y="672" class="sub">contra cajeros nuevos en OSM 2026</text>
+  <rect x="960" y="532" width="280" height="82" rx="12" class="modelo"/>
+  <text x="978" y="560" class="titulo">Pronóstico del subte</text>
+  <text x="978" y="581" class="sub">Random Forest y XGBoost · calendario</text>
+  <text x="978" y="602" class="texto">→ gente por día, meses adelante</text>
+
+  <rect x="960" y="628" width="280" height="62" rx="10" class="caja"/>
+  <text x="978" y="655" class="titulo">Validación hacia el futuro</text>
+  <text x="978" y="676" class="sub">cajeros nuevos en OSM 2026</text>
 
   <!-- 5. Consumo -->
-  <rect x="1290" y="150" width="270" height="166" rx="12" class="salida"/>
-  <text x="1308" y="180" class="titulo">App (Streamlit + deck.gl)</text>
-  <text x="1308" y="206" class="texto">mapa 3D de brecha</text>
-  <text x="1308" y="230" class="texto">simulador de cajeros nuevos</text>
-  <text x="1308" y="254" class="texto">demanda por hora</text>
-  <text x="1308" y="278" class="texto">carga del listado propio</text>
-  <text x="1308" y="302" class="sub">funciona sin internet</text>
+  <rect x="1290" y="140" width="270" height="190" rx="12" class="salida"/>
+  <text x="1308" y="170" class="titulo">App (Streamlit + deck.gl)</text>
+  <text x="1308" y="196" class="texto">mapa 3D de brecha</text>
+  <text x="1308" y="220" class="texto">predicción por zona</text>
+  <text x="1308" y="244" class="texto">simulador de cajeros nuevos</text>
+  <text x="1308" y="268" class="texto">demanda por hora</text>
+  <text x="1308" y="292" class="texto">carga del listado propio</text>
+  <text x="1308" y="316" class="sub">funciona sin internet</text>
 
-  <rect x="1290" y="342" width="270" height="110" rx="12" class="salida"/>
-  <text x="1308" y="372" class="titulo">Notebooks 01, 02 y 03</text>
-  <text x="1308" y="398" class="texto">calidad, EDA, modelos, horario</text>
-  <text x="1308" y="422" class="texto">se pueden correr en vivo</text>
+  <rect x="1290" y="346" width="270" height="134" rx="12" class="salida"/>
+  <text x="1308" y="376" class="titulo">Notebooks 01 a 05</text>
+  <text x="1308" y="402" class="texto">calidad y EDA, machine learning,</text>
+  <text x="1308" y="424" class="texto">optimización, horario, pronóstico</text>
+  <text x="1308" y="448" class="texto">se pueden correr en vivo</text>
 
-  <rect x="1290" y="478" width="270" height="110" rx="12" class="salida"/>
-  <text x="1308" y="508" class="titulo">Presentación e informe</text>
-  <text x="1308" y="534" class="texto">gráficos y conclusiones</text>
-  <text x="1308" y="558" class="texto">para la gerencia</text>
+  <rect x="1290" y="496" width="270" height="110" rx="12" class="salida"/>
+  <text x="1308" y="526" class="titulo">Presentación e informe</text>
+  <text x="1308" y="552" class="texto">gráficos y conclusiones</text>
+  <text x="1308" y="576" class="texto">para la gerencia</text>
 
   <!-- Flechas: fuentes -> ingesta -->
   <path d="M300,179 C325,179 325,300 348,300" class="linea" marker-end="url(#flecha)"/>
@@ -132,13 +141,14 @@
   <!-- ingesta -> preparación -->
   <path d="M590,375 L638,375" class="linea" marker-end="url(#flecha)"/>
   <!-- preparación -> modelos -->
-  <path d="M910,330 C935,330 935,216 958,216" class="linea" marker-end="url(#flecha)"/>
-  <path d="M910,375 L958,375" class="linea" marker-end="url(#flecha)"/>
-  <path d="M910,420 C935,420 935,532 958,532" class="linea" marker-end="url(#flecha)"/>
+  <path d="M910,320 C935,320 935,215 958,215" class="linea" marker-end="url(#flecha)"/>
+  <path d="M910,354 L958,354" class="linea" marker-end="url(#flecha)"/>
+  <path d="M910,420 C935,420 935,468 958,468" class="linea" marker-end="url(#flecha)"/>
+  <path d="M910,470 C935,470 935,573 958,573" class="linea" marker-end="url(#flecha)"/>
   <!-- modelos -> consumo -->
-  <path d="M1240,216 C1265,216 1265,240 1288,240" class="linea" marker-end="url(#flecha)"/>
-  <path d="M1240,374 C1265,374 1265,397 1288,397" class="linea" marker-end="url(#flecha)"/>
-  <path d="M1240,532 C1265,532 1265,533 1288,533" class="linea" marker-end="url(#flecha)"/>
+  <path d="M1240,215 C1265,215 1265,235 1288,235" class="linea" marker-end="url(#flecha)"/>
+  <path d="M1240,354 C1265,354 1265,413 1288,413" class="linea" marker-end="url(#flecha)"/>
+  <path d="M1240,468 C1265,468 1265,551 1288,551" class="linea" marker-end="url(#flecha)"/>
 
   <text x="40" y="726" class="sub">Repositorio: github.com/ValentinoDiaz0509/CienciaDeDatos · Metodología: CRISP-DM · Datos: GCBA, INDEC, SBASE, © colaboradores de OpenStreetMap</text>
 </svg>

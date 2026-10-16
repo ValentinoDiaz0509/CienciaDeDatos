@@ -10,6 +10,10 @@ from src.estilo import num_es as n  # noqa: E402
 R = json.loads((RAIZ / "data/processed/resumen.json").read_text(encoding="utf-8"))
 import pandas as pd  # noqa: E402
 
+BP = pd.read_csv(RAIZ / "data/processed/barrios_prediccion.csv", index_col="barrio")
+TOP = BP[BP["diferencia_link"] > 0].head(3)
+faltan_txt = ", ".join(f"{b} ({n(r.diferencia_link)})" for b, r in TOP.iterrows())
+
 EX = pd.read_csv(RAIZ / "data/processed/recomendaciones_exactas_20.csv")
 bar_tipo = lambda z: ", ".join(EX[EX["tipo_zona"] == z]["barrio"].value_counts().index[:3])  # noqa: E731
 cam = R["metodo_distancia"] == "caminando"
@@ -36,11 +40,16 @@ Cruzamos dónde vive y circula la gente con dónde están los cajeros automátic
 | Vecinos con un **Banelco** a menos de 500 m | **{n(100 * R["cobertura_banelco"])} %** |{fila_recta}
 | Vecinos sin un Link a distancia caminable | **{n(R["residentes_sin_link"])}** |
 | Con **20 cajeros** en las ubicaciones óptimas | Link pasa al **{n(100 * R["cobertura_link_con_20"], 1)} %** (+{n(R["nuevos_20_exacto"])} vecinos) |{fila_igualar}
-| Modelo elegido (validación espacial) | {R["modelo_elegido"]}, D² = {n(R["d2_espacial"], 2)} |
+| Terminales Link que faltan según su demanda (machine learning) | {faltan_txt} |
+| Zonas sin ningún cajero que deberían tener uno (clasificador) | **{n(R["zonas_sin_cajero_que_deberian"])}**, con {n(R["residentes_zonas_sin_cajero_que_deberian"])} vecinos |
+| Modelo de regresión elegido (validación espacial anidada) | {R["modelo_elegido"]}: D² = {n(R["d2_espacial_promedio"], 2)}, error medio de {n(R["mae_espacial"], 1)} terminales por zona |
+| Clasificador elegido | {R["clasificador_elegido"]}: AUC = {n(R["auc_clasificador"], 2)} |
 
-Los cajeros **siguen al comercio, no a los vecinos**. Hay dos oportunidades: **competir** en los corredores comerciales del
-norte y el centro, donde la demanda justifica más terminales Link de las que hay, y **cubrir** los barrios residenciales
-({bar_tipo("Residencial denso")}) y el sur ({bar_tipo("Mayor vulnerabilidad social")}), donde no hay un Link a distancia caminable. El detalle está en el [informe técnico](docs/informe.md).
+Los cajeros **siguen al comercio, no a los vecinos**. Un modelo de machine learning (árboles, Random Forest y XGBoost,
+validados en comunas que no vieron) estima cuántos cajeros le corresponden a cada zona según su demanda. Hay dos
+oportunidades: **competir** donde la demanda justifica más terminales Link de las que hay ({", ".join(TOP.index)}), y
+**cubrir** los barrios residenciales ({bar_tipo("Residencial denso")}) y el sur ({bar_tipo("Mayor vulnerabilidad social")}),
+donde no hay un Link a distancia caminable. El detalle está en el [informe técnico](docs/informe.md).
 
 ## Cómo ver la app
 
@@ -97,8 +106,11 @@ Después, abrir `http://localhost:8501` en el navegador. Para correr también lo
 2. *Create app* → elegí el repositorio `ValentinoDiaz0509/CienciaDeDatos`, la rama `main` y el archivo `app/app.py`.
 3. *Deploy*. En unos minutos queda una dirección pública para abrir desde cualquier navegador.
 
-La app tiene seis secciones: panorama (mapa 3D de la brecha), simulador de cajeros nuevos, demanda por hora, tipos de zona,
-"usá tus datos" (cargar el listado actual de cajeros) y cómo funciona.
+La app tiene siete secciones: panorama (mapa 3D de la brecha), predicción por zona (cuántas terminales tiene cada barrio,
+cuántas le corresponden y por qué), simulador de cajeros nuevos, demanda por hora, tipos de zona, "usá tus datos" (cargar el
+listado actual de cajeros) y cómo funciona.
+
+![Predicción por zona: Belgrano tiene 30 terminales Link y le corresponden 52; el mapa marca sus zonas y a la derecha está el porqué de la zona elegida](docs/figuras/app_prediccion.png)
 
 ![Simulador de expansión: elegís cuántos cajeros sumar y a qué distancia, y la app devuelve dónde ponerlos](docs/figuras/app_simulador.png)
 
@@ -113,8 +125,8 @@ La app tiene seis secciones: panorama (mapa 3D de la brecha), simulador de cajer
 | 1 | Dominio y problema | [informe §1](docs/informe.md#1-comprensión-del-negocio) |
 | 2 | Arquitectura de la solución | [diagrama](docs/figuras/arquitectura.png) e [informe §3](docs/informe.md#3-preparación-de-los-datos) |
 | 3 | Análisis exploratorio | [`notebooks/01_calidad_y_eda.ipynb`](notebooks/01_calidad_y_eda.ipynb) |
-| 4 | Técnica de minería y por qué | [`notebooks/02_modelos.ipynb`](notebooks/02_modelos.ipynb) y [`03_demanda_por_hora.ipynb`](notebooks/03_demanda_por_hora.ipynb) |
-| 5 | Conclusión con visualización | [informe](docs/informe.md#resumen-ejecutivo), notebook 02 §8 y la presentación |
+| 4 | Técnica de minería y por qué | [`02_machine_learning.ipynb`](notebooks/02_machine_learning.ipynb), [`03_optimizacion.ipynb`](notebooks/03_optimizacion.ipynb), [`04_demanda_por_hora.ipynb`](notebooks/04_demanda_por_hora.ipynb) y [`05_pronostico_subte.ipynb`](notebooks/05_pronostico_subte.ipynb) |
+| 5 | Conclusión con visualización | [informe](docs/informe.md#resumen-ejecutivo), notebooks 02 §9 y 03, y la presentación |
 | 6 | Aplicación funcional | [`app/app.py`](app/app.py) |
 
 La [guía de defensa](docs/defensa.md) repasa la consigna punto por punto e incluye roles, guion de 15 minutos, checklist y
@@ -128,11 +140,16 @@ preguntas probables.
    Calidad medida con las seis dimensiones de DAMA.
 2. **Preparación:** grilla de {n(R["hexagonos"])} hexágonos H3 (≈3 × 3 manzanas), interpolación areal del censo y áreas de
    influencia de ≈400 m. {"Distancias caminando por la red peatonal de OpenStreetMap (Dijkstra)." if cam else "Distancias en línea recta."}
-3. **Modelos:**
-   - regresión de conteos con validación cruzada espacial (seis modelos y un ensamble), para medir la brecha;
-   - K-Means, para los tipos de zona y de estación de subte;
-   - cobertura máxima resuelta de forma exacta (programación lineal entera con HiGHS) y con un algoritmo goloso.
-4. **Evaluación:** validación temporal con los cajeros que aparecieron en OpenStreetMap después de 2017.
+3. **Modelos**, siguiendo los cuatro niveles de análisis:
+   - **predictivo (machine learning):** regresión (7 modelos: de una línea de base a árbol de decisión, Random Forest,
+     XGBoost y un ensamble) y clasificación (4 modelos) con **validación cruzada espacial anidada**: GroupKFold por comuna
+     y GridSearchCV adentro; curva de sobreajuste y error OOB;
+   - **diagnóstico:** valores SHAP, importancia de Gini y coeficientes de la regresión de Poisson;
+   - **prescriptivo:** K-Means para los tipos de zona y de estación, y cobertura máxima resuelta de forma exacta
+     (programación lineal entera con HiGHS) y con un algoritmo goloso;
+   - **pronóstico:** Random Forest y XGBoost sobre el calendario para la demanda diaria del subte (notebook 05).
+4. **Evaluación:** métricas en comunas no vistas (D² de Poisson, MAE, AUC) y validación temporal con los cajeros que
+   aparecieron en OpenStreetMap después de 2017.
 5. **Despliegue:** app de Streamlit con mapas de deck.gl, que funciona sin conexión.
 
 ## Estructura del repositorio
@@ -150,11 +167,14 @@ preguntas probables.
 ├── notebooks/
 │   ├── 00_descarga_datos.ipynb     # baja todas las fuentes (Colab)
 │   ├── 00b_red_peatonal.ipynb      # baja la red de calles (Colab)
+│   ├── 00c_serie_diaria_subte.ipynb # baja la serie diaria del subte 2022-2026 (Colab)
 │   ├── 01_calidad_y_eda.ipynb      # calidad de datos y análisis exploratorio
-│   ├── 02_modelos.ipynb            # regresión, clustering, optimización, validación
-│   └── 03_demanda_por_hora.ipynb   # perfiles horarios del subte
+│   ├── 02_machine_learning.ipynb   # regresión y clasificación: árboles, Random Forest, XGBoost, SHAP
+│   ├── 03_optimizacion.ipynb       # tipos de zona (K-Means) y dónde sumar cajeros
+│   ├── 04_demanda_por_hora.ipynb   # perfiles horarios del subte
+│   └── 05_pronostico_subte.ipynb   # pronóstico diario de pasajeros
 ├── src/
-│   ├── descarga.py  features.py  modelos.py  red.py  horario.py  pipeline.py  estilo.py
+│   ├── descarga.py  features.py  modelos.py  ml.py  pronostico.py  red.py  horario.py  pipeline.py
 └── requirements.txt
 ```
 
@@ -162,13 +182,14 @@ preguntas probables.
 
 ```bash
 pip install -r requirements.txt
-python -m src.pipeline                      # variables, modelos y resultados (≈1 minuto)
+python -m src.pipeline                      # variables, modelos y resultados (≈6 minutos)
 for f in notebooks/_construir/nb0*.py; do python "$f"; done   # regenera los notebooks (textos con los números nuevos)
 python docs/_construir/informe.py && python docs/_construir/readme.py
 ```
 
-Para volver a bajar las fuentes: [00 · Descarga]({COLAB}/00_descarga_datos.ipynb) y [00b · Red peatonal]({COLAB}/00b_red_peatonal.ipynb)
-en Colab (*Entorno de ejecución → Ejecutar todo*).
+Para volver a bajar las fuentes: [00 · Descarga]({COLAB}/00_descarga_datos.ipynb), [00b · Red peatonal]({COLAB}/00b_red_peatonal.ipynb)
+y [00c · Serie diaria del subte]({COLAB}/00c_serie_diaria_subte.ipynb) en Colab (*Entorno de ejecución → Ejecutar todo*).
+El pronóstico ([05]({COLAB}/05_pronostico_subte.ipynb)) también corre directo en Colab: si no encuentra la serie, la baja.
 
 ## Fuentes y licencias
 
@@ -179,6 +200,9 @@ en Colab (*Entorno de ejecución → Ejecutar todo*).
 
 **Aviso:** el listado público de cajeros corresponde a un relevamiento de alrededor de 2017. Solo se usan datos públicos;
 ningún dato interno de Red Link.
+
+**Uso de IA:** usamos asistentes de inteligencia artificial como apoyo para programar, revisar el código y redactar. El grupo
+definió el problema, eligió las fuentes y los métodos, y revisó el código y los resultados.
 """
 (RAIZ / "README.md").write_text(texto, encoding="utf-8")
 print("ok README.md")

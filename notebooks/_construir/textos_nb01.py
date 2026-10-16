@@ -1,8 +1,6 @@
 # Textos del notebook 01. Se ejecuta desde nb01_eda.py con RAIZ definido; los números salen de los datos.
 import json
 
-import geopandas as gpd
-import numpy as np
 import pandas as pd
 
 from src import estilo as _e

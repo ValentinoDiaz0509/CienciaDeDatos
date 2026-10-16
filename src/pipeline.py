@@ -5,7 +5,7 @@ Corre todo el análisis de punta a punta y deja en data/processed/ lo que usan l
 notebooks, la app y la presentación.
 
     hexagonos.parquet / resultados_hex.parquet   variables, brecha, tipo de zona y distancias
-    metricas_modelos.csv                          regresión: 6 modelos + ensamble, validación espacial anidada y aleatoria
+    metricas_modelos.csv                          regresión: 7 modelos (árbol, Random Forest, XGBoost, ensamble...), validación espacial anidada y aleatoria
     hiperparametros.csv                           hiperparámetros elegidos en cada partición
     aportes_hex.parquet                           aporte de cada variable a la predicción de cada zona (SHAP)
     importancia_variables.csv, importancia_gini.csv, coeficientes_glm.csv
@@ -22,6 +22,8 @@ notebooks, la app y la presentación.
     estaciones_subte.csv, cajeros_nuevos_osm.csv, validacion_temporal.csv
     resumen.json                                  números clave
 
+El pronóstico del subte (pronostico_*.csv) se calcula aparte, con python -m src.pronostico, cuando está la serie diaria.
+
 Uso:
     python -m src.pipeline
 """
@@ -34,7 +36,6 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.base import clone
 
 from . import features as f
 from . import horario as ho
@@ -103,7 +104,7 @@ def correr(salida: Path = DIR_PROC) -> dict:
     params_rf = ml.params_mas_frecuentes(params["Random Forest"])
     (ml.importancia_gini(X, y, params_rf).rename("importancia").rename_axis("variable").reset_index()
        .assign(nombre=lambda d: d["variable"].map(ml.NOMBRES)).to_csv(salida / "importancia_gini.csv", index=False))
-    glm = clone(m.candidatos()["Regresión de Poisson (GLM)"]).fit(X, y)
+    glm = ml._glm().fit(X, y)
     m.coeficientes_glm(glm, list(X.columns)).to_csv(salida / "coeficientes_glm.csv", index=False)
     ml.curva_profundidad(X, y, grupos).to_csv(salida / "curva_profundidad.csv", index=False)
 

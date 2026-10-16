@@ -15,9 +15,15 @@ Este informe se genera a partir de los resultados del pipeline (`python docs/_co
 - Los cajeros **siguen al comercio, no a los vecinos**: en los corredores comerciales hay
   17,9 terminales cada 10.000 vecinos; en los barrios
   residenciales, 5,3.
-- Hay **dos oportunidades**. **Competir** en los corredores comerciales del norte y el centro (Palermo, Balvanera, Belgrano),
-  donde la demanda justifica más terminales Link de las que hay. **Cubrir** los barrios residenciales (Belgrano, Villa Urquiza, Almagro) y el sur (Villa Lugano, Barracas, Villa Soldati),
-  donde no hay un Link a distancia caminable.
+- Un modelo de **machine learning**, un ensamble de regresión de Poisson y XGBoost elegido entre 7 con validación cruzada
+  espacial anidada (D² = 0,57; error medio de 4,2 terminales por zona), estima cuántos
+  cajeros le corresponden a cada zona según su demanda. A Link le faltan terminales sobre todo en **Palermo** (le corresponden
+  83, tiene 47) y **Belgrano** (52 contra
+  30). Un clasificador **Random Forest** (AUC = 0,84) encuentra
+  **254 zonas sin ningún cajero** que, por su demanda, deberían tener uno: viven ahí
+  480.545 personas.
+- Hay **dos estrategias**. **Competir** donde la demanda justifica más terminales Link de las que hay (Palermo, Belgrano, Recoleta).
+  **Cubrir** los barrios residenciales (Belgrano, Villa Urquiza, Almagro) y el sur (Villa Lugano, Barracas, Villa Soldati), donde no hay un Link a distancia caminable.
 - Con **20 cajeros** en las ubicaciones óptimas, Link suma **265.929 vecinos** y pasa al
   **59,8 %**. La diferencia con Banelco baja de 13 a 5 puntos; con 35 cajeros, Link igualaría la cobertura actual de Banelco. Al promedio
   nacional de 3.242 extracciones por terminal por mes (BCRA, 2025), son unas **64.840 operaciones mensuales**.
@@ -93,40 +99,98 @@ OpenStreetMap está incompleto para cajeros (206 contra 1.279).
 
 ## 4. Modelado
 
-### 4.1 Regresión de conteos: ¿cuántas terminales tienen las zonas con esta demanda?
-Objetivo: terminales (todas las redes) en el área de influencia. Seis modelos más un ensamble definido de antemano,
-evaluados con **validación cruzada espacial** (GroupKFold por comuna, 5 particiones) y, a modo de comparación, aleatoria.
+Seguimos los cuatro niveles de análisis de la materia: el EDA es el **descriptivo**; los modelos de esta sección son el
+**predictivo** (4.1 y 4.2) y el **diagnóstico** que lo explica (4.3); la segmentación y la optimización son el
+**prescriptivo** (4.4 a 4.6).
 
-| Modelo | D² Poisson espacial | D² Poisson aleatoria | MAE espacial | R² espacial |
+### 4.1 Regresión: ¿cuántas terminales le corresponden a cada zona? (`notebooks/02_machine_learning.ipynb`)
+Objetivo: terminales de todas las redes en el área de influencia. Es un conteo con muchos ceros y cola larga, así que
+usamos pérdida de Poisson y medimos con la **devianza de Poisson (D²)**, el equivalente del R² para conteos, y el **error
+absoluto medio (MAE)**.
+
+**Validación cruzada espacial anidada.** Las zonas vecinas se parecen y comparten área de influencia: si se mezclan al azar
+entrenamiento y prueba, el modelo "ve" la respuesta en los vecinos. Por eso se mide siempre en **comunas que el modelo no vio**
+(GroupKFold por comuna, 5 particiones), y los hiperparámetros se eligen con GridSearchCV **adentro** de cada partición de
+entrenamiento, también dejando comunas afuera (4 particiones internas). La regla de elección se fijó antes de ver los
+resultados: el mayor D² promedio entre particiones.
+
+| Modelo | D² espacial (promedio ± desvío) | D² aleatoria | MAE espacial |
+|---|---|---|---|
+| Ensamble (Poisson + XGBoost) | 0,57 ± 0,14 | 0,79 | 4,22 |
+| XGBoost | 0,54 ± 0,18 | 0,78 | 4,29 |
+| Random Forest | 0,54 ± 0,19 | 0,81 | 4,37 |
+| Regresión de Poisson (GLM) | 0,53 ± 0,16 | 0,73 | 4,47 |
+| Árbol de decisión (CART) | 0,42 ± 0,18 | 0,72 | 5,02 |
+| Poisson solo con población | -0,10 ± 0,44 | 0,11 | 7,11 |
+| Línea de base (promedio) | -0,21 ± 0,18 | -0,01 | 8,01 |
+
+**Elección: Ensamble (Poisson + XGBoost)** (promedio geométrico de la regresión de Poisson y XGBoost): el D² más alto y más estable, y
+el menor error. Con validación aleatoria habría ganado Random Forest (D² = 0,81),
+que en comunas no vistas cae a 0,54: los árboles memorizan la geografía
+(autocorrelación espacial). La regla "más vecinos, más cajeros" (Poisson solo con población) es peor que predecir el promedio.
+
+**Sobreajuste y OOB (clases 6 y 8).** Un árbol de decisión mejora siempre en entrenamiento (D² = 0,97
+con 15 niveles), pero en comunas no vistas el mejor resultado está en 8 niveles
+(D² = 0,46) y después empeora. El error OOB del Random Forest da R² = 0,80,
+pero en comunas no vistas el R² es 0,29: con datos espaciales el OOB es
+optimista, por la misma razón que la validación aleatoria.
+
+**Brecha** = terminales que le corresponden (predicción fuera de muestra) − terminales que tiene. Para Link, lo que le
+corresponde es la predicción por la participación de Link en la ciudad (34,5 %). Por barrio, la predicción
+de cada área de influencia se reparte entre sus 7 hexágonos para no contar cada terminal siete veces.
+
+| Barrio | Residentes | Terminales Link | Le corresponden | Faltan | Participación Link |
+|---|---|---|---|---|---|
+| Palermo | 242.275 | 47 | 83 | **+36** | 26 % |
+| Belgrano | 145.100 | 30 | 52 | **+22** | 24 % |
+| Recoleta | 160.736 | 57 | 66 | **+9** | 28 % |
+| Colegiales | 59.426 | 7 | 14 | **+7** | 18 % |
+| San Cristóbal | 51.472 | 6 | 12 | **+6** | 29 % |
+
+Hay barrios sin ninguna terminal Link a los que les corresponde alguna: Villa General Mitre (5), Agronomía (3), Versalles (2).
+En el otro extremo, el microcentro (San Nicolás: tiene 180 terminales Link y le corresponden 36; Monserrat: tiene 51 terminales Link y le corresponden 22; Retiro: tiene 41 terminales Link y le corresponden 27)
+concentra las casas centrales de los bancos públicos de la red y gente que llega en colectivo y tren, que el modelo ve solo
+en parte: lo leemos como sobreoferta a revisar, no como cajeros que sobran.
+
+### 4.2 Clasificación: ¿a esta zona le corresponde al menos un cajero?
+Objetivo: el hexágono tiene o no al menos una terminal de cualquier red. Misma validación espacial anidada; el umbral marca
+tantas zonas como las que hoy tienen cajero (tasa base), así que precisión y recall coinciden.
+
+| Modelo | AUC espacial (promedio) | PR-AUC | Precisión = recall | AUC aleatoria |
 |---|---|---|---|---|
-| Regresión de Poisson (GLM) | 0,623 | 0,746 | 4,47 | 0,378 |
-| Ensamble (Poisson GLM + Boosting) | 0,615 | 0,815 | 4,18 | 0,363 |
-| Random Forest | 0,564 | 0,820 | 4,34 | 0,305 |
-| Gradient Boosting (Poisson) | 0,521 | 0,836 | 4,19 | 0,297 |
-| Árbol de decisión (CART) | 0,495 | 0,680 | 4,81 | 0,277 |
-| Línea de base (promedio) | -0,110 | -0,003 | 8,01 | -0,042 |
-| Poisson solo con población | -0,138 | 0,097 | 7,11 | 0,012 |
+| Random Forest | 0,830 | 0,606 | 0,572 | 0,852 |
+| XGBoost | 0,830 | 0,604 | 0,570 | 0,848 |
+| Regresión logística | 0,827 | 0,624 | 0,594 | 0,842 |
+| Árbol de decisión | 0,795 | 0,547 | 0,542 | 0,817 |
 
-**Elección: Regresión de Poisson (GLM).** Con validación aleatoria habría ganado Gradient Boosting (Poisson)
-(D² = 0,84), pero en zonas no vistas cae a
-0,52: los modelos de árboles memorizan la geografía (autocorrelación espacial).
-El GLM generaliza mejor (D² = 0,62) y además se puede explicar: subir un desvío las parcelas comerciales multiplica
+Elegimos **Random Forest**: AUC de 0,83 en promedio por grupo de comunas
+(0,84 con todas las zonas juntas). En la matriz de confusión, los falsos positivos son
+**oportunidades**: 254 zonas sin ningún cajero que, por su demanda, deberían tener uno,
+donde viven 480.545 personas (sobre todo en Palermo, Balvanera, Belgrano, Villa Crespo). Un árbol de 3 niveles, entrenado solo
+para leer las reglas, empieza preguntando por la cantidad de comercios del hexágono.
+
+### 4.3 Diagnóstico: por qué el modelo predice lo que predice
+El modelo elegido es aditivo en escala logarítmica, así que la predicción de cada zona se descompone **exactamente** en el
+aporte de cada variable (valores **SHAP**: TreeSHAP en XGBoost y coeficiente × valor en la regresión de Poisson). Según SHAP lo
+que más pesa es comercios y servicios (OSM), parcelas comerciales, parcelas residenciales; según la importancia de **Gini** del Random Forest,
+comercios y servicios (OSM), pasajeros de subte por día hábil, parcelas comerciales. En la regresión de Poisson, subir un desvío las parcelas comerciales multiplica
 las terminales esperadas por 2,15; los comercios de OSM, por 2,05; el % de 65+, por
 1,40; los pasajeros de subte, por 1,22; las parcelas residenciales, por 0,44;
 y el % de hogares con NBI, por 0,87.
 
-**Brecha** = terminales esperadas (predicción fuera de muestra) − terminales reales. **Brecha Link** = lo esperado × participación
-de Link en la ciudad (34,5 %) − terminales Link reales. Barrios con más terminales Link faltantes:
+Tres zonas, tres decisiones:
 
-| Barrio | Residentes | Terminales Link | Terminales Banelco | Participación Link | Link faltantes |
-|---|---|---|---|---|---|
-| Palermo | 242.296 | 47 | 138 | 25 % | 49 |
-| Balvanera | 145.825 | 69 | 78 | 47 % | 41 |
-| Belgrano | 145.112 | 30 | 93 | 24 % | 32 |
-| Recoleta | 160.757 | 57 | 148 | 28 % | 22 |
-| Retiro | 66.257 | 41 | 113 | 27 % | 13 |
+| Zona | Demanda en ≈400 m | Le corresponden | Tiene | Decisión |
+|---|---|---|---|---|
+| Belgrano, a 600 m de la estación Juramento (D) | 17.264 vecinos, 555 comercios | 30,1 (10,4 Link) | 5 (ninguna Link) | **Competir** |
+| Villa Urquiza, a 500 m de la estación Juan Manuel de Rosas (B) | 17.535 vecinos, 120 comercios, sin subte | 4,1 (1,4 Link) | 0 | **Un solo cajero Link** |
+| Villa Soldati | 15.888 vecinos, 11 comercios | 0,5 | 0 | **Cubrir**, no competir |
 
-### 4.2 K-Means: tipos de zona
+En Villa Urquiza viven muchas personas pero el flujo de gente es bajo (pocos comercios y sin subte): le corresponde un solo
+cajero Link (1,4 terminales), y hoy no tiene ninguno de ninguna red. En Villa Soldati el mercado no pondría un cajero; si el objetivo es acercar el
+efectivo a quienes más lo usan, entra por la estrategia de cobertura.
+
+### 4.4 K-Means: tipos de zona (`notebooks/03_optimizacion.ipynb`)
 k = 4 por silueta (0,36) y codo, sobre variables de demanda estandarizadas (conteos en escala log).
 
 | Tipo de zona | Residentes | Pasajeros de subte/día | Terminales cada 10 mil | Link cada 10 mil | NBI (mediana) |
@@ -135,18 +199,18 @@ k = 4 por silueta (0,36) y codo, sobre variables de demanda estandarizadas (cont
 | Corredores comerciales con subte | 857.976 | 686.058 | 17,9 | 6,7 | 4,3 % |
 | Mayor vulnerabilidad social | 399.094 | 4.884 | 3,5 | 1,8 | 10,6 % |
 
-### 4.3 Optimización: dónde sumar cajeros
+### 4.5 Optimización: dónde sumar cajeros
 **Problema de cobertura máxima** (MCLP; Church y ReVelle, 1974): elegir N sitios (hexágonos con comercio) que maximicen los
 vecinos que pasan a tener un Link a menos de 500 m. Se resuelve con el **algoritmo goloso** (garantía de 1 − 1/e del óptimo por
 submodularidad; Nemhauser, Wolsey y Fisher, 1978) y de forma **exacta** como programa lineal entero con HiGHS.
 
 | Cajeros | Goloso (vecinos) | Exacto (vecinos) | Diferencia | Sitios en común | Segundos (exacto) |
 |---|---|---|---|---|---|
-| 5 | 80.292 | 80.292 | 0,00 % | 5 | 0,40 |
-| 10 | 144.616 | 144.616 | -0,00 % | 10 | 0,41 |
-| 20 | 264.384 | 265.929 | 0,58 % | 17 | 0,43 |
-| 30 | 366.022 | 369.671 | 0,99 % | 27 | 0,42 |
-| 50 | 538.631 | 544.973 | 1,16 % | 41 | 0,50 |
+| 5 | 80.292 | 80.292 | 0,00 % | 5 | 0,44 |
+| 10 | 144.616 | 144.616 | -0,00 % | 10 | 0,42 |
+| 20 | 264.384 | 265.929 | 0,58 % | 17 | 0,54 |
+| 30 | 366.022 | 369.671 | 0,99 % | 27 | 0,44 |
+| 50 | 538.631 | 544.973 | 1,16 % | 41 | 0,49 |
 
 El goloso queda a menos del 1,2 % del óptimo. Las 20 ubicaciones óptimas:
 
@@ -173,7 +237,7 @@ El goloso queda a menos del 1,2 % del óptimo. Las 20 ubicaciones óptimas:
 | 19 | Almagro | 5 | Residencial denso | 11.767 |
 | 20 | Belgrano | 13 | Residencial denso | 11.472 |
 
-### 4.4 Demanda por hora
+### 4.6 Demanda por hora (`notebooks/04_demanda_por_hora.ipynb`)
 Con los molinetes 2025 (690.863 entradas por día hábil), los picos son a las **8:00** y las
 **17:00**. Un K-Means sobre la forma de la curva horaria de cada estación separa estaciones de **origen** (pico a la
 mañana, barrios) y de **destino** (pico a la tarde, centro). 80 de 90
@@ -181,21 +245,25 @@ estaciones ya tienen un Link a menos de 500 m; sumar a los pasajeros de la hora 
 
 ## 5. Evaluación
 
-- **Generalización:** D² espacial = 0,62, MAE = 4,5 terminales por área de influencia.
+- **Generalización (regresión):** D² espacial = 0,57 ± 0,14 entre grupos de
+  comunas; MAE = 4,2 terminales por área de influencia.
+- **Generalización (clasificación):** AUC espacial = 0,84; PR-AUC = 0,61 (la tasa base
+  es 22 %).
 - **Validación temporal:** de los 206 cajeros que OpenStreetMap tiene mapeados en 2026, 9 no
-  estaban en el listado 2017. Cayeron, en promedio, en zonas con más brecha que el 66 % de la
-  ciudad (p = 0,049, Monte Carlo). El AUC es 0,65, contra 0,51 de usar solo la población.
-  Es una evidencia a favor, pero modesta, por la cantidad de casos.
+  estaban en el listado 2017. Cayeron, en promedio, en zonas con más brecha que el 67 % de la
+  ciudad (p = 0,042, Monte Carlo). El AUC de la brecha es 0,64 y el de la probabilidad
+  del clasificador, 0,58, contra 0,51 de usar solo la
+  población. Es una evidencia a favor, pero modesta, por la cantidad de casos.
 - **Robustez:** sumar a los pasajeros de la hora pico de la mañana no cambia ninguno de los 20 sitios óptimos. El goloso queda a menos del 1,2 % del óptimo exacto, y medir
   con otra regla de conexión a la red cambia la cobertura en poco más de un punto.
 
 **Limitaciones.**
 - La oferta es de ≈2017.
 - No hay transacciones: la demanda se aproxima con residentes, comercio y pasajeros.
-- La brecha compara contra el promedio del mercado, así que no detecta zonas que el mercado entero desatiende (la
-  optimización por cobertura cubre ese caso).
+- Lo que le "corresponde" a una zona compara contra cómo está repartido hoy el mercado, así que no detecta zonas que el
+  mercado entero desatiende (la optimización por cobertura cubre ese caso).
 - OpenStreetMap varía en completitud entre barrios.
-- Los feriados en día de semana cuentan como hábiles.
+- Los feriados en día de semana cuentan como hábiles en el promedio horario.
 - Las distancias se miden desde el centro de cada hexágono y la red peatonal no tiene en cuenta semáforos, pendientes ni
   la percepción de seguridad de cada cuadra.
 
@@ -203,6 +271,8 @@ estaciones ya tienen un Link a menos de 500 m; sumar a los pasajeros de la hora 
 
 App en Streamlit con mapas de deck.gl (`streamlit run app/app.py`). Funciona sin internet. Incluye:
 - mapa 3D de la brecha;
+- predicción por zona: para cada barrio, cuántas terminales tiene y cuántas le corresponden, el porqué de cada zona (SHAP)
+  y las oportunidades del clasificador;
 - simulador de N cajeros (exacto o goloso, distancia caminando o en línea recta, con o sin pasajeros por franja horaria);
 - demanda por hora;
 - tipos de zona;
@@ -212,15 +282,23 @@ Una terminal nueva que alcance el promedio nacional suma unas 3.242 extracciones
 promedio de julio 2025). El ingreso por operación es un dato interno: la app lo recibe como parámetro.
 
 **Próximos pasos:**
+- pronosticar la demanda de paso día por día con la serie 2022-2026 de los molinetes (`notebooks/05_pronostico_subte.ipynb`);
 - correr el modelo con el listado actual y las transacciones por terminal;
 - sumar restricciones de costo y de seguridad por sitio a la optimización;
 - validar la hipótesis horaria (carga de efectivo antes de los picos) con transacciones por hora.
+
+## Uso de herramientas de IA
+
+Usamos asistentes de inteligencia artificial como apoyo para programar, revisar el código y redactar. El grupo definió el
+problema, eligió las fuentes y los métodos, y revisó el código y los resultados.
 
 ## Referencias
 
 - BCRA (2025). *Informe Mensual de Pagos Minoristas*, agosto de 2025 (datos de julio de 2025).
 - Boeing, G. (2017). OSMnx: New methods for acquiring, constructing, analyzing, and visualizing complex street networks. *Computers, Environment and Urban Systems*, 65, 126-139.
 - Breiman, L. (2001). Random Forests. *Machine Learning*, 45(1), 5-32.
+- Breiman, L., Friedman, J., Olshen, R. y Stone, C. (1984). *Classification and Regression Trees*. Wadsworth.
+- Chen, T. y Guestrin, C. (2016). XGBoost: A scalable tree boosting system. *Proceedings of KDD 2016*, 785-794.
 - Chapman, P. et al. (2000). *CRISP-DM 1.0: Step-by-step data mining guide*.
 - Church, R. y ReVelle, C. (1974). The maximal covering location problem. *Papers of the Regional Science Association*, 32, 101-118.
 - Dijkstra, E. W. (1959). A note on two problems in connexion with graphs. *Numerische Mathematik*, 1, 269-271.
@@ -228,10 +306,13 @@ promedio de julio 2025). El ingreso por operación es un dato interno: la app lo
 - Friedman, J. (2001). Greedy function approximation: a gradient boosting machine. *Annals of Statistics*, 29(5).
 - Huangfu, Q. y Hall, J. (2018). Parallelizing the dual revised simplex method. *Mathematical Programming Computation*, 10, 119-142.
 - INDEC (2024). *Censo Nacional de Población, Hogares y Viviendas 2022*, base por radio censal.
+- Lundberg, S. y Lee, S.-I. (2017). A unified approach to interpreting model predictions. *NeurIPS 2017*.
+- Lundberg, S. et al. (2020). From local explanations to global understanding with explainable AI for trees. *Nature Machine Intelligence*, 2, 56-67.
 - McCullagh, P. y Nelder, J. (1989). *Generalized Linear Models* (2.ª ed.). Chapman & Hall.
 - Nemhauser, G., Wolsey, L. y Fisher, M. (1978). An analysis of approximations for maximizing submodular set functions. *Mathematical Programming*, 14, 265-294.
 - Openshaw, S. (1984). *The Modifiable Areal Unit Problem*. Geo Books.
 - Roberts, D. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. *Ecography*, 40(8), 913-929.
 - Uber Technologies (2018). *H3: Uber's Hexagonal Hierarchical Spatial Index*.
+- Varma, S. y Simon, R. (2006). Bias in error estimation when using cross-validation for model selection. *BMC Bioinformatics*, 7, 91.
 - Wang, R. y Strong, D. (1996). Beyond accuracy: what data quality means to data consumers. *Journal of Management Information Systems*, 12(4).
 - Fuentes de datos: GCBA (BA Data), INDEC, SBASE, © colaboradores de OpenStreetMap.

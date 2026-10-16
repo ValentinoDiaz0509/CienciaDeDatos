@@ -29,19 +29,19 @@ documento *Ciencia de Datos – Trabajo Práctico Obligatorio* (docente: Santiag
 
 | # | Entregable | Qué mostramos | Archivo |
 |---|---|---|---|
-| 1 | Dominio y problema | Red Link, el problema de la cobertura, la hipótesis y el valor | `docs/informe.md` §1, diapositivas 1-3 |
-| 2 | Arquitectura de la solución | Diagrama de la tubería: fuentes → descarga → variables por hexágono → modelos → app | `docs/informe.md` §2, `docs/figuras/arquitectura.svg` |
-| 3 | Análisis exploratorio | Calidad de datos (DAMA) y los cinco tipos de EDA; qué hay, qué falta, qué llamó la atención | `notebooks/01_calidad_y_eda.ipynb` |
-| 4 | Técnica de minería | Regresión de conteos (6 modelos + ensamble, validación espacial), K-Means de zonas y de estaciones, cobertura máxima exacta (MILP) y golosa; por qué esos y no otros | `notebooks/02_modelos.ipynb`, `notebooks/03_demanda_por_hora.ipynb` |
-| 5 | Conclusión | Mapas y curva de cobertura que responden la hipótesis | `notebooks/02_modelos.ipynb` §8, diapositivas finales |
-| 6 | Aplicación funcional | App con mapa 3D, simulador de cajeros nuevos (exacto o goloso, caminando o en línea recta), demanda por hora y carga del listado propio | `app/app.py` |
+| 1 | Dominio y problema | Red Link, el problema de la cobertura, la hipótesis y el valor | `docs/informe.md` §1, diapositivas 1-4 |
+| 2 | Arquitectura de la solución | Diagrama de la tubería: fuentes → descarga → variables por hexágono → modelos → app | `docs/informe.md` §3, `docs/figuras/arquitectura.svg`, diapositiva 6 |
+| 3 | Análisis exploratorio | Calidad de datos (DAMA) y los cinco tipos de EDA; qué hay, qué falta, qué llamó la atención | `notebooks/01_calidad_y_eda.ipynb`, diapositivas 7-8 |
+| 4 | Técnica de minería | **Machine learning:** regresión (7 modelos, de la línea de base a árboles, Random Forest, XGBoost y un ensamble) y clasificación (4 modelos) con validación cruzada espacial anidada, curva de sobreajuste, OOB, SHAP y Gini. **Prescriptivo:** K-Means de zonas y de estaciones, cobertura máxima exacta (MILP) y golosa. **Pronóstico** diario del subte. Por qué esos y no otros | `notebooks/02_machine_learning.ipynb`, `03_optimizacion.ipynb`, `04_demanda_por_hora.ipynb`, `05_pronostico_subte.ipynb`, diapositivas 9-20 |
+| 5 | Conclusión | Mapas, tres zonas de ejemplo y curva de cobertura que responden la hipótesis | `notebooks/02_machine_learning.ipynb` §9, diapositivas 21-23 |
+| 6 | Aplicación funcional | App con mapa 3D, predicción por zona (tiene / le corresponden / por qué), simulador de cajeros nuevos (exacto o goloso, caminando o en línea recta), demanda por hora y carga del listado propio | `app/app.py` |
 
 ### Condiciones para superar las expectativas mínimas
 
 | Aspecto | Qué hicimos |
 |---|---|
 | **Datos** · dominio propio y múltiples orígenes | Dominio cercano (Red Link) y seis fuentes cruzadas: GCBA, INDEC, SBASE y OpenStreetMap |
-| **Técnicas** · combinar modelos y justificar qué aporta cada uno | Supervisado (brecha) + no supervisado (tipos de zona y de estación) + optimización exacta (dónde poner cajeros), más un ensamble evaluado contra los modelos individuales y una validación temporal con datos que el modelo no vio |
+| **Técnicas** · combinar modelos y justificar qué aporta cada uno | Machine learning supervisado (árboles, Random Forest, XGBoost y un ensamble, en regresión y clasificación, con validación espacial anidada y explicación SHAP) + no supervisado (tipos de zona y de estación) + optimización exacta (dónde poner cajeros) + pronóstico en el tiempo, y una validación temporal con datos que el modelo no vio |
 | **Visualización** · librerías modernas y navegación novedosa | Mapa 3D de hexágonos H3 con deck.gl, columnas 3D de pasajeros por hora, simulador interactivo y carga de datos propios |
 
 ### Material de soporte
@@ -70,11 +70,11 @@ documento *Ciencia de Datos – Trabajo Práctico Obligatorio* (docente: Santiag
 | **Negocio** (líder) | Problema, hipótesis, valor y conclusión | Apertura y cierre |
 | **Ingeniería de datos** | Fuentes, descarga y arquitectura | Fuentes y diagrama |
 | **Análisis exploratorio** | Calidad de datos y EDA | Hallazgos |
-| **Modelado supervisado** | Variables, comparación de modelos, validación, brecha | Técnica y por qué |
+| **Machine learning** | Variables, comparación de modelos, validación espacial anidada, sobreajuste y OOB, SHAP, clasificación | Modelos, métricas y las tres zonas |
 | **Segmentación y optimización** | K-Means, cobertura máxima (exacta y golosa), demanda por hora, validación temporal | Tipos de zona y dónde sumar cajeros |
 | **Producto** | App y visualizaciones | Demo en vivo |
 
-- **Con 5 integrantes:** se unen *Modelado supervisado* y *Segmentación y optimización*.
+- **Con 5 integrantes:** se unen *Machine learning* y *Segmentación y optimización*.
 - **Con 4 integrantes:** además se unen *Ingeniería de datos* y *Análisis exploratorio*.
 
 ## 3. Guion de 15 minutos
@@ -83,13 +83,21 @@ La consigna pide **primero la conclusión, después cómo llegamos**. El corte e
 
 | Tiempo | Rol | Contenido | Diapositivas |
 |---|---|---|---|
-| 0:00 – 2:00 | Negocio | El problema, la hipótesis y **la respuesta**: dónde faltan, cuántos vecinos se suman con 20 cajeros | 1-3 |
-| 2:00 – 3:30 | Ingeniería de datos | Seis fuentes, por qué cada una, y el diagrama de la tubería | 4-5 |
-| 3:30 – 5:30 | Análisis exploratorio | Calidad (el listado de cajeros es de ≈2017), dónde vive la gente vs. dónde están los cajeros, la paradoja del centro | 6-7 |
-| 5:30 – 8:00 | Modelado supervisado | Qué predecimos, seis modelos, por qué validación espacial, por qué ganó el elegido, qué aprendió, el mapa de brecha | 8-10 |
-| 8:00 – 10:30 | Segmentación y optimización | Tipos de zona, por qué medir caminando, cobertura Link vs. Banelco, curva de cajeros nuevos, demanda por hora, validación con OSM | 11-15 |
-| 10:30 – 13:00 | Producto | Demo: panorama → simulador (mover el slider, cambiar caminando/línea recta) → "Usá tus datos" | 16 |
-| 13:00 – 15:00 | Negocio | Valor en operaciones y efectivo, conclusión, próximos pasos y limitaciones | 17-18 |
+| 0:00 – 2:10 | Negocio | El problema, la hipótesis, **la respuesta** y los cuatro niveles de análisis | 1-4 |
+| 2:10 – 4:20 | Ingeniería de datos · Análisis exploratorio | Seis fuentes y por qué cada una, la tubería, la calidad (el listado es de ≈2017) y dónde vive la gente vs. dónde están los cajeros | 5-8 |
+| 4:20 – 9:20 | Machine learning | Cómo entrenamos y validamos, los 7 modelos y sus métricas, sobreajuste y OOB, qué aprendió (SHAP y Gini), dónde faltan terminales, **tres zonas, tres decisiones** y las 254 oportunidades del clasificador | 9-15 |
+| 9:20 – 11:40 | Segmentación y optimización | Tipos de zona, por qué medir caminando, cobertura Link vs. Banelco y curva de cajeros nuevos, demanda por hora (si sobra tiempo) y validación con OSM | 16-20 |
+| 11:40 – 13:10 | Producto | Demo: predicción por zona (Belgrano y Villa Urquiza) → simulador (20 a 35 cajeros, caminando/línea recta) → "Usá tus datos" si sobra tiempo | 21 |
+| 13:10 – 14:20 | Negocio | Valor en operaciones y efectivo, conclusión, próximos pasos y limitaciones | 22-23 |
+
+El anexo (A1-A5: coeficientes, hiperparámetros, curvas ROC, árbol y explicación SHAP) queda para las preguntas.
+
+**La fórmula de cada diapositiva técnica**, como pidió el profe: *dataset → modelo → métrica → hallazgo de negocio*. La
+barra de abajo de cada una dice los datos, la técnica y la métrica; el título dice el hallazgo. Ejemplo para decir en voz
+alta: "Con el censo, los usos del suelo y OpenStreetMap entrenamos un ensamble de regresión de Poisson y XGBoost, validado
+en comunas que no vio (D² = 0,57, erra 4 terminales por zona). Con eso vimos que en Villa Urquiza, cerca de Juan Manuel de
+Rosas, viven 17 mil personas pero hay poco comercio y no pasa el subte: el flujo de gente es bajo y le corresponde un solo
+cajero Link."
 
 ## 4. Checklist del día de la entrega
 
@@ -107,7 +115,8 @@ La consigna es explícita: *si no abre, no se presentó.*
 - [ ] App abierta antes de empezar (`abrir_app.bat`, o `streamlit run app/app.py` con el entorno activado).
 - [ ] Presentación descargada en PDF y en PowerPoint, en la notebook y en un pendrive.
 - [ ] Cargador y adaptador HDMI.
-- [ ] Notebook de modelos abierto en la sección de comparación, por si piden correr código en vivo.
+- [ ] Notebook 02 (machine learning) abierto en la comparación de modelos, por si piden correr código en vivo
+  (con `RECALCULAR = False` muestra los resultados en segundos).
 
 ## 5. Preguntas probables y respuestas
 
@@ -128,8 +137,57 @@ cuenta personas sin un Link cerca.
 
 **¿Por qué validación espacial y no un train/test al azar?**
 Las zonas vecinas se parecen y comparten área de influencia. Al azar, el modelo "ve" la respuesta en los vecinos y el
-error parece menor. Dejando afuera una comuna entera medimos lo que importa: qué tan bien anda en una zona que no vio.
-La diferencia entre ambas validaciones está en la comparación de modelos.
+error parece menor. Dejando afuera grupos de comunas medimos lo que importa: qué tan bien anda en una zona que no vio.
+Con validación al azar habríamos elegido Random Forest (D² 0,81), que en comunas no vistas cae a 0,54.
+
+**¿Por qué "anidada"?**
+Porque los hiperparámetros también se eligen con datos. Si los elegimos mirando las mismas comunas con las que medimos,
+el resultado queda optimista. Adentro de cada partición de entrenamiento corre otro GroupKFold (4 particiones) con
+GridSearchCV; la partición que mide nunca participa de ninguna decisión.
+
+**¿Qué es el D² y cómo se lee 0,57?**
+Es el equivalente del R² para conteos: qué parte de la devianza de Poisson explica el modelo frente a predecir siempre el
+promedio. 0,57 quiere decir que explica más de la mitad de la variación en terminales entre zonas que nunca vio. El ± 0,14
+es cuánto varía entre grupos de comunas. El error medio es de 4,2 terminales por zona (área de 400 m).
+
+**¿Por qué ganó un ensamble y no XGBoost solo?**
+Por la regla fijada de antemano (mayor D² promedio en comunas no vistas): el ensamble da 0,57 contra 0,54 de XGBoost y es el
+más estable. Combina lo que cada parte hace bien: la regresión de Poisson extrapola mejor a zonas extremas como el
+microcentro y XGBoost capta relaciones no lineales. Promedia en escala logarítmica, así que se puede explicar exacto con SHAP.
+
+**¿Qué es el sobreajuste y cómo lo ven?**
+Un árbol más profundo siempre mejora en los datos de entrenamiento (D² 0,97 con 15 niveles) pero en comunas que no vio el
+mejor está en 8 niveles y después empeora: memoriza ruido. Por eso Random Forest y XGBoost combinan muchos árboles, y
+GridSearchCV le eligió a XGBoost árboles de 2 a 4 niveles.
+
+**¿Qué es el OOB y por qué no lo usaron para elegir?**
+Cada árbol del Random Forest se entrena con una muestra bootstrap y deja afuera un tercio de las filas: con ellas se mide un
+error "gratis" (out-of-bag). Con datos espaciales es optimista, por la misma razón que la validación al azar: da R² 0,80
+contra 0,29 en comunas no vistas. En clasificación la diferencia es chica (AUC 0,85 contra 0,84).
+
+**¿Qué es SHAP?**
+Una forma de repartir la predicción de cada zona entre las variables. Para el ensamble es exacta: XGBoost calcula sus
+valores SHAP (TreeSHAP) y en la regresión de Poisson el aporte es coeficiente por valor. Se lee como un multiplicador: en la
+zona de Belgrano cerca de Juramento, los comercios multiplican por 3,15 lo que le corresponde frente a una zona típica.
+
+**¿Qué diferencia hay entre la importancia de Gini y SHAP?**
+Gini (clase 8) mide cuánto ordena cada variable los cortes del Random Forest; tiende a favorecer variables con muchos valores
+distintos. SHAP mide cuánto mueve cada variable la predicción. Coinciden en lo principal: el comercio primero, los vecinos
+últimos.
+
+**¿Cómo se lee el AUC del clasificador? ¿Y por qué ese umbral?**
+AUC 0,84: si tomamos al azar una zona con cajero y una sin, el modelo le da más probabilidad a la que tiene en el 84 % de los
+casos (0,5 sería azar). El umbral marca tantas zonas como las que hoy tienen cajero (la tasa base, 22 %), así precisión y
+recall coinciden (0,57). Los falsos positivos son lo interesante: zonas sin cajero que se parecen a las que tienen.
+
+**La regresión y el clasificador, ¿no dicen lo mismo?**
+Se complementan. La regresión dice cuántas terminales le corresponden a un área y sirve para comparar barrios y redes. El
+clasificador dice si a una zona puntual le corresponde al menos un cajero: sirve para encontrar huecos en zonas sin
+ninguno, de ninguna red.
+
+**¿Esto es machine learning o estadística?**
+Las dos cosas, comparadas con la misma regla: la regresión de Poisson es un modelo estadístico clásico; el árbol, Random
+Forest y XGBoost son machine learning (clases 6 y 8). La validación decide cuál generaliza mejor, no la preferencia.
 
 **¿Por qué Poisson?**
 El objetivo es un conteo (terminales), con muchos ceros y cola larga. La pérdida de Poisson modela eso directamente y
@@ -166,6 +224,11 @@ conectar cada punto con más de una cuadra (por ejemplo, en una esquina) y la co
 **¿Por qué 500 metros?**
 Son unas 5 cuadras, 6 o 7 minutos a pie: una distancia que una persona está dispuesta a caminar hasta un cajero. Es un
 supuesto, por eso el simulador permite elegir entre 300 y 800 m y ver cómo cambian las ubicaciones.
+
+**¿Usaron inteligencia artificial?**
+Sí, como apoyo para programar, revisar el código y redactar, y lo declaramos en el informe y el README. El planteo del
+problema, la elección de fuentes y métodos, y la revisión de los resultados son del grupo. (Ajustar esta respuesta a lo que
+efectivamente hizo cada uno.)
 
 **¿Qué harían con más tiempo?**
 Transacciones reales por terminal y por hora; restricciones de costo y de seguridad por sitio en la optimización; el

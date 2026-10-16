@@ -1,14 +1,16 @@
 """
 modelos.py
 ----------
-Las tres técnicas del TPO, cada una responde una pregunta distinta:
+Piezas de modelado que comparten el pipeline, los notebooks y la app:
 
-1. Regresión (supervisado) -> ¿Cuántas terminales tienen las zonas con este perfil
-   de demanda? La diferencia con lo que hay es la BRECHA (diagnóstico).
+1. Preparación y métricas de la regresión de conteos (los modelos de machine learning,
+   su validación espacial anidada y su explicación están en ml.py). La diferencia entre
+   lo que le corresponde a cada zona y lo que tiene es la BRECHA.
 2. Clustering (no supervisado) -> ¿Qué tipos de zona hay? (segmentación para
    explicar dónde está la brecha).
 3. Optimización (prescriptivo) -> Si Red Link promueve N cajeros nuevos, ¿dónde
    conviene ubicarlos para sumar la mayor cantidad de vecinos con un Link cerca?
+4. Validación temporal con los cajeros que aparecieron en OpenStreetMap después de 2017.
 
 Todas las funciones reciben la tabla de `features.construir()`.
 """
@@ -18,16 +20,9 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from scipy.spatial import cKDTree
-from sklearn.base import clone
 from sklearn.cluster import KMeans
-from sklearn.dummy import DummyRegressor
-from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegressor, VotingRegressor
-from sklearn.linear_model import PoissonRegressor
 from sklearn.metrics import mean_absolute_error, mean_poisson_deviance, mean_squared_error, r2_score, silhouette_score
-from sklearn.model_selection import GroupKFold, KFold, cross_val_predict
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import FunctionTransformer, StandardScaler
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.preprocessing import StandardScaler
 
 SEMILLA = 42
 CRS_METRICO = "EPSG:5347"
@@ -95,36 +90,6 @@ def preparar(tabla: pd.DataFrame):
 # --------------------------------------------------------------------------
 # 1. Regresión
 # --------------------------------------------------------------------------
-_log1p = FunctionTransformer(np.log1p, feature_names_out="one-to-one")
-
-
-def candidatos() -> dict:
-    """Modelos comparados, del más simple al más complejo."""
-    return {
-        "Línea de base (promedio)": DummyRegressor(strategy="mean"),
-        "Poisson solo con población": make_pipeline(
-            FunctionTransformer(lambda X: np.log1p(X[["poblacion_k1"]])), StandardScaler(), PoissonRegressor(alpha=1e-4, max_iter=1000)),
-        "Regresión de Poisson (GLM)": _glm(),
-        "Árbol de decisión (CART)": DecisionTreeRegressor(max_depth=6, min_samples_leaf=20, random_state=SEMILLA),
-        "Random Forest": RandomForestRegressor(n_estimators=500, min_samples_leaf=5, max_features=0.5,
-                                               n_jobs=-1, random_state=SEMILLA),
-        "Gradient Boosting (Poisson)": _boosting(),
-        # Ensamble definido de antemano (no elegido mirando resultados): promedia un modelo
-        # lineal interpretable y uno no lineal, los dos con pérdida de Poisson.
-        "Ensamble (Poisson GLM + Boosting)": VotingRegressor([("glm", _glm()), ("gb", _boosting())]),
-    }
-
-
-def _glm():
-    return make_pipeline(FunctionTransformer(lambda X: np.log1p(X.clip(lower=0))), StandardScaler(),
-                         PoissonRegressor(alpha=1e-3, max_iter=2000))
-
-
-def _boosting():
-    return HistGradientBoostingRegressor(loss="poisson", learning_rate=0.05, max_iter=400, max_leaf_nodes=15,
-                                         min_samples_leaf=20, l2_regularization=1.0, random_state=SEMILLA)
-
-
 def metricas(y: np.ndarray, pred: np.ndarray) -> dict:
     pred = np.clip(pred, 1e-6, None)
     dev = mean_poisson_deviance(y, pred)
@@ -135,31 +100,6 @@ def metricas(y: np.ndarray, pred: np.ndarray) -> dict:
         "R²": r2_score(y, pred),
         "D² Poisson": 1 - dev / dev0,  # % de la devianza explicada (el R² de los modelos de conteo)
     }
-
-
-def comparar(X, y, grupos, modelos: dict | None = None) -> tuple[pd.DataFrame, dict]:
-    """
-    Compara modelos con dos esquemas de validación cruzada:
-    - espacial: se deja afuera una comuna entera por vez (GroupKFold por comuna), lo que
-      simula predecir una zona que el modelo no vio;
-    - aleatoria: KFold común, que filtra información entre vecinos y sobreestima el desempeño.
-    Devuelve la tabla de métricas y las predicciones fuera de muestra (espaciales).
-    """
-    modelos = modelos or candidatos()
-    esquemas = {"espacial (por comuna)": (GroupKFold(n_splits=5), grupos),
-                "aleatoria": (KFold(n_splits=5, shuffle=True, random_state=SEMILLA), None)}
-    filas, oof = [], {}
-    for nombre, modelo in modelos.items():
-        for esquema, (cv, g) in esquemas.items():
-            pred = cross_val_predict(clone(modelo), X, y, groups=g, cv=cv)
-            filas.append({"modelo": nombre, "validación": esquema, **metricas(y.values, pred)})
-            if esquema.startswith("espacial"):
-                oof[nombre] = pred
-    return pd.DataFrame(filas), oof
-
-
-def ensamble(oof: dict, nombres: list[str]) -> np.ndarray:
-    return np.mean([oof[n] for n in nombres], axis=0)
 
 
 def calcular_brechas(tabla: pd.DataFrame, mascara: pd.Series, esperado: np.ndarray) -> pd.DataFrame:
@@ -352,13 +292,6 @@ def resolver_exacto(tabla: pd.DataFrame, n_nuevos: int, conj: dict, w: np.ndarra
     res.attrs.update(cubierto_final=cubierto, objetivo=float(-sol.fun), estado=sol.message,
                      gap=float(getattr(sol, "mip_gap", np.nan) or 0.0), cota=cota)
     return res
-
-
-def cobertura_golosa(tabla: pd.DataFrame, n_nuevos: int, radio_m: float = 500, peso_pasajeros: float = 0.0,
-                     conj: dict | None = None) -> pd.DataFrame:
-    """Atajo: goloso con cobertura en línea recta (o con los conjuntos que se le pasen)."""
-    conj = conj or conjuntos_recta(tabla, radio_m)
-    return resolver_goloso(tabla, n_nuevos, conj, demanda(tabla, peso_pasajeros))
 
 
 def comparar_goloso_exacto(tabla: pd.DataFrame, conj: dict, w: np.ndarray, ns=(5, 10, 20, 30, 50)) -> pd.DataFrame:
