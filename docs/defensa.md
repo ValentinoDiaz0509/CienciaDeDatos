@@ -9,8 +9,8 @@ documento *Ciencia de Datos – Trabajo Práctico Obligatorio* (docente: Santiag
 
 | Requisito | Cómo lo cumplimos | Dónde está |
 |---|---|---|
-| Grupo de 5 a 6, cada uno con un rol propio | Seis roles definidos, con alternativas para 4 o 5 integrantes (sección 2) | este documento |
-| Dominio conocido o de interés | Red de cajeros: un integrante trabaja en Red Link (solo usamos datos públicos) | `README.md` |
+| Grupo de 5 a 6, cada uno con un rol propio | Somos 4, con un rol propio cada uno (sección 2). La consigna pide 5 o 6: **confirmarlo con el profe** | este documento |
+| Dominio conocido o de interés | Red de cajeros: un integrante trabaja en Red Link (solo usamos datos públicos; declarado en el informe, el README y la diapositiva 5) | `docs/informe.md` §1.3, `README.md` |
 | Fuentes identificadas y justificadas | Seis fuentes de cuatro organismos, con qué aporta cada una y su calidad medida | `notebooks/01_calidad_y_eda.ipynb` |
 | Primero el problema, después los datos | La hipótesis se definió antes de buscar datos; los datos se eligieron para responderla | `docs/informe.md` §1 |
 
@@ -59,23 +59,25 @@ documento *Ciencia de Datos – Trabajo Práctico Obligatorio* (docente: Santiag
 | Creatividad, prolijidad y claridad | Una idea por diapositiva, gráficos con título que dice la conclusión, ortografía revisada |
 | Coherencia | La conclusión responde exactamente la hipótesis (zonas con brecha + dónde sumar + cuánto mejora) |
 | Valor para el negocio | Resultados en vecinos cubiertos, operaciones por mes y efectivo movido, no en métricas del modelo |
-| Participación | Seis roles, cada uno presenta su parte y tiene preguntas probables preparadas |
+| Participación | Cuatro roles, cada uno presenta su parte y tiene preguntas probables preparadas |
 
 **Condición para aprobar:** llevar todo funcionando sin depender de internet (sección 4).
 
 ## 2. Roles
 
-| Rol | Responsable de | Presenta |
-|---|---|---|
-| **Negocio** (líder) | Problema, hipótesis, valor y conclusión | Apertura y cierre |
-| **Ingeniería de datos** | Fuentes, descarga y arquitectura | Fuentes y diagrama |
-| **Análisis exploratorio** | Calidad de datos y EDA | Hallazgos |
-| **Machine learning** | Variables, comparación de modelos, validación espacial anidada, sobreajuste y OOB, SHAP, clasificación | Modelos, métricas y las tres zonas |
-| **Segmentación y optimización** | K-Means, cobertura máxima (exacta y golosa), demanda por hora y pronóstico del subte, validación temporal | Tipos de zona, dónde sumar cajeros y cuánta gente va a pasar |
-| **Producto** | App y visualizaciones | Demo en vivo |
+Somos cuatro, así que cada rol junta dos partes del trabajo. Los repartimos para que nadie hable mucho más que el resto y
+para que cada uno presente lo que mejor conoce.
 
-- **Con 5 integrantes:** se unen *Machine learning* y *Segmentación y optimización*.
-- **Con 4 integrantes:** además se unen *Ingeniería de datos* y *Análisis exploratorio*.
+| Rol | Responsable de | Presenta | Diapositivas | Tiempo |
+|---|---|---|---|---|
+| **Negocio** (líder) | Problema, hipótesis, valor y conclusión | Apertura y cierre | 1-4 y 23-24 | 3:10 |
+| **Datos** | Fuentes, descarga, arquitectura, calidad (DAMA), EDA y red peatonal | Fuentes, tubería, calidad, hallazgos y por qué medir caminando | 5-8 y 17 | 2:55 |
+| **Machine learning** | Variables, comparación de modelos, validación espacial anidada, sobreajuste y OOB, SHAP, clasificación y K-Means | Modelos, métricas, las tres zonas y los tipos de zona | 9-16 | 4:40 |
+| **Optimización y producto** | Cobertura máxima (exacta y golosa), demanda por hora, pronóstico del subte, validación con OSM, la app y sus visualizaciones | Dónde sumar cajeros, cuándo pasa la gente, la validación y la demo | 18-22 | 3:35 |
+
+- **Si se suma un quinto integrante:** *Producto* (la demo y las visualizaciones) vuelve a ser un rol aparte.
+- **Si se suman dos:** también se separan *Ingeniería de datos* (fuentes y arquitectura) y *Análisis exploratorio* (calidad
+  y EDA).
 
 ## 3. Guion de 15 minutos
 
@@ -83,12 +85,15 @@ La consigna pide **primero la conclusión, después cómo llegamos**. El corte e
 
 | Tiempo | Rol | Contenido | Diapositivas |
 |---|---|---|---|
-| 0:00 – 2:10 | Negocio | El problema, la hipótesis, **la respuesta** y los cuatro niveles de análisis | 1-4 |
-| 2:10 – 4:20 | Ingeniería de datos · Análisis exploratorio | Seis fuentes y por qué cada una, la tubería, la calidad (el listado es de ≈2017) y dónde vive la gente vs. dónde están los cajeros | 5-8 |
-| 4:20 – 9:00 | Machine learning | Cómo entrenamos y validamos, los 7 modelos y sus métricas, sobreajuste y OOB, qué aprendió (SHAP y Gini), dónde faltan terminales, **tres zonas, tres decisiones** y las 254 oportunidades del clasificador | 9-15 |
-| 9:00 – 11:50 | Segmentación y optimización | Tipos de zona, por qué medir caminando, cobertura Link vs. Banelco y curva de cajeros nuevos, demanda por hora (15 segundos), **pronóstico del subte** y validación con OSM | 16-21 |
-| 11:50 – 13:20 | Producto | Demo: predicción por zona (Belgrano y Villa Urquiza) → simulador (20 a 35 cajeros, caminando/línea recta) → "Usá tus datos" si sobra tiempo | 22 |
-| 13:20 – 14:30 | Negocio | Valor en operaciones y efectivo, conclusión, próximos pasos y limitaciones | 23-24 |
+| 0:00 – 1:55 | Negocio | El problema, la hipótesis, **la respuesta** y los cuatro niveles de análisis | 1-4 |
+| 1:55 – 4:15 | Datos | Seis fuentes y por qué cada una, la tubería, la calidad (el listado es de ≈2017) y dónde vive la gente vs. dónde están los cajeros | 5-8 |
+| 4:15 – 8:55 | Machine learning | Cómo entrenamos y validamos, los 7 modelos y sus métricas, sobreajuste y OOB, qué aprendió (SHAP y Gini), dónde faltan terminales, **tres zonas, tres decisiones**, las 254 oportunidades del clasificador y los tipos de zona (K-Means) | 9-16 |
+| 8:55 – 9:30 | Datos | Por qué medir caminando: la red peatonal de OpenStreetMap | 17 |
+| 9:30 – 13:05 | Optimización y producto | Cobertura Link vs. Banelco y curva de cajeros nuevos, demanda por hora (15 segundos), **pronóstico del subte**, validación con OSM y la demo: predicción por zona (Belgrano y Villa Urquiza) → simulador (20 a 35 cajeros, caminando/línea recta) | 18-22 |
+| 13:05 – 14:20 | Negocio | Valor en operaciones y efectivo, conclusión, próximos pasos y limitaciones | 23-24 |
+
+Quedan 40 segundos de margen. El tiempo de cada diapositiva está al principio de sus notas; las notas traen más de lo que
+entra en ese tiempo, así que cada uno elige lo esencial y ensaya con reloj.
 
 El anexo (A1-A5: coeficientes, hiperparámetros, curvas ROC, árbol y explicación SHAP) queda para las preguntas.
 
@@ -261,6 +266,11 @@ conectar cada punto con más de una cuadra (por ejemplo, en una esquina) y la co
 **¿Por qué 500 metros?**
 Son unas 5 cuadras, 6 o 7 minutos a pie: una distancia que una persona está dispuesta a caminar hasta un cajero. Es un
 supuesto, por eso el simulador permite elegir entre 300 y 800 m y ver cómo cambian las ubicaciones.
+
+**Uno de ustedes trabaja en Red Link. ¿No hay un conflicto de interés?**
+Lo declaramos en el informe, el README y la presentación. Por eso elegimos este dominio, y por eso mismo usamos solo datos
+públicos: ninguna transacción ni información interna de la empresa, y las conclusiones no representan a Red Link. Todo el
+código y los datos están en el repositorio, así que cualquiera puede repetir el análisis.
 
 **¿Usaron inteligencia artificial?**
 Sí, como apoyo para programar, revisar el código y redactar, y lo declaramos en el informe y el README. El planteo del

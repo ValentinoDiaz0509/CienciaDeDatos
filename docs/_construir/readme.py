@@ -214,7 +214,8 @@ directo, también en Colab.
 - Extracciones por terminal: BCRA, *Informe Mensual de Pagos Minoristas*, agosto 2025.
 
 **Aviso:** el listado público de cajeros corresponde a un relevamiento de alrededor de 2017. Solo se usan datos públicos;
-ningún dato interno de Red Link.
+ningún dato interno de Red Link. Un integrante del grupo trabaja en Red Link: por eso elegimos este dominio, pero el trabajo
+no usa información interna de la empresa y sus conclusiones no la representan.
 
 **Uso de IA:** usamos asistentes de inteligencia artificial como apoyo para programar, revisar el código y redactar. El grupo
 definió el problema, eligió las fuentes y los métodos, y revisó el código y los resultados.

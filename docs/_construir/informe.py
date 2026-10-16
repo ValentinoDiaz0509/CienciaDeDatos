@@ -238,6 +238,8 @@ ubicada es un costo fijo con poco uso.
 ### 1.3 Supuestos y alcance
 - Cada banco decide la instalación; Red Link puede proponer ubicaciones a los bancos de su red.
 - Solo datos públicos: no se usan transacciones ni ningún dato interno de Red Link.
+- Un integrante del grupo trabaja en Red Link. Por eso elegimos este dominio; el trabajo no usa información interna de la
+  empresa y sus conclusiones no la representan.
 - Alcance: Ciudad Autónoma de Buenos Aires.
 - Criterio de éxito: un modelo de demanda que generalice a zonas no vistas (validación espacial) y un conjunto de
   ubicaciones cuyo impacto se pueda medir en vecinos cubiertos.
