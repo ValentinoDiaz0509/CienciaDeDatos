@@ -21,6 +21,8 @@ def texto(clave, defecto=""):
 cells = [
     md("""# 04 · Demanda por hora del día
 
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/04_demanda_por_hora.ipynb)
+
 **TPO Ciencia de Datos · ¿Dónde faltan cajeros Link en CABA?**
 
 Los cajeros no se usan igual a toda hora. Con los molinetes del subte (SBASE, año 2025 completo, 335 días con datos)
@@ -36,7 +38,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-RAIZ = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
+if "google.colab" in sys.modules:   # en Colab: clona el repositorio e instala lo que falta
+    import subprocess
+    RAIZ = Path("/content/CienciaDeDatos")
+    if not RAIZ.exists():
+        subprocess.run(["git", "clone", "-q", "--depth", "1",
+                        "https://github.com/ValentinoDiaz0509/CienciaDeDatos.git", str(RAIZ)], check=True)
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "h3", "xgboost"], check=True)
+else:
+    RAIZ = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
 sys.path.insert(0, str(RAIZ))
 from src import estilo as e, features as f, horario as ho, modelos as m
 

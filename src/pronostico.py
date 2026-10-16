@@ -45,8 +45,10 @@ NOMBRES = {
 # Receso escolar de invierno en CABA (calendario escolar de cada año)
 VACACIONES_INVIERNO = {2025: ("2025-07-21", "2025-08-01"), 2026: ("2026-07-20", "2026-07-31")}
 # Días que en los datos se comportan como feriado (o que son feriado solo en la Ciudad) y que el paquete `holidays`
-# no trae. El 9/11/2026 (visita del Papa León XIV) es feriado nacional y ya viene en el paquete; el 10 lo es en CABA.
+# no trae. El 9/11/2026 (visita del Papa León XIV) es feriado nacional (las versiones nuevas del paquete ya lo traen) y el 10
+# lo es en CABA.
 FERIADOS_EXTRA = {"2025-10-10": "Día del Respeto a la Diversidad Cultural (trasladado al viernes)",
+                  "2026-11-09": "Visita del Papa León XIV (feriado nacional)",
                   "2026-11-10": "Visita del Papa León XIV (feriado en la Ciudad de Buenos Aires)"}
 
 

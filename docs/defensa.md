@@ -32,16 +32,16 @@ documento *Ciencia de Datos – Trabajo Práctico Obligatorio* (docente: Santiag
 | 1 | Dominio y problema | Red Link, el problema de la cobertura, la hipótesis y el valor | `docs/informe.md` §1, diapositivas 1-4 |
 | 2 | Arquitectura de la solución | Diagrama de la tubería: fuentes → descarga → variables por hexágono → modelos → app | `docs/informe.md` §3, `docs/figuras/arquitectura.svg`, diapositiva 6 |
 | 3 | Análisis exploratorio | Calidad de datos (DAMA) y los cinco tipos de EDA; qué hay, qué falta, qué llamó la atención | `notebooks/01_calidad_y_eda.ipynb`, diapositivas 7-8 |
-| 4 | Técnica de minería | **Machine learning:** regresión (7 modelos, de la línea de base a árboles, Random Forest, XGBoost y un ensamble) y clasificación (4 modelos) con validación cruzada espacial anidada, curva de sobreajuste, OOB, SHAP y Gini. **Prescriptivo:** K-Means de zonas y de estaciones, cobertura máxima exacta (MILP) y golosa. **Pronóstico** diario del subte (Random Forest y XGBoost sobre el calendario, validados hacia adelante). Por qué esos y no otros | `notebooks/02_machine_learning.ipynb`, `03_optimizacion.ipynb`, `04_demanda_por_hora.ipynb`, `05_pronostico_subte.ipynb`, diapositivas 9-21 |
-| 5 | Conclusión | Mapas, tres zonas de ejemplo y curva de cobertura que responden la hipótesis | `notebooks/02_machine_learning.ipynb` §9, diapositivas 23-24 |
-| 6 | Aplicación funcional | App con mapa 3D, predicción por zona (tiene / le corresponden / por qué), simulador de cajeros nuevos (exacto o goloso, caminando o en línea recta), demanda por hora, pronóstico del subte y carga del listado propio | `app/app.py`, diapositiva 22 |
+| 4 | Técnica de minería | **Machine learning:** regresión (7 modelos, de la línea de base a árboles, Random Forest, XGBoost y un ensamble) y clasificación (4 modelos) con validación cruzada espacial anidada, curva de sobreajuste, OOB, SHAP y Gini. **Prescriptivo:** K-Means de zonas y de estaciones, cobertura máxima exacta (MILP) y golosa. **Pronóstico** diario del subte (Random Forest y XGBoost sobre el calendario, validados hacia adelante). **Clase 11:** validación estratificada por grupos, PCA, K-Means como ubicador frente al óptimo y DBSCAN. Por qué esos y no otros | `notebooks/02_machine_learning.ipynb`, `03_optimizacion.ipynb`, `04_demanda_por_hora.ipynb`, `05_pronostico_subte.ipynb`, `06_tecnicas_avanzadas.ipynb`, diapositivas 9-22 y A6 |
+| 5 | Conclusión | Mapas, tres zonas de ejemplo y curva de cobertura que responden la hipótesis | `notebooks/02_machine_learning.ipynb` §9, diapositivas 24-25 |
+| 6 | Aplicación funcional | App con mapa 3D, predicción por zona (tiene / le corresponden / por qué), simulador de cajeros nuevos (exacto o goloso, caminando o en línea recta), demanda por hora, pronóstico del subte y carga del listado propio | `app/app.py`, diapositiva 23 |
 
 ### Condiciones para superar las expectativas mínimas
 
 | Aspecto | Qué hicimos |
 |---|---|
 | **Datos** · dominio propio y múltiples orígenes | Dominio cercano (Red Link) y seis fuentes cruzadas: GCBA, INDEC, SBASE y OpenStreetMap; encontramos y aislamos un error de fechas en los molinetes de 2025 |
-| **Técnicas** · combinar modelos y justificar qué aporta cada uno | Machine learning supervisado (árboles, Random Forest, XGBoost y un ensamble, en regresión y clasificación, con validación espacial anidada y explicación SHAP) + no supervisado (tipos de zona y de estación) + optimización exacta (dónde poner cajeros) + pronóstico en el tiempo, y una validación temporal con datos que el modelo no vio |
+| **Técnicas** · combinar modelos y justificar qué aporta cada uno | Machine learning supervisado (árboles, Random Forest, XGBoost y un ensamble, en regresión y clasificación, con validación espacial anidada y explicación SHAP) + no supervisado (K-Means de zonas y de estaciones, DBSCAN y PCA) + optimización exacta (dónde poner cajeros, comparada con K-Means como ubicador) + pronóstico en el tiempo, y una validación temporal con datos que el modelo no vio |
 | **Visualización** · librerías modernas y navegación novedosa | Mapa 3D de hexágonos H3 con deck.gl, columnas 3D de pasajeros por hora, simulador interactivo y carga de datos propios |
 
 ### Material de soporte
@@ -70,10 +70,10 @@ para que cada uno presente lo que mejor conoce.
 
 | Rol | Responsable de | Presenta | Diapositivas | Tiempo |
 |---|---|---|---|---|
-| **Negocio** (líder) | Problema, hipótesis, valor y conclusión | Apertura y cierre | 1-4 y 23-24 | 3:10 |
-| **Datos** | Fuentes, descarga, arquitectura, calidad (DAMA), EDA y red peatonal | Fuentes, tubería, calidad, hallazgos y por qué medir caminando | 5-8 y 17 | 2:55 |
-| **Machine learning** | Variables, comparación de modelos, validación espacial anidada, sobreajuste y OOB, SHAP, clasificación y K-Means | Modelos, métricas, las tres zonas y los tipos de zona | 9-16 | 4:40 |
-| **Optimización y producto** | Cobertura máxima (exacta y golosa), demanda por hora, pronóstico del subte, validación con OSM, la app y sus visualizaciones | Dónde sumar cajeros, cuándo pasa la gente, la validación y la demo | 18-22 | 3:35 |
+| **Negocio** (líder) | Problema, hipótesis, valor y conclusión | Apertura y cierre | 1-4 y 24-25 | 3:00 |
+| **Datos** | Fuentes, descarga, arquitectura, calidad (DAMA), EDA y red peatonal | Fuentes, tubería, calidad, hallazgos y por qué medir caminando | 5-8 y 17 | 2:45 |
+| **Machine learning** | Variables, comparación de modelos, validación espacial anidada (y estratificada), sobreajuste y OOB, SHAP, clasificación, K-Means y PCA | Modelos, métricas, las tres zonas y los tipos de zona | 9-16 | 4:30 |
+| **Optimización y producto** | Cobertura máxima (exacta y golosa), K-Means como ubicador y DBSCAN, demanda por hora, pronóstico del subte, validación con OSM, la app y sus visualizaciones | Dónde sumar cajeros (y por qué no con K-Means), cuándo pasa la gente, la validación y la demo | 18-23 | 4:05 |
 
 - **Si se suma un quinto integrante:** *Producto* (la demo y las visualizaciones) vuelve a ser un rol aparte.
 - **Si se suman dos:** también se separan *Ingeniería de datos* (fuentes y arquitectura) y *Análisis exploratorio* (calidad
@@ -85,17 +85,18 @@ La consigna pide **primero la conclusión, después cómo llegamos**. El corte e
 
 | Tiempo | Rol | Contenido | Diapositivas |
 |---|---|---|---|
-| 0:00 – 1:55 | Negocio | El problema, la hipótesis, **la respuesta** y los cuatro niveles de análisis | 1-4 |
-| 1:55 – 4:15 | Datos | Seis fuentes y por qué cada una, la tubería, la calidad (el listado es de ≈2017) y dónde vive la gente vs. dónde están los cajeros | 5-8 |
-| 4:15 – 8:55 | Machine learning | Cómo entrenamos y validamos, los 7 modelos y sus métricas, sobreajuste y OOB, qué aprendió (SHAP y Gini), dónde faltan terminales, **tres zonas, tres decisiones**, las 254 oportunidades del clasificador y los tipos de zona (K-Means) | 9-16 |
-| 8:55 – 9:30 | Datos | Por qué medir caminando: la red peatonal de OpenStreetMap | 17 |
-| 9:30 – 13:05 | Optimización y producto | Cobertura Link vs. Banelco y curva de cajeros nuevos, demanda por hora (15 segundos), **pronóstico del subte**, validación con OSM y la demo: predicción por zona (Belgrano y Villa Urquiza) → simulador (20 a 35 cajeros, caminando/línea recta) | 18-22 |
-| 13:05 – 14:20 | Negocio | Valor en operaciones y efectivo, conclusión, próximos pasos y limitaciones | 23-24 |
+| 0:00 – 1:50 | Negocio | El problema, la hipótesis, **la respuesta** y los cuatro niveles de análisis | 1-4 |
+| 1:50 – 4:00 | Datos | Seis fuentes y por qué cada una, la tubería, la calidad (el listado es de ≈2017) y dónde vive la gente vs. dónde están los cajeros | 5-8 |
+| 4:00 – 8:30 | Machine learning | Cómo entrenamos y validamos, los 7 modelos y sus métricas, sobreajuste y OOB, qué aprendió (SHAP y Gini), dónde faltan terminales, **tres zonas, tres decisiones**, las 254 oportunidades del clasificador y los tipos de zona (K-Means) | 9-16 |
+| 8:30 – 9:05 | Datos | Por qué medir caminando: la red peatonal de OpenStreetMap | 17 |
+| 9:05 – 13:10 | Optimización y producto | Cobertura Link vs. Banelco y curva de cajeros nuevos, **K-Means vs. el óptimo y los bolsones de DBSCAN (clase 11)**, demanda por hora (15 segundos), **pronóstico del subte**, validación con OSM y la demo: predicción por zona (Belgrano y Villa Urquiza) → simulador (20 a 35 cajeros, caminando/línea recta, y K-Means para comparar) | 18-23 |
+| 13:10 – 14:20 | Negocio | Valor en operaciones y efectivo, conclusión, próximos pasos y limitaciones | 24-25 |
 
 Quedan 40 segundos de margen. El tiempo de cada diapositiva está al principio de sus notas; las notas traen más de lo que
 entra en ese tiempo, así que cada uno elige lo esencial y ensaya con reloj.
 
-El anexo (A1-A5: coeficientes, hiperparámetros, curvas ROC, árbol y explicación SHAP) queda para las preguntas.
+El anexo (A1-A6: coeficientes, hiperparámetros, curvas ROC, árbol, explicación SHAP, validación estratificada y PCA) queda
+para las preguntas.
 
 **La fórmula de cada diapositiva técnica**, como pidió el profe: *dataset → modelo → métrica → hallazgo de negocio*. La
 barra de abajo de cada una dice los datos, la técnica y la métrica; el título dice el hallazgo. Ejemplo para decir en voz
@@ -255,6 +256,40 @@ indicador del flujo de gente, no de la demanda de efectivo.
 **¿Por qué el intervalo sale de XGBoost si el modelo elegido es Random Forest?**
 Porque XGBoost se puede entrenar para estimar un cuantil directamente (pérdida de cuantil): uno aprende el percentil 10 y
 otro el 90. El Random Forest de scikit-learn no lo trae. La banda se ajusta para que siempre contenga el pronóstico.
+
+**En la clase 11 se dijo que K-Means sirve para ubicar cajeros. ¿Por qué no lo usaron?**
+Lo probamos (notebook 06 y diapositiva 19). Agrupamos a la gente sin un Link cerca, pesando cada zona por sus vecinos, y
+pusimos un cajero en el centro de cada grupo. Con 20 cajeros suma 137.506 vecinos a 5 cuadras; la optimización
+exacta, 265.929: K-Means llega al 52 %. K-Means minimiza la distancia de cada persona al
+centro de su grupo, pero no sabe dónde están los cajeros que ya existen ni que la meta es quedar a 500 m. Tampoco gana en
+distancia media: 734 m contra 707 m del óptimo. Sirve para describir (los
+tipos de zona); para decidir dónde poner cajeros, la optimización. En la app se pueden comparar los tres métodos.
+
+**¿Qué es DBSCAN y para qué lo usaron?**
+Un clustering por densidad: arma grupos donde los puntos están juntos y deja como ruido a los que quedan aislados, sin
+fijar de antemano cuántos grupos hay ni suponer que son redondos. Con los vecinos sin un Link a distancia caminable
+encuentra 32 bolsones donde vive el 56 % de esa gente. Los 20 cajeros óptimos caen en
+12: los demás son la lista para una segunda tanda. Los parámetros (radio de 320 m y un mínimo de
+8.000 vecinos) están justificados en el notebook 06, con una tabla de sensibilidad.
+
+**¿Usaron PCA?**
+Sí, para entender las variables, no como entrada de los modelos. Cuatro componentes (criterio de Kaiser) resumen el
+79 % de la información de las 14: el primero es la intensidad urbana (comercio, oficinas, vecinos), el
+segundo la lejanía del centro y del subte, el tercero el nivel socioeconómico y el cuarto, casi solo las estaciones de tren.
+Con esos componentes, K-Means arma los mismos tipos de zona (ARI 0,99). No lo metimos en los modelos
+porque son pocas variables, los árboles no lo necesitan y perderíamos la explicación por variable (SHAP).
+
+**¿Escalaron las variables? ¿Hubo fuga de datos?**
+Escalamos con StandardScaler (y logaritmo en los conteos) solo para los modelos que lo necesitan: la regresión de Poisson,
+la logística, K-Means y PCA. En los modelos supervisados el escalado es un paso del pipeline, así que en cada partición se
+ajusta solo con el entrenamiento: la parte que mide nunca participa. Los árboles, Random Forest y XGBoost no se escalan.
+
+**¿Por qué no usaron validación cruzada estratificada?**
+La usamos como control (notebook 06). La validación principal separa por comuna, que es lo más importante con datos
+espaciales, pero no controla cuántas zonas con cajero caen en cada partición (de 14 % a
+35 %). Con StratifiedGroupKFold, que separa por comuna y además equilibra las clases (de
+17 % a 24 %), el clasificador elegido y su AUC no cambian
+(0,83).
 
 **¿Por qué medir caminando y no en línea recta?**
 Porque nadie camina en línea recta: hay manzanas, vías del tren, parques y autopistas. Bajamos la red peatonal de

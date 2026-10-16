@@ -32,6 +32,20 @@ fila_pron = (f"\n| Pronóstico del subte ({PR['modelo_elegido']}, validado en me
 texto_pron = (" Un segundo modelo pronostica cuánta gente va a entrar al subte cada día de los próximos seis meses, para "
               "planificar la carga de efectivo y el mantenimiento." if PR else "")
 
+_RT = RAIZ / "data/processed/tecnicas_resumen.json"
+RT = json.loads(_RT.read_text(encoding="utf-8")) if _RT.exists() else None
+fila_tec = (f"\n| Ubicar los 20 cajeros con K-Means (clase 11) en vez del óptimo | {n(RT['kmeans_20'])} vecinos, el "
+            f"{n(RT['kmeans_pct_optimo_20'])} % del óptimo exacto |\n| Bolsones de vecinos sin un Link cerca (DBSCAN) | "
+            f"**{RT['bolsones']}**, con el {n(RT['pct_en_bolsones'])} % de esa gente |" if RT else "")
+NOTEBOOKS = [("00_descarga_datos", "baja todas las fuentes"), ("00b_red_peatonal", "baja la red de calles"),
+             ("00c_serie_diaria_subte", "baja la serie diaria del subte"), ("01_calidad_y_eda", "calidad de datos y EDA"),
+             ("02_machine_learning", "regresión y clasificación: árboles, Random Forest, XGBoost, SHAP"),
+             ("03_optimizacion", "tipos de zona (K-Means) y dónde sumar cajeros"),
+             ("04_demanda_por_hora", "perfiles horarios del subte"), ("05_pronostico_subte", "pronóstico diario de pasajeros"),
+             ("06_tecnicas_avanzadas", "clase 11: validación estratificada, PCA, K-Means como ubicador y DBSCAN")]
+tabla_colab = "\n".join(f"| [`{nb}`](notebooks/{nb}.ipynb) | {desc} | [![Abrir en Colab](https://colab.research.google.com/assets/"
+                        f"colab-badge.svg)]({COLAB}/{nb}.ipynb) |" for nb, desc in NOTEBOOKS)
+
 fila_igualar = (f"\n| Cajeros nuevos para igualar la cobertura de Banelco | **{R['cajeros_para_igualar_banelco']}** |"
                 if R.get("cajeros_para_igualar_banelco") else "")
 
@@ -53,7 +67,7 @@ Cruzamos dónde vive y circula la gente con dónde están los cajeros automátic
 | Terminales Link que faltan según su demanda (machine learning) | {faltan_txt} |
 | Zonas sin ningún cajero que deberían tener uno (clasificador) | **{n(R["zonas_sin_cajero_que_deberian"])}**, con {n(R["residentes_zonas_sin_cajero_que_deberian"])} vecinos |
 | Modelo de regresión elegido (validación espacial anidada) | {R["modelo_elegido"]}: D² = {n(R["d2_espacial_promedio"], 2)}, error medio de {n(R["mae_espacial"], 1)} terminales por zona |
-| Clasificador elegido | {R["clasificador_elegido"]}: AUC = {n(R["auc_clasificador"], 2)} |{fila_pron}
+| Clasificador elegido | {R["clasificador_elegido"]}: AUC = {n(R["auc_clasificador"], 2)} |{fila_pron}{fila_tec}
 
 Los cajeros **siguen al comercio, no a los vecinos**. Un modelo de machine learning (árboles, Random Forest y XGBoost,
 validados en comunas que no vieron) estima cuántos cajeros le corresponden a cada zona según su demanda. Hay dos
@@ -160,7 +174,9 @@ preguntas probables.
    - **prescriptivo:** K-Means para los tipos de zona y de estación, y cobertura máxima resuelta de forma exacta
      (programación lineal entera con HiGHS) y con un algoritmo goloso;
    - **pronóstico:** Random Forest y XGBoost sobre el calendario para la demanda diaria del subte, validados hacia
-     adelante en meses que no vieron (notebook 05).
+     adelante en meses que no vieron (notebook 05);
+   - **técnicas de la clase 11** (notebook 06): validación cruzada estratificada por grupos, PCA de las variables de
+     demanda, K-Means como ubicador de cajeros frente al óptimo exacto y DBSCAN para encontrar bolsones de vecinos sin Link.
 4. **Evaluación:** métricas en comunas no vistas (D² de Poisson, MAE, AUC), MAPE del pronóstico en meses no vistos y
    validación temporal con los cajeros que aparecieron en OpenStreetMap después de 2017.
 5. **Despliegue:** app de Streamlit con mapas de deck.gl, que funciona sin conexión.
@@ -185,9 +201,10 @@ preguntas probables.
 │   ├── 02_machine_learning.ipynb   # regresión y clasificación: árboles, Random Forest, XGBoost, SHAP
 │   ├── 03_optimizacion.ipynb       # tipos de zona (K-Means) y dónde sumar cajeros
 │   ├── 04_demanda_por_hora.ipynb   # perfiles horarios del subte
-│   └── 05_pronostico_subte.ipynb   # pronóstico diario de pasajeros
+│   ├── 05_pronostico_subte.ipynb   # pronóstico diario de pasajeros
+│   └── 06_tecnicas_avanzadas.ipynb # clase 11: validación estratificada, PCA, K-Means y DBSCAN
 ├── src/
-│   ├── descarga.py  features.py  modelos.py  ml.py  pronostico.py  red.py  horario.py  pipeline.py
+│   ├── descarga.py  features.py  modelos.py  ml.py  pronostico.py  tecnicas.py  red.py  horario.py  pipeline.py
 └── requirements.txt
 ```
 
@@ -197,14 +214,20 @@ preguntas probables.
 pip install -r requirements.txt
 python -m src.pipeline                      # variables, modelos y resultados (≈6 minutos)
 python -m src.pronostico                    # pronóstico del subte (segundos)
+python -m src.tecnicas                      # técnicas de la clase 11 (un par de minutos)
 for f in notebooks/_construir/nb0*.py; do python "$f"; done   # regenera los notebooks (textos con los números nuevos)
 python docs/_construir/informe.py && python docs/_construir/readme.py
 ```
 
-Para volver a bajar las fuentes: [00 · Descarga]({COLAB}/00_descarga_datos.ipynb), [00b · Red peatonal]({COLAB}/00b_red_peatonal.ipynb)
-y [00c · Serie diaria del subte]({COLAB}/00c_serie_diaria_subte.ipynb) en Colab (*Entorno de ejecución → Ejecutar todo*).
-La serie diaria del subte ya está en `data/base/`, así que el pronóstico ([05]({COLAB}/05_pronostico_subte.ipynb)) corre
-directo, también en Colab.
+## Notebooks (todos abren en Colab)
+
+Cada notebook se puede abrir en Google Colab sin instalar nada: la primera celda clona el repositorio e instala lo que falta.
+Los datos ya están en el repo, así que alcanza con *Entorno de ejecución → Ejecutar todo*. Los 00 vuelven a bajar las
+fuentes de internet; los demás usan las que ya están en `data/`.
+
+| Notebook | Qué hace | Colab |
+|---|---|---|
+{tabla_colab}
 
 ## Fuentes y licencias
 

@@ -1,0 +1,11 @@
+validación,partición,zonas,con cajero (%)
+Por comuna (GroupKFold),1,553,14.285714285714285
+Por comuna (GroupKFold),2,561,22.816399286987522
+Por comuna (GroupKFold),3,515,19.223300970873787
+Por comuna (GroupKFold),4,523,34.990439770554495
+Por comuna (GroupKFold),5,588,17.687074829931973
+Por comuna y estratificada (StratifiedGroupKFold),1,737,24.151967435549526
+Por comuna y estratificada (StratifiedGroupKFold),2,510,19.80392156862745
+Por comuna y estratificada (StratifiedGroupKFold),3,474,16.877637130801688
+Por comuna y estratificada (StratifiedGroupKFold),4,487,24.435318275154007
+Por comuna y estratificada (StratifiedGroupKFold),5,532,21.616541353383457

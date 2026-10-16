@@ -9,6 +9,8 @@ SALIDA = Path(__file__).resolve().parents[1] / "00c_serie_diaria_subte.ipynb"
 cells = [
     md("""# 00c · Serie diaria del subte (para el pronóstico)
 
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00c_serie_diaria_subte.ipynb)
+
 Baja de BA Data los **molinetes del subte de 2022 a 2026** (pasajeros cada 15 minutos por molinete) y los resume a
 **pasajeros por día y estación** y **por día y hora en toda la red**. Con esa serie se entrena el pronóstico del
 notebook 05.

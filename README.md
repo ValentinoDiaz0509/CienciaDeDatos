@@ -20,6 +20,8 @@ Cruzamos dónde vive y circula la gente con dónde están los cajeros automátic
 | Modelo de regresión elegido (validación espacial anidada) | Ensamble (Poisson + XGBoost): D² = 0,57, error medio de 4,2 terminales por zona |
 | Clasificador elegido | Random Forest: AUC = 0,84 |
 | Pronóstico del subte (Random Forest, validado en meses que no vio) | erra un 8,0 % por día (repetir el año anterior: 22,2 %); 765 mil entradas por día hábil en septiembre de 2026 y 522 mil en enero de 2027 |
+| Ubicar los 20 cajeros con K-Means (clase 11) en vez del óptimo | 137.506 vecinos, el 52 % del óptimo exacto |
+| Bolsones de vecinos sin un Link cerca (DBSCAN) | **32**, con el 56 % de esa gente |
 
 Los cajeros **siguen al comercio, no a los vecinos**. Un modelo de machine learning (árboles, Random Forest y XGBoost,
 validados en comunas que no vieron) estima cuántos cajeros le corresponden a cada zona según su demanda. Hay dos
@@ -126,7 +128,9 @@ preguntas probables.
    - **prescriptivo:** K-Means para los tipos de zona y de estación, y cobertura máxima resuelta de forma exacta
      (programación lineal entera con HiGHS) y con un algoritmo goloso;
    - **pronóstico:** Random Forest y XGBoost sobre el calendario para la demanda diaria del subte, validados hacia
-     adelante en meses que no vieron (notebook 05).
+     adelante en meses que no vieron (notebook 05);
+   - **técnicas de la clase 11** (notebook 06): validación cruzada estratificada por grupos, PCA de las variables de
+     demanda, K-Means como ubicador de cajeros frente al óptimo exacto y DBSCAN para encontrar bolsones de vecinos sin Link.
 4. **Evaluación:** métricas en comunas no vistas (D² de Poisson, MAE, AUC), MAPE del pronóstico en meses no vistos y
    validación temporal con los cajeros que aparecieron en OpenStreetMap después de 2017.
 5. **Despliegue:** app de Streamlit con mapas de deck.gl, que funciona sin conexión.
@@ -151,9 +155,10 @@ preguntas probables.
 │   ├── 02_machine_learning.ipynb   # regresión y clasificación: árboles, Random Forest, XGBoost, SHAP
 │   ├── 03_optimizacion.ipynb       # tipos de zona (K-Means) y dónde sumar cajeros
 │   ├── 04_demanda_por_hora.ipynb   # perfiles horarios del subte
-│   └── 05_pronostico_subte.ipynb   # pronóstico diario de pasajeros
+│   ├── 05_pronostico_subte.ipynb   # pronóstico diario de pasajeros
+│   └── 06_tecnicas_avanzadas.ipynb # clase 11: validación estratificada, PCA, K-Means y DBSCAN
 ├── src/
-│   ├── descarga.py  features.py  modelos.py  ml.py  pronostico.py  red.py  horario.py  pipeline.py
+│   ├── descarga.py  features.py  modelos.py  ml.py  pronostico.py  tecnicas.py  red.py  horario.py  pipeline.py
 └── requirements.txt
 ```
 
@@ -163,14 +168,28 @@ preguntas probables.
 pip install -r requirements.txt
 python -m src.pipeline                      # variables, modelos y resultados (≈6 minutos)
 python -m src.pronostico                    # pronóstico del subte (segundos)
+python -m src.tecnicas                      # técnicas de la clase 11 (un par de minutos)
 for f in notebooks/_construir/nb0*.py; do python "$f"; done   # regenera los notebooks (textos con los números nuevos)
 python docs/_construir/informe.py && python docs/_construir/readme.py
 ```
 
-Para volver a bajar las fuentes: [00 · Descarga](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00_descarga_datos.ipynb), [00b · Red peatonal](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00b_red_peatonal.ipynb)
-y [00c · Serie diaria del subte](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00c_serie_diaria_subte.ipynb) en Colab (*Entorno de ejecución → Ejecutar todo*).
-La serie diaria del subte ya está en `data/base/`, así que el pronóstico ([05](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/05_pronostico_subte.ipynb)) corre
-directo, también en Colab.
+## Notebooks (todos abren en Colab)
+
+Cada notebook se puede abrir en Google Colab sin instalar nada: la primera celda clona el repositorio e instala lo que falta.
+Los datos ya están en el repo, así que alcanza con *Entorno de ejecución → Ejecutar todo*. Los 00 vuelven a bajar las
+fuentes de internet; los demás usan las que ya están en `data/`.
+
+| Notebook | Qué hace | Colab |
+|---|---|---|
+| [`00_descarga_datos`](notebooks/00_descarga_datos.ipynb) | baja todas las fuentes | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00_descarga_datos.ipynb) |
+| [`00b_red_peatonal`](notebooks/00b_red_peatonal.ipynb) | baja la red de calles | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00b_red_peatonal.ipynb) |
+| [`00c_serie_diaria_subte`](notebooks/00c_serie_diaria_subte.ipynb) | baja la serie diaria del subte | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00c_serie_diaria_subte.ipynb) |
+| [`01_calidad_y_eda`](notebooks/01_calidad_y_eda.ipynb) | calidad de datos y EDA | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/01_calidad_y_eda.ipynb) |
+| [`02_machine_learning`](notebooks/02_machine_learning.ipynb) | regresión y clasificación: árboles, Random Forest, XGBoost, SHAP | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/02_machine_learning.ipynb) |
+| [`03_optimizacion`](notebooks/03_optimizacion.ipynb) | tipos de zona (K-Means) y dónde sumar cajeros | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/03_optimizacion.ipynb) |
+| [`04_demanda_por_hora`](notebooks/04_demanda_por_hora.ipynb) | perfiles horarios del subte | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/04_demanda_por_hora.ipynb) |
+| [`05_pronostico_subte`](notebooks/05_pronostico_subte.ipynb) | pronóstico diario de pasajeros | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/05_pronostico_subte.ipynb) |
+| [`06_tecnicas_avanzadas`](notebooks/06_tecnicas_avanzadas.ipynb) | clase 11: validación estratificada, PCA, K-Means como ubicador y DBSCAN | [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/06_tecnicas_avanzadas.ipynb) |
 
 ## Fuentes y licencias
 

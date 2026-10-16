@@ -21,6 +21,8 @@ def texto(clave, defecto=""):
 cells = [
     md("""# 03 · Segmentación y optimización: dónde conviene sumar cajeros
 
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/03_optimizacion.ipynb)
+
 **TPO Ciencia de Datos · ¿Dónde faltan cajeros Link en CABA?**
 
 Es el nivel **prescriptivo** (clase 2): ¿qué conviene hacer? Usamos dos técnicas:
@@ -39,7 +41,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-RAIZ = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
+if "google.colab" in sys.modules:   # en Colab: clona el repositorio e instala lo que falta
+    import subprocess
+    RAIZ = Path("/content/CienciaDeDatos")
+    if not RAIZ.exists():
+        subprocess.run(["git", "clone", "-q", "--depth", "1",
+                        "https://github.com/ValentinoDiaz0509/CienciaDeDatos.git", str(RAIZ)], check=True)
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "h3", "xgboost"], check=True)
+else:
+    RAIZ = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
 sys.path.insert(0, str(RAIZ))
 from src import estilo as e, features as f, modelos as m, red as rp
 

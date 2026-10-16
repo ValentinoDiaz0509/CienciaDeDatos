@@ -276,7 +276,15 @@ def resolver_exacto(tabla: pd.DataFrame, n_nuevos: int, conj: dict, w: np.ndarra
     if sol.x is None:
         raise RuntimeError(f"HiGHS no encontró solución: {sol.message}")
     elegidos_j = [usados[k] for k in np.flatnonzero(sol.x[:nJ] > 0.5)]
-    # ordenar por ganancia marginal (como si se instalaran de a uno)
+    res = _ordenar_sitios(tabla, elegidos_j, conj, w)
+    cota = -getattr(sol, "mip_dual_bound", np.nan) if getattr(sol, "mip_dual_bound", None) is not None else np.nan
+    res.attrs.update(objetivo=float(-sol.fun), estado=sol.message,
+                     gap=float(getattr(sol, "mip_gap", np.nan) or 0.0), cota=cota)
+    return res
+
+
+def _ordenar_sitios(tabla: pd.DataFrame, elegidos_j: list[int], conj: dict, w: np.ndarray) -> pd.DataFrame:
+    """Ordena los sitios elegidos por ganancia marginal, como si se instalaran de a uno."""
     cubierto = conj["cubierto"].copy()
     restantes, filas = list(elegidos_j), []
     while restantes:
@@ -287,10 +295,34 @@ def resolver_exacto(tabla: pd.DataFrame, n_nuevos: int, conj: dict, w: np.ndarra
         cubierto[nuevos] = True
         filas.append(_fila_sitio(tabla, conj["candidatos"][jj], len(filas) + 1, gan[k], nuevos))
     res = pd.DataFrame(filas)
-    res["personas_acumuladas"] = res["personas_nuevas"].cumsum()
-    cota = -getattr(sol, "mip_dual_bound", np.nan) if getattr(sol, "mip_dual_bound", None) is not None else np.nan
-    res.attrs.update(cubierto_final=cubierto, objetivo=float(-sol.fun), estado=sol.message,
-                     gap=float(getattr(sol, "mip_gap", np.nan) or 0.0), cota=cota)
+    if not res.empty:
+        res["personas_acumuladas"] = res["personas_nuevas"].cumsum()
+    res.attrs.update(cubierto_final=cubierto, objetivo=float(res["personas_nuevas"].sum()) if not res.empty else 0.0)
+    return res
+
+
+def resolver_kmeans(tabla: pd.DataFrame, n_nuevos: int, conj: dict, w: np.ndarray, semilla: int = SEMILLA) -> pd.DataFrame:
+    """
+    K-Means ponderado, como se propuso en la clase 11 para ubicar cajeros: agrupa a las personas que hoy no tienen un
+    Link cerca en n grupos (cada hexágono pesa según su gente) y pone un cajero en el sitio candidato más cercano al
+    centro de cada grupo. K-Means minimiza la distancia al cuadrado de esas personas al centro de su grupo: no busca que
+    la mayor cantidad quede a la distancia máxima. Sirve para comparar con el óptimo.
+    """
+    xy = _xy(tabla)
+    pendiente = (~conj["cubierto"]) & (w > 0)
+    n = min(n_nuevos, int(pendiente.sum()))
+    if n == 0:
+        return pd.DataFrame()
+    km = KMeans(n_clusters=n, n_init=10, random_state=semilla).fit(xy[pendiente], sample_weight=w[pendiente])
+    vecinos = min(10, len(conj["candidatos"]))
+    _, idx = cKDTree(xy[conj["candidatos"]]).query(km.cluster_centers_, k=vecinos)
+    elegidos = []
+    for fila in np.atleast_2d(idx):   # el sitio candidato más cercano a cada centro, sin repetir
+        jj = next((int(j) for j in fila if int(j) not in elegidos), None)
+        if jj is not None:
+            elegidos.append(jj)
+    res = _ordenar_sitios(tabla, elegidos, conj, w)
+    res.attrs.update(centros=km.cluster_centers_)
     return res
 
 

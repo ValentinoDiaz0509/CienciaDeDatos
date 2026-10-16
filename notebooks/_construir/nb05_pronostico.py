@@ -39,6 +39,8 @@ else:
 cells = [
     md("""# 05 · Pronóstico: ¿cuánta gente va a pasar por el subte en los próximos meses?
 
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/05_pronostico_subte.ipynb)
+
 **TPO Ciencia de Datos · ¿Dónde faltan cajeros Link en CABA?**
 
 El notebook 02 predice **dónde**: cuántos cajeros le corresponden a cada zona. Este predice **cuándo**: cuánta gente va a

@@ -23,6 +23,8 @@ notebooks, la app y la presentación.
     resumen.json                                  números clave
 
 El pronóstico del subte (pronostico_*.csv) se calcula aparte, con python -m src.pronostico, cuando está la serie diaria.
+Las técnicas de la clase 11 (tecnicas_*.csv: validación estratificada, PCA, K-Means como ubicador y DBSCAN) se calculan
+después del pipeline, con python -m src.tecnicas.
 
 Uso:
     python -m src.pipeline

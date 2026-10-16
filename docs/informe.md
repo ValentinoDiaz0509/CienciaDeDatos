@@ -301,6 +301,62 @@ Entre las 7 y las 10 de un día hábil entra el 23 % de la gente del día. Los
 molinetes cuentan entradas al subte, no extracciones: son un indicador del flujo de gente cerca de las estaciones, no de la
 demanda de efectivo.
 
+### 4.8 Técnicas de la clase 11 (`notebooks/06_tecnicas_avanzadas.ipynb`)
+La clase 11 (técnicas avanzadas de minería de datos) repasó la preparación de variables y el escalado, la validación cruzada
+estratificada y tres técnicas no supervisadas. Las aplicamos donde responden una pregunta del negocio.
+
+**Escalado sin fuga de datos.** El logaritmo de los conteos y el `StandardScaler` son pasos del pipeline de la regresión de
+Poisson y de la logística, así que en cada partición se ajustan solo con los datos de entrenamiento. Los árboles, Random
+Forest y XGBoost no se escalan: no lo necesitan.
+
+**Validación cruzada estratificada por grupos.** GroupKFold deja comunas enteras afuera, pero no controla la proporción de
+zonas con cajero: en las particiones de prueba va de 14 % a 35 %.
+Con `StratifiedGroupKFold` (también anidada) va de 17 % a 24 %, y
+el resultado no cambia: Random Forest sigue siendo el mejor clasificador.
+
+| Clasificador | AUC por comuna | AUC por comuna y estratificada |
+|---|---|---|
+| Regresión logística | 0,827 | 0,826 |
+| Árbol de decisión | 0,795 | 0,795 |
+| Random Forest | 0,830 | 0,828 |
+| XGBoost | 0,830 | 0,824 |
+
+**PCA.** Sobre las 14 variables de demanda (conteos en logaritmo, todo estandarizado), dos componentes guardan el
+57 % de la varianza y cuatro, el 79 %; el criterio de Kaiser también se queda con
+4. El primero es la intensidad urbana (comercio, oficinas, vecinos), el segundo la lejanía del centro y del
+subte, el tercero el nivel socioeconómico y el cuarto, casi solo las estaciones de tren. Repetido sobre cuatro componentes,
+el K-Means de tipos de zona da casi la misma agrupación (índice de Rand ajustado 0,99). No lo usamos
+como entrada de los modelos: son pocas variables, los árboles no lo necesitan y se perdería la explicación por variable (SHAP).
+
+**K-Means como ubicador de cajeros.** En la clase se propuso usar K-Means para ubicar cajeros: cada centro de grupo es un
+cajero. Lo aplicamos a la gente sin un Link a 500 m (cada hexágono pesa por sus vecinos) y llevamos cada centro al sitio con
+comercio más cercano. Frente al óptimo exacto:
+
+| Cajeros | Óptimo exacto (vecinos) | K-Means (vecinos) | K-Means / óptimo | Distancia media, óptimo (m) | Distancia media, K-Means (m) |
+|---|---|---|---|---|---|
+| 5 | 80.292 | 21.718 | 27 % | 785 | 809 |
+| 10 | 144.616 | 38.536 | 27 % | 750 | 801 |
+| 20 | 265.929 | 137.506 | 52 % | 707 | 734 |
+| 30 | 369.671 | 186.104 | 50 % | 671 | 700 |
+| 50 | 544.973 | 322.170 | 59 % | 614 | 642 |
+
+K-Means minimiza la distancia de cada persona al centro de su grupo, pero no sabe dónde están los cajeros actuales ni que la
+meta es quedar a 500 m: suma la mitad de vecinos y tampoco gana en distancia media (hoy 818 m para la gente
+sin Link). Con 20 cajeros, solo 2 sitios coinciden.
+
+**DBSCAN.** Sobre los hexágonos con vecinos sin un Link a distancia caminable, pesados por su gente (radio de 320 m, mínimo
+de 8.000 vecinos), encuentra **32 bolsones** densos que juntan el 56 % de
+esa gente; el resto vive disperso. Los 20 cajeros óptimos caen en 12 bolsones, así que los otros
+20 son la lista para una segunda tanda.
+
+| Bolsón | Barrios | Vecinos sin Link | Le toca un cajero óptimo |
+|---|---|---|---|
+| 1 | Belgrano, Núñez y Palermo | 60.569 | sí |
+| 2 | Belgrano, Coghlan y Núñez | 59.377 | sí |
+| 3 | Villa Urquiza y Coghlan | 55.617 | sí |
+| 4 | Flores, Villa General Mitre y Villa Santa Rita | 51.217 | sí |
+| 5 | Balvanera y San Cristóbal | 48.873 | sí |
+
 ## 5. Evaluación
 
 - **Generalización (regresión):** D² espacial = 0,57 ± 0,14 entre grupos de
@@ -313,6 +369,7 @@ demanda de efectivo.
   del clasificador, 0,58, contra 0,51 de usar solo la
   población. Es una evidencia a favor, pero modesta, por la cantidad de casos.
 - **Pronóstico (validación hacia adelante):** MAPE de 8,0 % por día con Random Forest, contra 22,2 % de repetir el año anterior; en el último período (mayo a agosto de 2026), 6,8 % y sobreestima el total en 4,4 %.
+- **Robustez (clase 11):** con validación estratificada por grupos el clasificador elegido no cambia (AUC 0,83); los tipos de zona se mantienen sobre componentes principales (ARI 0,99); ubicar los cajeros con K-Means suma el 52 % de los vecinos del óptimo exacto.
 - **Robustez:** sumar a los pasajeros de la hora pico de la mañana no cambia ninguno de los 20 sitios óptimos. El goloso queda a menos del 1,2 % del óptimo exacto, y medir
   con otra regla de conexión a la red cambia la cobertura en poco más de un punto.
 
@@ -334,7 +391,8 @@ App en Streamlit con mapas de deck.gl (`streamlit run app/app.py`). Funciona sin
 - mapa 3D de la brecha;
 - predicción por zona: para cada barrio, cuántas terminales tiene y cuántas le corresponden, el porqué de cada zona (SHAP)
   y las oportunidades del clasificador;
-- simulador de N cajeros (exacto o goloso, distancia caminando o en línea recta, con o sin pasajeros por franja horaria);
+- simulador de N cajeros (exacto, goloso o K-Means, distancia caminando o en línea recta, con o sin pasajeros por franja
+  horaria);
 - demanda por hora y pronóstico de entradas al subte para los próximos seis meses;
 - tipos de zona;
 - carga del listado propio de cajeros, que recalcula cobertura y ubicaciones.
@@ -365,12 +423,17 @@ problema, eligió las fuentes y los métodos, y revisó el código y los resulta
 - Chapman, P. et al. (2000). *CRISP-DM 1.0: Step-by-step data mining guide*.
 - Church, R. y ReVelle, C. (1974). The maximal covering location problem. *Papers of the Regional Science Association*, 32, 101-118.
 - Dijkstra, E. W. (1959). A note on two problems in connexion with graphs. *Numerische Mathematik*, 1, 269-271.
+- Ester, M., Kriegel, H.-P., Sander, J. y Xu, X. (1996). A density-based algorithm for discovering clusters in large spatial databases with noise. *Proceedings of KDD-96*, 226-231.
 - Fayyad, U., Piatetsky-Shapiro, G. y Smyth, P. (1996). From data mining to knowledge discovery in databases. *AI Magazine*, 17(3).
 - Friedman, J. (2001). Greedy function approximation: a gradient boosting machine. *Annals of Statistics*, 29(5).
+- Hubert, L. y Arabie, P. (1985). Comparing partitions. *Journal of Classification*, 2, 193-218.
 - Huangfu, Q. y Hall, J. (2018). Parallelizing the dual revised simplex method. *Mathematical Programming Computation*, 10, 119-142.
 - Hyndman, R. y Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3.ª ed.). OTexts.
 - INDEC (2024). *Censo Nacional de Población, Hogares y Viviendas 2022*, base por radio censal.
+- Jolliffe, I. y Cadima, J. (2016). Principal component analysis: a review and recent developments. *Philosophical Transactions of the Royal Society A*, 374(2065), 20150202.
+- Kaiser, H. (1960). The application of electronic computers to factor analysis. *Educational and Psychological Measurement*, 20(1), 141-151.
 - Koenker, R. y Bassett, G. (1978). Regression quantiles. *Econometrica*, 46(1), 33-50.
+- Lloyd, S. (1982). Least squares quantization in PCM. *IEEE Transactions on Information Theory*, 28(2), 129-137.
 - Lundberg, S. y Lee, S.-I. (2017). A unified approach to interpreting model predictions. *NeurIPS 2017*.
 - Lundberg, S. et al. (2020). From local explanations to global understanding with explainable AI for trees. *Nature Machine Intelligence*, 2, 56-67.
 - McCullagh, P. y Nelder, J. (1989). *Generalized Linear Models* (2.ª ed.). Chapman & Hall.

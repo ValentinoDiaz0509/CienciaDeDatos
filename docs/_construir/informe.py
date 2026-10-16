@@ -180,6 +180,74 @@ demanda de efectivo.
 """
     pron_seccion = pron_seccion.replace("{tabla_pron}", tabla_pron).replace("{tabla_mens}", tabla_mens)
 
+# Técnicas de la clase 11 (notebook 06)
+_RT = P / "tecnicas_resumen.json"
+RT = json.loads(_RT.read_text(encoding="utf-8")) if _RT.exists() else None
+tec_seccion = tec_eval = ""
+if RT:
+    est_t = pd.read_csv(P / "tecnicas_estratificada.csv")
+    km_t = pd.read_csv(P / "tecnicas_kmeans_vs_optimo.csv")
+    bol_t = pd.read_csv(P / "tecnicas_bolsones.csv")
+    tabla_est = "\n".join(f"| {r['modelo']} | {n(r['AUC por comuna'], 3)} | {n(r['AUC estratificada'], 3)} |" for _, r in est_t.iterrows())
+    tabla_km = "\n".join(
+        f"| {int(r['cajeros'])} | {n(r['óptimo exacto'])} | {n(r['K-Means'])} | {n(r['K-Means / óptimo (%)'])} % | "
+        f"{n(r['distancia media con el óptimo (m)'])} | {n(r['distancia media con K-Means (m)'])} |"
+        for _, r in km_t[km_t["cajeros"].isin([5, 10, 20, 30, 50])].iterrows())
+    tabla_bol = "\n".join(f"| {int(r['bolsón'])} | {r['barrios']} | {n(r['vecinos sin Link'])} | "
+                           f"{'sí' if r['le toca un cajero óptimo'] else 'no'} |" for _, r in bol_t.head(5).iterrows())
+    tec_seccion = f"""
+### 4.8 Técnicas de la clase 11 (`notebooks/06_tecnicas_avanzadas.ipynb`)
+La clase 11 (técnicas avanzadas de minería de datos) repasó la preparación de variables y el escalado, la validación cruzada
+estratificada y tres técnicas no supervisadas. Las aplicamos donde responden una pregunta del negocio.
+
+**Escalado sin fuga de datos.** El logaritmo de los conteos y el `StandardScaler` son pasos del pipeline de la regresión de
+Poisson y de la logística, así que en cada partición se ajustan solo con los datos de entrenamiento. Los árboles, Random
+Forest y XGBoost no se escalan: no lo necesitan.
+
+**Validación cruzada estratificada por grupos.** GroupKFold deja comunas enteras afuera, pero no controla la proporción de
+zonas con cajero: en las particiones de prueba va de {n(RT['tasa_por_comuna_min'])} % a {n(RT['tasa_por_comuna_max'])} %.
+Con `StratifiedGroupKFold` (también anidada) va de {n(RT['tasa_estratificada_min'])} % a {n(RT['tasa_estratificada_max'])} %, y
+el resultado no cambia: {RT['mejor_estratificada']} sigue siendo el mejor clasificador.
+
+| Clasificador | AUC por comuna | AUC por comuna y estratificada |
+|---|---|---|
+{{tabla_est}}
+
+**PCA.** Sobre las 14 variables de demanda (conteos en logaritmo, todo estandarizado), dos componentes guardan el
+{n(RT['pca_varianza_2'])} % de la varianza y cuatro, el {n(RT['pca_varianza_4'])} %; el criterio de Kaiser también se queda con
+{RT['pca_kaiser']}. El primero es la intensidad urbana (comercio, oficinas, vecinos), el segundo la lejanía del centro y del
+subte, el tercero el nivel socioeconómico y el cuarto, casi solo las estaciones de tren. Repetido sobre cuatro componentes,
+el K-Means de tipos de zona da casi la misma agrupación (índice de Rand ajustado {n(RT['ari_4_componentes'], 2)}). No lo usamos
+como entrada de los modelos: son pocas variables, los árboles no lo necesitan y se perdería la explicación por variable (SHAP).
+
+**K-Means como ubicador de cajeros.** En la clase se propuso usar K-Means para ubicar cajeros: cada centro de grupo es un
+cajero. Lo aplicamos a la gente sin un Link a 500 m (cada hexágono pesa por sus vecinos) y llevamos cada centro al sitio con
+comercio más cercano. Frente al óptimo exacto:
+
+| Cajeros | Óptimo exacto (vecinos) | K-Means (vecinos) | K-Means / óptimo | Distancia media, óptimo (m) | Distancia media, K-Means (m) |
+|---|---|---|---|---|---|
+{{tabla_km}}
+
+K-Means minimiza la distancia de cada persona al centro de su grupo, pero no sabe dónde están los cajeros actuales ni que la
+meta es quedar a 500 m: suma la mitad de vecinos y tampoco gana en distancia media (hoy {n(RT['dist_media_hoy'])} m para la gente
+sin Link). Con 20 cajeros, solo {RT['sitios_en_comun_20']} sitios coinciden.
+
+**DBSCAN.** Sobre los hexágonos con vecinos sin un Link a distancia caminable, pesados por su gente (radio de 320 m, mínimo
+de {n(RT['minimo_bolson'])} vecinos), encuentra **{RT['bolsones']} bolsones** densos que juntan el {n(RT['pct_en_bolsones'])} % de
+esa gente; el resto vive disperso. Los 20 cajeros óptimos caen en {RT['bolsones_con_cajero_optimo']} bolsones, así que los otros
+{RT['bolsones'] - RT['bolsones_con_cajero_optimo']} son la lista para una segunda tanda.
+
+| Bolsón | Barrios | Vecinos sin Link | Le toca un cajero óptimo |
+|---|---|---|---|
+{{tabla_bol}}
+"""
+    tec_seccion = (tec_seccion.replace("{tabla_est}", tabla_est).replace("{tabla_km}", tabla_km)
+                   .replace("{tabla_bol}", tabla_bol))
+    tec_eval = (f"- **Robustez (clase 11):** con validación estratificada por grupos el clasificador elegido no cambia (AUC "
+                f"{n(RT['auc_estratificada_rf'], 2)}); los tipos de zona se mantienen sobre componentes principales (ARI "
+                f"{n(RT['ari_4_componentes'], 2)}); ubicar los cajeros con K-Means suma el {n(RT['kmeans_pct_optimo_20'])} % de los "
+                "vecinos del óptimo exacto.\n")
+
 fig_red = ("\n![Ejemplo en San Cristóbal: el Link más cercano está a unos 400 m en línea recta y a más de 600 m caminando](figuras/ejemplo_caminando.png)\n" if cam and (RAIZ / "docs/figuras/ejemplo_caminando.png").exists() else "")
 
 texto = f"""# Informe técnico · ¿Dónde faltan cajeros Link en CABA?
@@ -388,7 +456,7 @@ Con los molinetes 2025 ({n(R['pax_subte_habil'])} entradas por día hábil), los
 **{R['hora_pico_tarde']}:00**. Un K-Means sobre la forma de la curva horaria de cada estación separa estaciones de **origen** (pico a la
 mañana, barrios) y de **destino** (pico a la tarde, centro). {R['estaciones'] - R['estaciones_sin_link']} de {R['estaciones']}
 estaciones ya tienen un Link a menos de 500 m; {robustez_txt}: el faltante grande está en los barrios, no en el transporte.
-{pron_seccion}
+{pron_seccion}{tec_seccion}
 ## 5. Evaluación
 
 - **Generalización (regresión):** D² espacial = {n(R['d2_espacial_promedio'], 2)} ± {n(R['d2_espacial_desvio'], 2)} entre grupos de
@@ -400,7 +468,7 @@ estaciones ya tienen un Link a menos de 500 m; {robustez_txt}: el faltante grand
   ciudad (p = {n(R['p_valor_cajeros_nuevos'], 3)}, Monte Carlo). El AUC de la brecha es {n(R['auc_validacion'], 2)} y el de la probabilidad
   del clasificador, {n(val.loc['Probabilidad de cajero (clasificador)', 'AUC'], 2)}, contra {n(val.loc['Solo residentes', 'AUC'], 2)} de usar solo la
   población. Es una evidencia a favor, pero modesta, por la cantidad de casos.
-{pron_eval}- **Robustez:** {robustez_txt}. El goloso queda a menos del {n(R['goloso_max_diferencia_pct'], 1)} % del óptimo exacto, y medir
+{pron_eval}{tec_eval}- **Robustez:** {robustez_txt}. El goloso queda a menos del {n(R['goloso_max_diferencia_pct'], 1)} % del óptimo exacto, y medir
   con otra regla de conexión a la red cambia la cobertura en poco más de un punto.
 
 **Limitaciones.**
@@ -421,7 +489,8 @@ App en Streamlit con mapas de deck.gl (`streamlit run app/app.py`). Funciona sin
 - mapa 3D de la brecha;
 - predicción por zona: para cada barrio, cuántas terminales tiene y cuántas le corresponden, el porqué de cada zona (SHAP)
   y las oportunidades del clasificador;
-- simulador de N cajeros (exacto o goloso, distancia caminando o en línea recta, con o sin pasajeros por franja horaria);
+- simulador de N cajeros (exacto, goloso o K-Means, distancia caminando o en línea recta, con o sin pasajeros por franja
+  horaria);
 - demanda por hora y pronóstico de entradas al subte para los próximos seis meses;
 - tipos de zona;
 - carga del listado propio de cajeros, que recalcula cobertura y ubicaciones.
@@ -452,12 +521,17 @@ problema, eligió las fuentes y los métodos, y revisó el código y los resulta
 - Chapman, P. et al. (2000). *CRISP-DM 1.0: Step-by-step data mining guide*.
 - Church, R. y ReVelle, C. (1974). The maximal covering location problem. *Papers of the Regional Science Association*, 32, 101-118.
 - Dijkstra, E. W. (1959). A note on two problems in connexion with graphs. *Numerische Mathematik*, 1, 269-271.
+- Ester, M., Kriegel, H.-P., Sander, J. y Xu, X. (1996). A density-based algorithm for discovering clusters in large spatial databases with noise. *Proceedings of KDD-96*, 226-231.
 - Fayyad, U., Piatetsky-Shapiro, G. y Smyth, P. (1996). From data mining to knowledge discovery in databases. *AI Magazine*, 17(3).
 - Friedman, J. (2001). Greedy function approximation: a gradient boosting machine. *Annals of Statistics*, 29(5).
+- Hubert, L. y Arabie, P. (1985). Comparing partitions. *Journal of Classification*, 2, 193-218.
 - Huangfu, Q. y Hall, J. (2018). Parallelizing the dual revised simplex method. *Mathematical Programming Computation*, 10, 119-142.
 - Hyndman, R. y Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3.ª ed.). OTexts.
 - INDEC (2024). *Censo Nacional de Población, Hogares y Viviendas 2022*, base por radio censal.
+- Jolliffe, I. y Cadima, J. (2016). Principal component analysis: a review and recent developments. *Philosophical Transactions of the Royal Society A*, 374(2065), 20150202.
+- Kaiser, H. (1960). The application of electronic computers to factor analysis. *Educational and Psychological Measurement*, 20(1), 141-151.
 - Koenker, R. y Bassett, G. (1978). Regression quantiles. *Econometrica*, 46(1), 33-50.
+- Lloyd, S. (1982). Least squares quantization in PCM. *IEEE Transactions on Information Theory*, 28(2), 129-137.
 - Lundberg, S. y Lee, S.-I. (2017). A unified approach to interpreting model predictions. *NeurIPS 2017*.
 - Lundberg, S. et al. (2020). From local explanations to global understanding with explainable AI for trees. *Nature Machine Intelligence*, 2, 56-67.
 - McCullagh, P. y Nelder, J. (1989). *Generalized Linear Models* (2.ª ed.). Chapman & Hall.

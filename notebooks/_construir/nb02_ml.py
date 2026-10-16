@@ -21,6 +21,8 @@ def texto(clave, defecto=""):
 cells = [
     md("""# 02 · Machine learning: ¿cuántos cajeros le corresponden a cada zona?
 
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/02_machine_learning.ipynb)
+
 **TPO Ciencia de Datos · ¿Dónde faltan cajeros Link en CABA?**
 
 En la clase 2 vimos cuatro niveles de análisis. Este notebook cubre el **predictivo** y el **diagnóstico** que lo explica:
@@ -49,7 +51,15 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import GroupKFold
 
-RAIZ = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
+if "google.colab" in sys.modules:   # en Colab: clona el repositorio e instala lo que falta
+    import subprocess
+    RAIZ = Path("/content/CienciaDeDatos")
+    if not RAIZ.exists():
+        subprocess.run(["git", "clone", "-q", "--depth", "1",
+                        "https://github.com/ValentinoDiaz0509/CienciaDeDatos.git", str(RAIZ)], check=True)
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "h3", "xgboost"], check=True)
+else:
+    RAIZ = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
 sys.path.insert(0, str(RAIZ))
 from src import estilo as e, features as f, graficos_ml as gm, ml, modelos as m
 

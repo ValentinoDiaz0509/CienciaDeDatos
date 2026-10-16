@@ -9,6 +9,8 @@ SALIDA = Path(__file__).resolve().parents[1] / "00b_red_peatonal.ipynb"
 cells = [
     md("""# 00b · Red peatonal de CABA (OpenStreetMap)
 
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00b_red_peatonal.ipynb)
+
 Baja las calles y senderos caminables de la Ciudad para medir distancias **caminando** en lugar de en línea recta.
 Usa [OSMnx](https://osmnx.readthedocs.io) (Boeing, 2017), que consulta OpenStreetMap.
 

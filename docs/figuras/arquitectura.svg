@@ -90,10 +90,10 @@
   <text x="978" y="278" class="texto">  a cada zona y oportunidades</text>
 
   <rect x="960" y="304" width="280" height="100" rx="12" class="modelo"/>
-  <text x="978" y="332" class="titulo">K-Means</text>
+  <text x="978" y="332" class="titulo">K-Means, DBSCAN y PCA</text>
   <text x="978" y="353" class="sub">no supervisado · silueta y codo</text>
-  <text x="978" y="376" class="texto">→ tipos de zona y estaciones</text>
-  <text x="978" y="395" class="texto">  de origen y destino</text>
+  <text x="978" y="376" class="texto">→ tipos de zona y estaciones;</text>
+  <text x="978" y="395" class="texto">  bolsones de vecinos sin Link</text>
 
   <rect x="960" y="418" width="280" height="100" rx="12" class="modelo"/>
   <text x="978" y="446" class="titulo">Cobertura máxima (MCLP)</text>

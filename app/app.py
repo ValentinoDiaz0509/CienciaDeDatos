@@ -480,8 +480,9 @@ elif pagina == "Simulador de expansión":
     radio = b.select_slider("Distancia máxima (m)", options=[300, 400, 500, 600, 700, 800], value=500)
     franja = c.selectbox("Pasajeros de subte a sumar", ["Ninguno (solo vecinos)", "Todo el día hábil",
                                                          "Hora pico mañana (6-10 h)", "Hora pico tarde (16-20 h)"])
-    solucion = d_.radio("Método", ["Óptimo exacto", "Goloso"], horizontal=True,
-                        help="Exacto: programación lineal entera (HiGHS). Goloso: agrega de a un sitio.")
+    solucion = d_.selectbox("Método", ["Óptimo exacto", "Goloso", "K-Means"],
+                            help="Exacto: programación lineal entera (HiGHS). Goloso: agrega de a un sitio. K-Means: agrupa "
+                                 "a la gente sin Link y pone un cajero en el centro de cada grupo (clase 11), para comparar.")
     col_pax = {"Todo el día hábil": "pax_subte_habil", "Hora pico mañana (6-10 h)": "pax_subte_manana",
                "Hora pico tarde (16-20 h)": "pax_subte_tarde"}.get(franja, "pax_subte_habil")
     peso = 0.0 if franja.startswith("Ninguno") else 1.0
@@ -489,8 +490,12 @@ elif pagina == "Simulador de expansión":
     conj = dict(CONJUNTOS[(CLAVE_METODO, radio)])
     conj["cubierto"] = res[COL_DIST].to_numpy() <= radio
     w = m.demanda(res, peso, col_pax)
-    recs = (m.resolver_exacto(res, n, conj, w, tiempo_max=30) if solucion == "Óptimo exacto"
-            else m.resolver_goloso(res, n, conj, w))
+    if solucion == "Óptimo exacto":
+        recs = m.resolver_exacto(res, n, conj, w, tiempo_max=30)
+    elif solucion == "Goloso":
+        recs = m.resolver_goloso(res, n, conj, w)
+    else:
+        recs = m.resolver_kmeans(res, n, conj, w)
     pob = res["poblacion"].sum()
     antes = res.loc[conj["cubierto"], "poblacion"].sum()
     gan = recs["residentes_nuevos"].sum() if not recs.empty else 0
@@ -501,6 +506,13 @@ elif pagina == "Simulador de expansión":
     k3.metric("Vecinos que ganan un Link cerca", fmt(gan))
     k4.metric("Extracciones por mes (estimadas)", fmt(len(recs) * BCRA_EXTRACCIONES_POR_ATM_MES),
               help=f"{fmt(BCRA_EXTRACCIONES_POR_ATM_MES)} extracciones por terminal por mes, promedio nacional. {BCRA_FUENTE}.")
+    if solucion == "K-Means":
+        ex = m.resolver_exacto(res, n, conj, w, tiempo_max=30)
+        gan_ex = ex["residentes_nuevos"].sum() if not ex.empty else 0
+        st.info(f"K-Means, como se vio en la clase 11, agrupa a la gente que no tiene un Link cerca y pone un cajero en el "
+                f"centro de cada grupo: minimiza la distancia a ese centro, no busca que la mayor cantidad de vecinos quede a "
+                f"{radio} m, y no sabe dónde están los cajeros que ya existen. Con {n} cajeros suma {fmt(gan)} vecinos; el "
+                f"óptimo exacto, {fmt(gan_ex)}" + (f" (K-Means llega al {fmt(100 * gan / gan_ex)} %)." if gan_ex else "."))
 
     d = res[res["poblacion"] > 0].copy()
     d["sin_link"] = np.where(d[COL_DIST] > radio, d["poblacion"], 0)
@@ -712,6 +724,17 @@ else:
     met = D["metricas"]
     esp = met[met["validación"].str.startswith("espacial")].set_index("modelo")
     ale = met[met["validación"] == "aleatoria"].set_index("modelo")
+    texto_tec = ""
+    if (PROC / "tecnicas_resumen.json").exists():
+        RT = json.loads((PROC / "tecnicas_resumen.json").read_text(encoding="utf-8"))
+        texto_tec = (
+            f"\n5. **Técnicas de la clase 11.** Con validación cruzada estratificada por grupos, el clasificador elegido no "
+            f"cambia (AUC {fmt(RT.get('auc_estratificada_rf', 0), 2)}). PCA: cuatro componentes resumen el "
+            f"{fmt(RT['pca_varianza_4'])} % de la información de las 14 variables y, con ellos, K-Means arma los mismos tipos de "
+            f"zona (ARI {fmt(RT['ari_4_componentes'], 2)}). K-Means como ubicador de cajeros llega al "
+            f"{fmt(RT['kmeans_pct_optimo_20'])} % de los vecinos que suma el óptimo exacto con 20 cajeros. DBSCAN encuentra "
+            f"{RT['bolsones']} bolsones de vecinos sin un Link cerca, donde vive el {fmt(RT['pct_en_bolsones'])} % de esa gente "
+            "(notebook 06).")
     texto_pron = ""
     if "pronostico" in D:
         RP = D["pronostico"]["resumen"]
@@ -751,7 +774,7 @@ cajeros 2026 y red peatonal) y BCRA (extracciones por cajero).
      (p = {fmt(resumen['p_valor_cajeros_nuevos'], 3)}).{texto_pron}
 4. **Prescriptivo.** K-Means ({resumen['k_clusters']} tipos de zona, silueta = {fmt(resumen['silueta'], 2)}) y **cobertura
    máxima**: programa lineal entero resuelto con HiGHS en menos de un segundo; el algoritmo goloso queda a menos del
-   {fmt(resumen['goloso_max_diferencia_pct'], 1)} % del óptimo.
+   {fmt(resumen['goloso_max_diferencia_pct'], 1)} % del óptimo.{texto_tec}
 
 **Distancias.** {texto_distancias}.
 """)
