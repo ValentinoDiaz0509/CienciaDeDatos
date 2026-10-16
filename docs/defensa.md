@@ -32,15 +32,15 @@ documento *Ciencia de Datos – Trabajo Práctico Obligatorio* (docente: Santiag
 | 1 | Dominio y problema | Red Link, el problema de la cobertura, la hipótesis y el valor | `docs/informe.md` §1, diapositivas 1-4 |
 | 2 | Arquitectura de la solución | Diagrama de la tubería: fuentes → descarga → variables por hexágono → modelos → app | `docs/informe.md` §3, `docs/figuras/arquitectura.svg`, diapositiva 6 |
 | 3 | Análisis exploratorio | Calidad de datos (DAMA) y los cinco tipos de EDA; qué hay, qué falta, qué llamó la atención | `notebooks/01_calidad_y_eda.ipynb`, diapositivas 7-8 |
-| 4 | Técnica de minería | **Machine learning:** regresión (7 modelos, de la línea de base a árboles, Random Forest, XGBoost y un ensamble) y clasificación (4 modelos) con validación cruzada espacial anidada, curva de sobreajuste, OOB, SHAP y Gini. **Prescriptivo:** K-Means de zonas y de estaciones, cobertura máxima exacta (MILP) y golosa. **Pronóstico** diario del subte. Por qué esos y no otros | `notebooks/02_machine_learning.ipynb`, `03_optimizacion.ipynb`, `04_demanda_por_hora.ipynb`, `05_pronostico_subte.ipynb`, diapositivas 9-20 |
-| 5 | Conclusión | Mapas, tres zonas de ejemplo y curva de cobertura que responden la hipótesis | `notebooks/02_machine_learning.ipynb` §9, diapositivas 21-23 |
-| 6 | Aplicación funcional | App con mapa 3D, predicción por zona (tiene / le corresponden / por qué), simulador de cajeros nuevos (exacto o goloso, caminando o en línea recta), demanda por hora y carga del listado propio | `app/app.py` |
+| 4 | Técnica de minería | **Machine learning:** regresión (7 modelos, de la línea de base a árboles, Random Forest, XGBoost y un ensamble) y clasificación (4 modelos) con validación cruzada espacial anidada, curva de sobreajuste, OOB, SHAP y Gini. **Prescriptivo:** K-Means de zonas y de estaciones, cobertura máxima exacta (MILP) y golosa. **Pronóstico** diario del subte (Random Forest y XGBoost sobre el calendario, validados hacia adelante). Por qué esos y no otros | `notebooks/02_machine_learning.ipynb`, `03_optimizacion.ipynb`, `04_demanda_por_hora.ipynb`, `05_pronostico_subte.ipynb`, diapositivas 9-21 |
+| 5 | Conclusión | Mapas, tres zonas de ejemplo y curva de cobertura que responden la hipótesis | `notebooks/02_machine_learning.ipynb` §9, diapositivas 23-24 |
+| 6 | Aplicación funcional | App con mapa 3D, predicción por zona (tiene / le corresponden / por qué), simulador de cajeros nuevos (exacto o goloso, caminando o en línea recta), demanda por hora, pronóstico del subte y carga del listado propio | `app/app.py`, diapositiva 22 |
 
 ### Condiciones para superar las expectativas mínimas
 
 | Aspecto | Qué hicimos |
 |---|---|
-| **Datos** · dominio propio y múltiples orígenes | Dominio cercano (Red Link) y seis fuentes cruzadas: GCBA, INDEC, SBASE y OpenStreetMap |
+| **Datos** · dominio propio y múltiples orígenes | Dominio cercano (Red Link) y seis fuentes cruzadas: GCBA, INDEC, SBASE y OpenStreetMap; encontramos y aislamos un error de fechas en los molinetes de 2025 |
 | **Técnicas** · combinar modelos y justificar qué aporta cada uno | Machine learning supervisado (árboles, Random Forest, XGBoost y un ensamble, en regresión y clasificación, con validación espacial anidada y explicación SHAP) + no supervisado (tipos de zona y de estación) + optimización exacta (dónde poner cajeros) + pronóstico en el tiempo, y una validación temporal con datos que el modelo no vio |
 | **Visualización** · librerías modernas y navegación novedosa | Mapa 3D de hexágonos H3 con deck.gl, columnas 3D de pasajeros por hora, simulador interactivo y carga de datos propios |
 
@@ -71,7 +71,7 @@ documento *Ciencia de Datos – Trabajo Práctico Obligatorio* (docente: Santiag
 | **Ingeniería de datos** | Fuentes, descarga y arquitectura | Fuentes y diagrama |
 | **Análisis exploratorio** | Calidad de datos y EDA | Hallazgos |
 | **Machine learning** | Variables, comparación de modelos, validación espacial anidada, sobreajuste y OOB, SHAP, clasificación | Modelos, métricas y las tres zonas |
-| **Segmentación y optimización** | K-Means, cobertura máxima (exacta y golosa), demanda por hora, validación temporal | Tipos de zona y dónde sumar cajeros |
+| **Segmentación y optimización** | K-Means, cobertura máxima (exacta y golosa), demanda por hora y pronóstico del subte, validación temporal | Tipos de zona, dónde sumar cajeros y cuánta gente va a pasar |
 | **Producto** | App y visualizaciones | Demo en vivo |
 
 - **Con 5 integrantes:** se unen *Machine learning* y *Segmentación y optimización*.
@@ -85,10 +85,10 @@ La consigna pide **primero la conclusión, después cómo llegamos**. El corte e
 |---|---|---|---|
 | 0:00 – 2:10 | Negocio | El problema, la hipótesis, **la respuesta** y los cuatro niveles de análisis | 1-4 |
 | 2:10 – 4:20 | Ingeniería de datos · Análisis exploratorio | Seis fuentes y por qué cada una, la tubería, la calidad (el listado es de ≈2017) y dónde vive la gente vs. dónde están los cajeros | 5-8 |
-| 4:20 – 9:20 | Machine learning | Cómo entrenamos y validamos, los 7 modelos y sus métricas, sobreajuste y OOB, qué aprendió (SHAP y Gini), dónde faltan terminales, **tres zonas, tres decisiones** y las 254 oportunidades del clasificador | 9-15 |
-| 9:20 – 11:40 | Segmentación y optimización | Tipos de zona, por qué medir caminando, cobertura Link vs. Banelco y curva de cajeros nuevos, demanda por hora (si sobra tiempo) y validación con OSM | 16-20 |
-| 11:40 – 13:10 | Producto | Demo: predicción por zona (Belgrano y Villa Urquiza) → simulador (20 a 35 cajeros, caminando/línea recta) → "Usá tus datos" si sobra tiempo | 21 |
-| 13:10 – 14:20 | Negocio | Valor en operaciones y efectivo, conclusión, próximos pasos y limitaciones | 22-23 |
+| 4:20 – 9:00 | Machine learning | Cómo entrenamos y validamos, los 7 modelos y sus métricas, sobreajuste y OOB, qué aprendió (SHAP y Gini), dónde faltan terminales, **tres zonas, tres decisiones** y las 254 oportunidades del clasificador | 9-15 |
+| 9:00 – 11:50 | Segmentación y optimización | Tipos de zona, por qué medir caminando, cobertura Link vs. Banelco y curva de cajeros nuevos, demanda por hora (15 segundos), **pronóstico del subte** y validación con OSM | 16-21 |
+| 11:50 – 13:20 | Producto | Demo: predicción por zona (Belgrano y Villa Urquiza) → simulador (20 a 35 cajeros, caminando/línea recta) → "Usá tus datos" si sobra tiempo | 22 |
+| 13:20 – 14:30 | Negocio | Valor en operaciones y efectivo, conclusión, próximos pasos y limitaciones | 23-24 |
 
 El anexo (A1-A5: coeficientes, hiperparámetros, curvas ROC, árbol y explicación SHAP) queda para las preguntas.
 
@@ -98,6 +98,11 @@ alta: "Con el censo, los usos del suelo y OpenStreetMap entrenamos un ensamble d
 en comunas que no vio (D² = 0,57, erra 4 terminales por zona). Con eso vimos que en Villa Urquiza, cerca de Juan Manuel de
 Rosas, viven 17 mil personas pero hay poco comercio y no pasa el subte: el flujo de gente es bajo y le corresponde un solo
 cajero Link."
+
+Y para el pronóstico: "Con la serie diaria de los molinetes entrenamos un Random Forest sobre el calendario, validado en meses que no
+vio (erra un 8 % por día, contra 22 % de repetir el año anterior). Con eso vimos que en enero entra un tercio
+menos de gente que en septiembre: es el momento para el mantenimiento, y los días previos a los picos, para reforzar la carga
+de efectivo."
 
 ## 4. Checklist del día de la entrega
 
@@ -214,6 +219,38 @@ Porque la gran mayoría de las estaciones de subte ya tiene un Link a menos de 5
 viaja ya pasa cerca de un cajero. Sumar a los pasajeros de la mañana no cambia ninguno de los 20 sitios. El faltante grande
 está en los barrios, y que el resultado casi no cambie al sumar pasajeros es una prueba de robustez.
 
+**¿Cómo pronosticaron cuánta gente va a pasar por el subte?**
+Con la serie diaria de los molinetes (de enero de 2025 a agosto de 2026) entrenamos Random Forest
+y XGBoost con 13 variables del calendario: día de la semana, feriados, puentes, vacaciones de invierno, época del año, entre
+otras. Se conocen de antemano, así que se puede pronosticar cualquier fecha futura (incluso el feriado del 9 de noviembre de 2026
+por la visita del Papa). Los comparamos contra una referencia ingenua: el mismo día de la semana del año anterior.
+
+**¿Cómo validaron el pronóstico? ¿Qué es el MAPE?**
+Hacia adelante, como se usaría en la realidad: entrenamos hasta diciembre de 2025 y medimos enero a abril de 2026; después,
+hasta abril y medimos mayo a agosto. Nunca usamos fechas futuras para entrenar. El MAPE es el error porcentual medio por día:
+Random Forest erra 8,0 %, XGBoost 8,2 % y la referencia 22,2 %. En el total de cada período de cuatro meses el error va de
+−5,3 % a +4,4 %: por eso cada mes se lee como un rango (la banda del 80 %).
+
+**¿Por qué no ARIMA o Prophet?**
+Con menos de dos años de datos y un patrón dominado por el calendario, un modelo de árboles sobre variables del calendario capta
+esos efectos de forma directa, incluidos los feriados que cambian de fecha cada año. ARIMA necesita una serie estacionaria y no
+maneja bien los feriados. Con más años, valdría la pena sumarlos como candidatos y elegir con la misma validación.
+
+**¿Qué encontraron en los datos del subte?**
+Un error en el archivo de 2025: una parte de los registros del 1 al 12 de agosto tiene la fecha como mes/día y, leída como
+día/mes, cae en el día 8 de otro mes. El 8 de cada mes tenía un tercio más de gente y del 1 al 12 de agosto faltaba lo mismo.
+La prueba: marzo de 2025 no está en el archivo, pero el 8 de marzo tenía entradas, que sumadas a las del 3 de agosto dan un
+domingo normal. Sacamos esos 22 días del entrenamiento; sin ese control, el modelo habría aprendido picos que no existen.
+
+**¿El pronóstico sirve para decidir dónde poner cajeros?**
+No es su objetivo: el dónde lo responde el modelo espacial. El pronóstico dice cuándo: cuánta gente va a pasar cada día y cada
+mes, para planificar la carga de efectivo y el mantenimiento. Los molinetes cuentan entradas al subte, no extracciones: es un
+indicador del flujo de gente, no de la demanda de efectivo.
+
+**¿Por qué el intervalo sale de XGBoost si el modelo elegido es Random Forest?**
+Porque XGBoost se puede entrenar para estimar un cuantil directamente (pérdida de cuantil): uno aprende el percentil 10 y
+otro el 90. El Random Forest de scikit-learn no lo trae. La banda se ajusta para que siempre contenga el pronóstico.
+
 **¿Por qué medir caminando y no en línea recta?**
 Porque nadie camina en línea recta: hay manzanas, vías del tren, parques y autopistas. Bajamos la red peatonal de
 OpenStreetMap con OSMnx (52.090 esquinas), proyectamos cada punto sobre la cuadra más cercana y calculamos el camino más
@@ -232,4 +269,5 @@ efectivamente hizo cada uno.)
 
 **¿Qué harían con más tiempo?**
 Transacciones reales por terminal y por hora; restricciones de costo y de seguridad por sitio en la optimización; el
-listado actual de cajeros; y un modelo de competencia (cuántas operaciones le saca un Link nuevo a un Banelco cercano).
+listado actual de cajeros; un modelo de competencia (cuántas operaciones le saca un Link nuevo a un Banelco cercano); y más
+años de molinetes, clima y eventos para el pronóstico.

@@ -590,12 +590,26 @@ elif pagina == "Demanda por hora":
             f"{fmt(mape['Mismo día del año anterior'], 1)} % de la referencia ingenua (el mismo día del año anterior).")
         p1, p2, p3 = st.columns(3)
         p1.metric(f"Día hábil promedio en {R['primer_mes_nombre']}", fmt(R["pax_habil_primer_mes"]),
-                  f"{'+' if R['variacion_primer_mes_pct'] >= 0 else ''}{fmt(R['variacion_primer_mes_pct'], 1)} % vs. un año antes")
-        p2.metric("Entradas por día hábil en estaciones sin Link cerca", fmt(R["pax_habil_estaciones_sin_link"]),
-                  help=f"{R['estaciones_sin_link']} estaciones sin un Link a distancia caminable, en {R['primer_mes_nombre']}.")
+                  f"{'+' if R['variacion_primer_mes_pct'] >= 0 else ''}{fmt(R['variacion_primer_mes_pct'], 1)} % vs. un año antes",
+                  delta_color="off")
+        p2.metric("En estaciones sin Link cerca", fmt(R["pax_habil_estaciones_sin_link"]),
+                  help=f"Entradas por día hábil en las {R['estaciones_sin_link']} estaciones sin un Link a distancia "
+                       f"caminable, en {R['primer_mes_nombre']}.")
         p3.metric("Pronóstico hasta", f"{pd.Timestamp(R['pronostico_hasta']):%d/%m/%Y}")
         st.altair_chart(grafico_pronostico(P["diario"]))
-        st.caption("La banda es un intervalo del 80 %: dos modelos XGBoost de cuantiles (10 y 90). Detalle en el notebook 05.")
+        st.caption("La banda es un intervalo del 80 %: dos modelos XGBoost de cuantiles (10 y 90). Los días con datos "
+                   "dudosos (paros, cortes y fechas mal cargadas en el archivo de 2025) no se usan para entrenar. Detalle "
+                   "en el notebook 05.")
+        meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre",
+                 "noviembre", "diciembre"]
+        m = P["mensual"]
+        st.dataframe(pd.DataFrame({
+            "Mes": m["mes"].map(lambda p_: f"{meses[int(p_[5:7]) - 1]} de {p_[:4]}"),
+            "Día hábil promedio": m["pronostico"].map(fmt),
+            "Rango probable (80 %)": m["p10"].map(fmt) + " a " + m["p90"].map(fmt),
+            "Mismo mes, un año antes": m["anio_anterior"].map(lambda v: fmt(v) if pd.notna(v) else "sin dato"),
+            "Variación": m["variacion_%"].map(lambda v: f"{'+' if v >= 0 else ''}{fmt(v, 1)} %" if pd.notna(v) else "sin dato"),
+        }), hide_index=True)
 
 
 # --------------------------------------------------------------------------
@@ -698,6 +712,14 @@ else:
     met = D["metricas"]
     esp = met[met["validación"].str.startswith("espacial")].set_index("modelo")
     ale = met[met["validación"] == "aleatoria"].set_index("modelo")
+    texto_pron = ""
+    if "pronostico" in D:
+        RP = D["pronostico"]["resumen"]
+        mp = RP["mape_promedio"]
+        texto_pron = (f"\n   - *Pronóstico en el tiempo:* ¿cuánta gente va a entrar al subte cada día? **{RP['modelo_elegido']}** "
+                      "con variables del calendario, validado hacia adelante (se entrena con el pasado y se mide en meses que no "
+                      f"vio): erra un {fmt(mp[RP['modelo_elegido']], 1)} % por día, contra {fmt(mp['Mismo día del año anterior'], 1)} % "
+                      "de repetir el mismo día del año anterior.")
     st.markdown(f"""
 **Pregunta.** ¿En qué zonas de CABA hay más demanda que cajeros Link, y dónde conviene sumar terminales?
 
@@ -705,7 +727,8 @@ else:
 Un cajero sirve a quien está a pocas cuadras, así que las variables se miden sobre el hexágono y sus 6 vecinos (≈400 m).
 
 **Datos, todos públicos.** Censo 2022 por radio censal (INDEC), cajeros automáticos (BA Data, relevamiento de ≈2017),
-usos del suelo 2022-2024 (BA Data), molinetes del subte 2025 (SBASE), OpenStreetMap (comercios, estaciones de tren,
+usos del suelo 2022-2024 (BA Data), molinetes del subte (SBASE: 2025 por hora y la serie diaria hasta agosto de 2026),
+OpenStreetMap (comercios, estaciones de tren,
 cajeros 2026 y red peatonal) y BCRA (extracciones por cajero).
 
 **Cuatro niveles de análisis:**
@@ -725,7 +748,7 @@ cajeros 2026 y red peatonal) y BCRA (extracciones por cajero).
      deberían tener uno.
    - *Validación hacia el futuro:* los {resumen['cajeros_nuevos_osm']} cajeros que aparecen en OpenStreetMap y no estaban en
      2017 cayeron en el percentil {fmt(100 * resumen['percentil_cajeros_nuevos'])} de la brecha calculada con datos de 2017
-     (p = {fmt(resumen['p_valor_cajeros_nuevos'], 3)}).
+     (p = {fmt(resumen['p_valor_cajeros_nuevos'], 3)}).{texto_pron}
 4. **Prescriptivo.** K-Means ({resumen['k_clusters']} tipos de zona, silueta = {fmt(resumen['silueta'], 2)}) y **cobertura
    máxima**: programa lineal entero resuelto con HiGHS en menos de un segundo; el algoritmo goloso queda a menos del
    {fmt(resumen['goloso_max_diferencia_pct'], 1)} % del óptimo.
@@ -786,6 +809,7 @@ cajeros 2026 y red peatonal) y BCRA (extracciones por cajero).
 - No hay datos de transacciones (son privados): la demanda se estima con residentes, comercio y pasajeros.
 - OpenStreetMap no tiene todos los comercios ni todas las sendas; su cobertura puede variar entre barrios.
 - Los feriados que caen en día de semana cuentan como días hábiles en el promedio del subte.
+- El pronóstico del subte se entrena con menos de dos años de datos y no anticipa paros, lluvias ni eventos.
 - Lo que le "corresponde" a una zona sale de cómo están repartidos hoy los cajeros entre zonas con demanda parecida: toma
   al mercado como referencia, no mide extracciones (son datos privados de las redes).
 """)

@@ -1,0 +1,91 @@
+base,pax_habil_reciente,parte,linea,estacion,perfil,link_cerca,pax_habil_pronostico
+constitucion,51961.290322580644,0.07056189994267394,C,Constitución,Origen: la gente sale de su casa (pico a la mañana),True,53970.13030693666
+congreso de tucuman,22744.83870967742,0.03088682023254282,D,Congreso de Tucumán,Origen: la gente sale de su casa (pico a la mañana),True,23624.1613968947
+san pedrito,20703.435483870966,0.028114654851972783,A,San Pedrito,Origen: la gente sale de su casa (pico a la mañana),True,21503.836874124005
+juan manuel de rosas,20045.854838709678,0.027221679727605138,B,Juan Manuel de Rosas,Origen: la gente sale de su casa (pico a la mañana),True,20820.833952403802
+retiro,18410.370967741936,0.02500074086052445,C,Retiro (C),Origen: la gente sale de su casa (pico a la mañana),True,19122.121755630964
+federico lacroze,18259.24193548387,0.02479551209144609,B,Federico Lacroze,Origen: la gente sale de su casa (pico a la mañana),True,18965.150026994263
+catedral,16609.16129032258,0.022554751235462956,D,Catedral,Destino: la gente vuelve del trabajo (pico a la tarde),True,17251.276740102297
+carlos pellegrini,14624.193548387097,0.019859223577732326,B,Carlos Pellegrini,Destino: la gente vuelve del trabajo (pico a la tarde),True,15189.569514930306
+hospitales,12852.822580645161,0.017453754040482463,H,Hospitales - Ringo Bonavena,Origen: la gente sale de su casa (pico a la mañana),True,13349.716783070573
+leandro n. alem,12603.40322580645,0.017115049911877574,B,Leandro N. Alem,Destino: la gente vuelve del trabajo (pico a la tarde),True,13090.654796769832
+facultad de medicina,12334.048387096775,0.01674927398406448,D,Facultad de Medicina,Destino: la gente vuelve del trabajo (pico a la tarde),True,12810.88661446109
+juramento,12258.645161290322,0.016646878627026983,D,Juramento,Origen: la gente sale de su casa (pico a la mañana),True,12732.568276000407
+callao,12103.822580645161,0.016436634128160047,D,Callao (D),Destino: la gente vuelve del trabajo (pico a la tarde),True,12571.760205223067
+plaza de mayo,11770.08064516129,0.01598342242167451,A,Plaza de Mayo,Destino: la gente vuelve del trabajo (pico a la tarde),True,12225.115700532499
+palermo,11558.274193548386,0.01569579550646244,D,Palermo,Origen: la gente sale de su casa (pico a la mañana),True,12005.120744240377
+callao,11190.741935483871,0.015196697538374005,B,Callao (B),Destino: la gente vuelve del trabajo (pico a la tarde),True,11623.379572367967
+malabia,10847.258064516129,0.014730256570786722,B,Malabia - Osvaldo Pugliese,Origen: la gente sale de su casa (pico a la mañana),True,11266.616505874135
+angel gallardo,10773.241935483871,0.014629744850263714,B,Ángel Gallardo,Origen: la gente sale de su casa (pico a la mañana),True,11189.738889789418
+medrano,10719.693548387097,0.014557027719704463,B,Medrano - Almagro,Origen: la gente sale de su casa (pico a la mañana),True,11134.120305043009
+bulnes,10495.983870967742,0.014253236574868083,D,Bulnes,Origen: la gente sale de su casa (pico a la mañana),True,10901.76194045485
+acoyte,10417.758064516129,0.014147008236551106,A,Acoyte,Origen: la gente sale de su casa (pico a la mañana),True,10820.511899484945
+florida,10111.58064516129,0.013731228330103446,B,Florida,Destino: la gente vuelve del trabajo (pico a la tarde),True,10502.497563870164
+uruguay,10013.354838709678,0.013597840581577595,B,Uruguay,Destino: la gente vuelve del trabajo (pico a la tarde),True,10400.474316549193
+primera junta,9791.483870967742,0.013296546350260417,A,Primera Junta,Origen: la gente sale de su casa (pico a la mañana),True,10170.02574673847
+san jose de flores,9102.129032258064,0.012360422808060923,A,San José de Flores,Origen: la gente sale de su casa (pico a la mañana),True,9454.020231057295
+jose hernandez,9038.193548387097,0.012273600306393193,D,José Hernández,Origen: la gente sale de su casa (pico a la mañana),True,9387.612981076945
+parque patricios,9007.306451612903,0.012231656539820616,H,Parque Patricios,Origen: la gente sale de su casa (pico a la mañana),True,9355.53177933316
+santa fe,9005.41935483871,0.012229093918050908,H,Santa Fe - Carlos Jáuregui,Destino: la gente vuelve del trabajo (pico a la tarde),True,9353.571726798422
+olleros,8954.709677419354,0.012160231671521303,D,Olleros,Origen: la gente sale de su casa (pico a la mañana),True,9300.901597147002
+dorrego,8953.645161290322,0.012158786090010186,B,Dorrego,Origen: la gente sale de su casa (pico a la mañana),True,9299.79592648638
+carlos gardel,8865.08064516129,0.012038518088835234,B,Carlos Gardel,Destino: la gente vuelve del trabajo (pico a la tarde),True,9207.807478039835
+carabobo,8544.435483870968,0.011603091415486478,A,Carabobo,Origen: la gente sale de su casa (pico a la mañana),True,8874.766072992064
+independencia,8530.951612903225,0.011584780716345654,E,Independencia - Santa Mama Antula,Destino: la gente vuelve del trabajo (pico a la tarde),True,8860.76091129086
+ministro carranza,8508.467741935483,0.011554248282610835,D,Ministro Carranza,Origen: la gente sale de su casa (pico a la mañana),True,8837.407806731675
+bolivar,8451.887096774193,0.011477413435019918,E,Bolívar,Destino: la gente vuelve del trabajo (pico a la tarde),True,8778.639735861072
+las heras,8279.161290322581,0.011242856883466004,H,Las Heras,Destino: la gente vuelve del trabajo (pico a la tarde),True,8599.236294882372
+plaza de los virreyes,8224.516129032258,0.011168650365895299,E,Plaza de los Virreyes - Eva Perón,Origen: la gente sale de su casa (pico a la mañana),False,8542.478534303807
+once,8212.08064516129,0.011151763345515426,H,Once - 30 de Diciembre,Origen: la gente sale de su casa (pico a la mañana),True,8529.562290677457
+scalabrini ortiz,8207.967741935483,0.01114617814422247,D,Scalabrini Ortiz,Origen: la gente sale de su casa (pico a la mañana),True,8525.290381306875
+pasteur,7849.580645161291,0.010659499035479544,B,Pasteur - AMIA,Destino: la gente vuelve del trabajo (pico a la tarde),True,8153.047925564346
+rio de janeiro,7501.790322580645,0.010187210033597287,A,Río de Janeiro,Origen: la gente sale de su casa (pico a la mañana),True,7791.811918670729
+plaza miserere,7338.370967741936,0.009965291368890567,A,Plaza Miserere,Origen: la gente sale de su casa (pico a la mañana),True,7622.074719679581
+plaza italia,7330.725806451613,0.009954909465310722,D,Plaza Italia,Destino: la gente vuelve del trabajo (pico a la tarde),True,7614.133994026028
+peru,7316.629032258064,0.009935766461663498,A,Perú,Destino: la gente vuelve del trabajo (pico a la tarde),True,7599.492234065678
+castro barros,6902.387096774193,0.009373238129087233,A,Castro Barros,Origen: la gente sale de su casa (pico a la mañana),True,7169.2355738120605
+los incas,6864.693548387097,0.009322051401943568,B,Los Incas - Parque Chas,Origen: la gente sale de su casa (pico a la mañana),True,7130.084780874603
+congreso,6809.693548387097,0.009247363023869158,A,Congreso - Raúl Alfonsín,Destino: la gente vuelve del trabajo (pico a la tarde),True,7072.958463409165
+pueyrredon,6548.709677419355,0.008892954623393493,B,Pueyrredón (B),Destino: la gente vuelve del trabajo (pico a la tarde),True,6801.884873113492
+aguero,6443.048387096775,0.008749469707039987,D,Agüero,Origen: la gente sale de su casa (pico a la mañana),True,6692.138683753938
+saenz pena,6425.5161290322585,0.008725661417606882,A,Sáenz Peña,Destino: la gente vuelve del trabajo (pico a la tarde),True,6673.928623025218
+venezuela,6328.306451612903,0.008593653542341644,H,Venezuela,Origen: la gente sale de su casa (pico a la mañana),False,6572.960788607567
+cordoba,6231.741935483871,0.008462521777083142,H,Córdoba,Destino: la gente vuelve del trabajo (pico a la tarde),True,6472.663057620594
+caseros,6103.403225806452,0.008288241593992796,H,Caseros,Origen: la gente sale de su casa (pico a la mañana),True,6339.362732672651
+puan,5892.387096774193,0.008001687913538983,A,Puan,Origen: la gente sale de su casa (pico a la mañana),True,6120.188653083113
+pueyrredon,5806.129032258064,0.00788455200563812,D,Pueyrredón (D),Origen: la gente sale de su casa (pico a la mañana),True,6030.595824401248
+correo central,5599.870967741936,0.007604459636483999,E,Correo Central,Destino: la gente vuelve del trabajo (pico a la tarde),True,5816.363757612973
+facultad de derecho,5423.629032258064,0.007365128285393361,H,Facultad de Derecho - Julieta Lanteri,Destino: la gente vuelve del trabajo (pico a la tarde),False,5633.308252937068
+loria,5315.451612903225,0.007218226540013577,A,Loria,Origen: la gente sale de su casa (pico a la mañana),True,5520.948660197862
+echeverria,5269.774193548387,0.0071561979515365306,B,Echeverría,Origen: la gente sale de su casa (pico a la mañana),True,5473.505337305745
+lima,5208.1612903225805,0.007072529445893057,A,Lima,Destino: la gente vuelve del trabajo (pico a la tarde),True,5409.510459675842
+catalinas,5124.919354838709,0.006959489352273694,E,Catalinas,Destino: la gente vuelve del trabajo (pico a la tarde),True,5323.050364532403
+boedo,4952.387096774193,0.006725195633721799,E,Boedo,Origen: la gente sale de su casa (pico a la mañana),True,5143.847954582906
+humberto i,4906.0161290322585,0.00666222522698751,H,Humberto I,Origen: la gente sale de su casa (pico a la mañana),True,5095.684270502808
+avenida la plata,4903.403225806452,0.006658676981460221,E,Avenida La Plata,Origen: la gente sale de su casa (pico a la mañana),False,5092.970351608556
+independencia,4895.887096774193,0.006648470299881724,C,Independencia (C),Destino: la gente vuelve del trabajo (pico a la tarde),True,5085.163646641138
+lavalle,4648.806451612903,0.006312942070051261,C,Lavalle,Destino: la gente vuelve del trabajo (pico a la tarde),True,4828.530785276611
+inclan,4557.3387096774195,0.006188731573845988,H,Inclán-Mezquita Al Ahmad,Origen: la gente sale de su casa (pico a la mañana),False,4733.526871392007
+diagonal norte,4394.451612903225,0.005967535699894826,C,Diagonal Norte,Destino: la gente vuelve del trabajo (pico a la tarde),True,4564.3425077311695
+tronador,4356.403225806452,0.005915867112247456,B,Tronador - Villa Ortúzar,Origen: la gente sale de su casa (pico a la mañana),True,4524.82315790684
+emilio mitre,4308.806451612903,0.005851232096500365,E,Emilio Mitre,Origen: la gente sale de su casa (pico a la mañana),False,4475.38627730845
+general san martin,4221.370967741936,0.005732497287837205,C,General San Martín,Destino: la gente vuelve del trabajo (pico a la tarde),True,4384.570509865595
+9 de julio,4211.274193548387,0.005718786166231756,D,9 de Julio,Destino: la gente vuelve del trabajo (pico a la tarde),True,4374.083391175459
+jose maria moreno,4104.451612903225,0.00557372425186612,E,José María Moreno,Origen: la gente sale de su casa (pico a la mañana),True,4263.13101564068
+alberti,4099.322580645161,0.005566759177312554,A,Alberti,Destino: la gente vuelve del trabajo (pico a la tarde),True,4257.803693366777
+corrientes,4042.483870967742,0.005489573885718941,H,Corrientes,Destino: la gente vuelve del trabajo (pico a la tarde),True,4198.767581123902
+moreno,3893.0,0.00528657919715776,C,Moreno,Destino: la gente vuelve del trabajo (pico a la tarde),True,4043.5046162354347
+retiro,3838.4032258064517,0.005212438387837561,E,Retiro (E),Destino: la gente vuelve del trabajo (pico a la tarde),True,3986.7971134141717
+san juan,3769.3064516129034,0.005118607006115928,C,San Juan,Origen: la gente sale de su casa (pico a la mañana),True,3915.0290359883843
+piedras,3435.3225806451615,0.004665066758377863,A,Piedras,Destino: la gente vuelve del trabajo (pico a la tarde),True,3568.1332425113114
+belgrano,3330.6935483870966,0.0045229836180351365,E,Belgrano,Destino: la gente vuelve del trabajo (pico a la tarde),True,3459.4592186408436
+avenida de mayo,3310.516129032258,0.004495583277574408,C,Avenida de Mayo,Destino: la gente vuelve del trabajo (pico a la tarde),True,3438.501733846339
+jujuy,2816.5,0.0038247239426649963,E,Jujuy,Origen: la gente sale de su casa (pico a la mañana),True,2925.3867843891862
+entre rios,2788.3709677419356,0.0037865255463712224,E,Entre Ríos - Rodolfo Walsh,Origen: la gente sale de su casa (pico a la mañana),True,2896.170274811555
+san jose,2491.967741935484,0.0033840187065256426,E,San José,Origen: la gente sale de su casa (pico a la mañana),False,2588.30800617157
+pichincha,2404.6774193548385,0.0032654810226139985,E,Pichincha,Origen: la gente sale de su casa (pico a la mañana),False,2497.643012000617
+varela,2278.451612903226,0.0030940700997957203,E,Varela,Origen: la gente sale de su casa (pico a la mañana),True,2366.537275788149
+general urquiza,2215.8870967741937,0.003009109331892308,E,General Urquiza,Origen: la gente sale de su casa (pico a la mañana),False,2301.553995597993
+medalla milagrosa,2074.5,0.0028171098239156878,E,Medalla Milagrosa,Origen: la gente sale de su casa (pico a la mañana),False,2154.700828764554
+pasco,1797.532258064516,0.0024409957980230886,A,Pasco,Origen: la gente sale de su casa (pico a la mañana),True,1867.0254259737926
+tribunales,0.03225806451612903,4.380550033689716e-08,D,Tribunales - Teatro Colón,Destino: la gente vuelve del trabajo (pico a la tarde),True,0.03350517153398105

@@ -27,6 +27,7 @@ Este informe se genera a partir de los resultados del pipeline (`python docs/_co
 - Con **20 cajeros** en las ubicaciones óptimas, Link suma **265.929 vecinos** y pasa al
   **59,8 %**. La diferencia con Banelco baja de 13 a 5 puntos; con 35 cajeros, Link igualaría la cobertura actual de Banelco. Al promedio
   nacional de 3.242 extracciones por terminal por mes (BCRA, 2025), son unas **64.840 operaciones mensuales**.
+- Un segundo modelo **pronostica** cuánta gente va a entrar al subte cada día: **Random Forest** sobre variables del calendario erra un **8,0 %** por día en meses que no vio, contra 22,2 % de repetir el año anterior. Espera **765 mil entradas por día hábil** en septiembre de 2026 y 522 mil en enero de 2027: la Gerencia Técnica puede planificar cuándo reforzar la carga de efectivo y cuándo hacer el mantenimiento.
 - El modelo se entrega como una **app** que la gerencia puede usar con su listado actual de cajeros.
 
 ---
@@ -65,6 +66,7 @@ ubicada es un costo fijo con poco uso.
 | Cajeros automáticos (1.279 ubicaciones, 2.673 terminales) | GCBA · BA Data | ≈2017 | Oferta por red y banco |
 | Censo 2022 por radio censal (3.820 radios) | INDEC | 2022 | Residentes, NBI, edad, educación, internet |
 | Molinetes del subte (90 estaciones) | SBASE · BA Data | 2025 | Entradas por estación y hora |
+| Molinetes del subte, serie diaria | SBASE · BA Data | enero de 2025 a agosto de 2026 | Entradas por día y estación, y por hora en toda la red (pronóstico) |
 | Relevamiento de usos del suelo (417.764 parcelas) | GCBA · BA Data | 2022-2024 | Comercio, oficinas, vivienda |
 | OpenStreetMap (≈29 mil puntos y red peatonal) | Colaboradores de OSM | 2026 | Comercios, estaciones, calles |
 | Barrios | GCBA · BA Data | vigente | Límites |
@@ -72,7 +74,7 @@ ubicada es un costo fijo con poco uso.
 **Calidad de datos (DAMA).** El listado de cajeros da bien en completitud (97 %), validez (100 %), unicidad (98,9 %: 14 duplicados por ubicación y banco) y consistencia (96,9 %), pero falla en **oportunidad**: el 31 %
 de las ubicaciones está a nombre de bancos que dejaron de operar con ese nombre entre 2017 y 2024 (Citibank, BBVA Banco
 Francés, Santander Río, HSBC). Lo tratamos como una foto de ≈2017. El censo por radio cubre el 99,2 % de la población oficial.
-Los molinetes cubren 335 de los 365 días de 2025. El CSV de usos del suelo no trae coordenadas, así que se tomaron del shapefile.
+A los molinetes de 2025 les falta marzo y, del 1 al 12 de agosto, una parte de los registros trae la fecha invertida (ver 4.7). El CSV de usos del suelo no trae coordenadas, así que se tomaron del shapefile.
 OpenStreetMap está incompleto para cajeros (206 contra 1.279).
 
 **Hallazgos del EDA** (cinco tipos de análisis exploratorio, `notebooks/01_calidad_y_eda.ipynb`):
@@ -100,7 +102,7 @@ OpenStreetMap está incompleto para cajeros (206 contra 1.279).
 ## 4. Modelado
 
 Seguimos los cuatro niveles de análisis de la materia: el EDA es el **descriptivo**; los modelos de esta sección son el
-**predictivo** (4.1 y 4.2) y el **diagnóstico** que lo explica (4.3); la segmentación y la optimización son el
+**predictivo** (4.1 y 4.2 en el espacio, 4.7 en el tiempo) y el **diagnóstico** que lo explica (4.3); la segmentación y la optimización son el
 **prescriptivo** (4.4 a 4.6).
 
 ### 4.1 Regresión: ¿cuántas terminales le corresponden a cada zona? (`notebooks/02_machine_learning.ipynb`)
@@ -243,6 +245,60 @@ Con los molinetes 2025 (690.863 entradas por día hábil), los picos son a las *
 mañana, barrios) y de **destino** (pico a la tarde, centro). 80 de 90
 estaciones ya tienen un Link a menos de 500 m; sumar a los pasajeros de la hora pico de la mañana no cambia ninguno de los 20 sitios óptimos: el faltante grande está en los barrios, no en el transporte.
 
+### 4.7 Pronóstico: cuánta gente va a pasar por el subte (`notebooks/05_pronostico_subte.ipynb`)
+Las secciones anteriores predicen **dónde**; esta predice **cuándo**. Con la serie diaria de los molinetes (enero de 2025 a agosto de 2026;
+578 días con datos) pronosticamos las entradas al subte de cada día de los seis meses siguientes al último dato,
+para que la Gerencia Técnica planifique la carga de efectivo y el mantenimiento de los cajeros cerca de las estaciones.
+
+- **Limpieza:** 28 días anómalos quedan afuera del entrenamiento y de la medición: paros y cortes (menos de la
+  mitad de un día igual de las semanas de alrededor), registros duplicados (más de 1,25 veces) y 22 días con
+  la **fecha mal cargada** en el archivo de 2025. Una parte de los registros del 1 al 12 de agosto trae la fecha como mes/día
+  y, leída como día/mes, cae en el día 8 de otro mes: el 8 de cada mes de 2025 tiene un tercio más de pasajeros que un día
+  típico y del 1 al 12 de agosto falta lo mismo, mientras que en 2026 no pasa. La prueba más clara: marzo de 2025 no está en el
+  archivo, pero el 8 de marzo tiene entradas, que sumadas a las del 3 de agosto dan un domingo normal.
+- **Variables (13, todas del calendario):** día de la semana, fin de semana, mes, día del mes, época del año (seno y coseno
+  del día del año), semana del mes, feriado, feriado puente, día no laborable, día pegado a un feriado, vacaciones de invierno
+  y año. Se conocen de antemano, incluso los feriados que se decretan con poco tiempo (como el del 9 de noviembre de 2026 por
+  la visita del Papa), así que se puede pronosticar cualquier fecha futura.
+- **Objetivo:** el logaritmo de las entradas del día, para que el error sea relativo.
+- **Modelos (clases 6 y 8):** Random Forest (500 árboles) y XGBoost (800 árboles de profundidad 4), contra una referencia
+  ingenua: el mismo día de la semana del año anterior.
+- **Validación hacia adelante con origen móvil:** se entrena con el pasado y se mide en los cuatro meses siguientes, que el
+  modelo no vio. Dos veces (enero a abril de 2026 y mayo a agosto de 2026), siempre con al menos un año de historia; los tres se
+  miden en los mismos días. Nunca se usan fechas futuras para entrenar.
+
+| Período de prueba | Modelo | MAPE | MAE (entradas por día) | Error del total |
+|---|---|---|---|---|
+| enero a abril de 2026 | Mismo día del año anterior | 26,7 % | 79.717 | -1,9 % |
+| enero a abril de 2026 | Random Forest | 9,2 % | 36.649 | -5,3 % |
+| enero a abril de 2026 | XGBoost | 8,1 % | 36.945 | -4,3 % |
+| mayo a agosto de 2026 | Mismo día del año anterior | 17,7 % | 72.491 | +6,6 % |
+| mayo a agosto de 2026 | Random Forest | 6,8 % | 33.276 | +4,4 % |
+| mayo a agosto de 2026 | XGBoost | 8,3 % | 42.194 | +6,3 % |
+
+**Elección: Random Forest**, el de menor error promedio: MAPE de 8,0 %, contra 8,2 % de XGBoost y 22,2 % de la
+referencia (su error es el 36 % del de la referencia). El error del total del período va de
+-5,3 % a +4,4 % según el período: con menos de dos años de historia (y sin marzo de 2025), el
+modelo capta solo en parte los cambios de nivel de un año a otro, así que conviene leer cada mes como un rango. Lo que más pesa
+es día de la semana, fin de semana y feriado. El intervalo del 80 % sale de dos modelos XGBoost de cuantiles (10 y 90).
+
+| Mes | Día hábil promedio | Rango probable (80 %) | Mismo mes, un año antes | Variación |
+|---|---|---|---|---|
+| septiembre de 2026 | 764.862 | 733.743 a 787.142 | 793.557 | -3,6 % |
+| octubre de 2026 | 753.633 | 718.109 a 771.230 | 771.039 | -2,3 % |
+| noviembre de 2026 | 727.429 | 675.652 a 755.779 | 759.279 | -4,2 % |
+| diciembre de 2026 | 677.128 | 608.722 a 722.894 | 702.493 | -3,6 % |
+| enero de 2027 | 521.899 | 495.437 a 538.552 | 523.962 | -0,4 % |
+| febrero de 2027 | 581.133 | 546.182 a 607.081 | 603.076 | -3,6 % |
+
+**Lectura para el negocio.** El día hábil promedio baja de 765 mil en septiembre de 2026 a
+522 mil en enero de 2027 (-32 %): el verano es el momento para el mantenimiento
+y las instalaciones, y los días previos a los de más gente, para reforzar la carga de efectivo. Las 10
+estaciones sin un Link a distancia caminable van a recibir unas 44.593 entradas por día hábil.
+Entre las 7 y las 10 de un día hábil entra el 23 % de la gente del día. Los
+molinetes cuentan entradas al subte, no extracciones: son un indicador del flujo de gente cerca de las estaciones, no de la
+demanda de efectivo.
+
 ## 5. Evaluación
 
 - **Generalización (regresión):** D² espacial = 0,57 ± 0,14 entre grupos de
@@ -254,6 +310,7 @@ estaciones ya tienen un Link a menos de 500 m; sumar a los pasajeros de la hora 
   ciudad (p = 0,042, Monte Carlo). El AUC de la brecha es 0,64 y el de la probabilidad
   del clasificador, 0,58, contra 0,51 de usar solo la
   población. Es una evidencia a favor, pero modesta, por la cantidad de casos.
+- **Pronóstico (validación hacia adelante):** MAPE de 8,0 % por día con Random Forest, contra 22,2 % de repetir el año anterior; en el último período (mayo a agosto de 2026), 6,8 % y sobreestima el total en 4,4 %.
 - **Robustez:** sumar a los pasajeros de la hora pico de la mañana no cambia ninguno de los 20 sitios óptimos. El goloso queda a menos del 1,2 % del óptimo exacto, y medir
   con otra regla de conexión a la red cambia la cobertura en poco más de un punto.
 
@@ -264,6 +321,8 @@ estaciones ya tienen un Link a menos de 500 m; sumar a los pasajeros de la hora 
   mercado entero desatiende (la optimización por cobertura cubre ese caso).
 - OpenStreetMap varía en completitud entre barrios.
 - Los feriados en día de semana cuentan como hábiles en el promedio horario.
+- La serie diaria del subte tiene menos de dos años (sin marzo de 2025): con más años, el pronóstico aprendería mejor la
+  estacionalidad. No anticipa paros, lluvias ni eventos.
 - Las distancias se miden desde el centro de cada hexágono y la red peatonal no tiene en cuenta semáforos, pendientes ni
   la percepción de seguridad de cada cuadra.
 
@@ -274,7 +333,7 @@ App en Streamlit con mapas de deck.gl (`streamlit run app/app.py`). Funciona sin
 - predicción por zona: para cada barrio, cuántas terminales tiene y cuántas le corresponden, el porqué de cada zona (SHAP)
   y las oportunidades del clasificador;
 - simulador de N cajeros (exacto o goloso, distancia caminando o en línea recta, con o sin pasajeros por franja horaria);
-- demanda por hora;
+- demanda por hora y pronóstico de entradas al subte para los próximos seis meses;
 - tipos de zona;
 - carga del listado propio de cajeros, que recalcula cobertura y ubicaciones.
 
@@ -282,7 +341,9 @@ Una terminal nueva que alcance el promedio nacional suma unas 3.242 extracciones
 promedio de julio 2025). El ingreso por operación es un dato interno: la app lo recibe como parámetro.
 
 **Próximos pasos:**
-- pronosticar la demanda de paso día por día con la serie 2022-2026 de los molinetes (`notebooks/05_pronostico_subte.ipynb`);
+- sumar más años de molinetes al pronóstico (el notebook 00c los baja cuando el catálogo de BA Data responde) y variables
+  de clima y eventos;
+- reportar a BA Data el error de fechas del archivo de molinetes de 2025;
 - correr el modelo con el listado actual y las transacciones por terminal;
 - sumar restricciones de costo y de seguridad por sitio a la optimización;
 - validar la hipótesis horaria (carga de efectivo antes de los picos) con transacciones por hora.
@@ -305,7 +366,9 @@ problema, eligió las fuentes y los métodos, y revisó el código y los resulta
 - Fayyad, U., Piatetsky-Shapiro, G. y Smyth, P. (1996). From data mining to knowledge discovery in databases. *AI Magazine*, 17(3).
 - Friedman, J. (2001). Greedy function approximation: a gradient boosting machine. *Annals of Statistics*, 29(5).
 - Huangfu, Q. y Hall, J. (2018). Parallelizing the dual revised simplex method. *Mathematical Programming Computation*, 10, 119-142.
+- Hyndman, R. y Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3.ª ed.). OTexts.
 - INDEC (2024). *Censo Nacional de Población, Hogares y Viviendas 2022*, base por radio censal.
+- Koenker, R. y Bassett, G. (1978). Regression quantiles. *Econometrica*, 46(1), 33-50.
 - Lundberg, S. y Lee, S.-I. (2017). A unified approach to interpreting model predictions. *NeurIPS 2017*.
 - Lundberg, S. et al. (2020). From local explanations to global understanding with explainable AI for trees. *Nature Machine Intelligence*, 2, 56-67.
 - McCullagh, P. y Nelder, J. (1989). *Generalized Linear Models* (2.ª ed.). Chapman & Hall.

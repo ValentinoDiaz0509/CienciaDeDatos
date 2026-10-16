@@ -96,6 +96,90 @@ red_txt = (f"Las distancias se miden **caminando** por la red peatonal de OpenSt
               if "cobertura_link_red_tolerancia_25m" in R else "") if cam else
            "Las distancias se miden en línea recta (la red peatonal de OpenStreetMap se incorpora con `notebooks/00b_red_peatonal.ipynb`).")
 
+# Pronóstico del subte (notebook 05): textos con los números de data/processed/pronostico_*.
+MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre",
+         "diciembre"]
+_fl = lambda iso: f"{MESES[int(iso[5:7]) - 1]} de {iso[:4]}"  # noqa: E731
+_sg = lambda v, d=1: ("+" if v >= 0 else "") + n(v, d)  # noqa: E731
+PR = json.loads((P / "pronostico_resumen.json").read_text(encoding="utf-8")) if (P / "pronostico_resumen.json").exists() else None
+pron_resumen = pron_seccion = pron_eval = pron_datos = ""
+if PR:
+    _el, _ing = PR["modelo_elegido"], "Mismo día del año anterior"
+    _otro = next(m for m in PR["mape_promedio"] if m not in (_el, _ing))
+    _m, _mi, _mo = PR["mape_promedio"][_el], PR["mape_promedio"][_ing], PR["mape_promedio"][_otro]
+    _tot = PR["error_total_ultimo_periodo"][_el]
+    _min_pct = 100 * (PR["pax_habil_mes_minimo"] / PR["pax_habil_primer_mes"] - 1)
+    _periodo = f"{_fl(PR['desde'])} a {_fl(PR['hasta'])}"
+    pv = pd.read_csv(P / "pronostico_validacion.csv")
+    imp_p = pd.read_csv(P / "pronostico_importancia.csv")
+    _tops = [minus(v) for v in imp_p["nombre"].head(3)]
+    _top3 = ", ".join(_tops[:-1]) + " y " + _tops[-1]
+    _tot_el = sorted(pv[pv["modelo"] == _el]["error del total (%)"])
+    tabla_pron = "\n".join(
+        f"| {r['período de prueba']} | {r['modelo']} | {n(r['MAPE (%)'], 1)} % | {n(r['MAE (pasajeros/día)'])} | "
+        f"{_sg(r['error del total (%)'])} % |" for _, r in pv.iterrows())
+    tabla_mens = "\n".join(
+        f"| {m['nombre']} | {n(m['pax_habil'])} | {n(m['p10'])} a {n(m['p90'])} | "
+        f"{n(m['anio_anterior']) if m['anio_anterior'] else 'sin dato'} | "
+        f"{_sg(m['variacion_pct']) + ' %' if m['variacion_pct'] is not None else 'sin dato'} |" for m in PR["mensual"])
+    pron_resumen = (
+        f"- Un segundo modelo **pronostica** cuánta gente va a entrar al subte cada día: **{_el}** sobre variables del "
+        f"calendario erra un **{n(_m, 1)} %** por día en meses que no vio, contra {n(_mi, 1)} % de repetir el año anterior. "
+        f"Espera **{n(PR['pax_habil_primer_mes'] / 1e3)} mil entradas por día hábil** en {PR['primer_mes_nombre']} y "
+        f"{n(PR['pax_habil_mes_minimo'] / 1e3)} mil en {PR['mes_minimo_nombre']}: la Gerencia Técnica puede planificar cuándo "
+        "reforzar la carga de efectivo y cuándo hacer el mantenimiento.\n")
+    pron_datos = (f"| Molinetes del subte, serie diaria | SBASE · BA Data | {_periodo} | Entradas por día y estación, y por hora "
+                  "en toda la red (pronóstico) |\n")
+    pron_eval = (f"- **Pronóstico (validación hacia adelante):** MAPE de {n(_m, 1)} % por día con {_el}, contra {n(_mi, 1)} % de "
+                 f"repetir el año anterior; en el último período ({PR['periodos_prueba'][-1]}), {n(PR['mape_ultimo_periodo'][_el], 1)} % "
+                 f"y {'sobreestima' if _tot >= 0 else 'subestima'} el total en {n(abs(_tot), 1)} %.\n")
+    pron_seccion = f"""
+### 4.7 Pronóstico: cuánta gente va a pasar por el subte (`notebooks/05_pronostico_subte.ipynb`)
+Las secciones anteriores predicen **dónde**; esta predice **cuándo**. Con la serie diaria de los molinetes ({_periodo};
+{n(PR['dias'])} días con datos) pronosticamos las entradas al subte de cada día de los seis meses siguientes al último dato,
+para que la Gerencia Técnica planifique la carga de efectivo y el mantenimiento de los cajeros cerca de las estaciones.
+
+- **Limpieza:** {PR['dias_anomalos']} días anómalos quedan afuera del entrenamiento y de la medición: paros y cortes (menos de la
+  mitad de un día igual de las semanas de alrededor), registros duplicados (más de 1,25 veces) y {PR['dias_fecha_cruzada']} días con
+  la **fecha mal cargada** en el archivo de 2025. Una parte de los registros del 1 al 12 de agosto trae la fecha como mes/día
+  y, leída como día/mes, cae en el día 8 de otro mes: el 8 de cada mes de 2025 tiene un tercio más de pasajeros que un día
+  típico y del 1 al 12 de agosto falta lo mismo, mientras que en 2026 no pasa. La prueba más clara: marzo de 2025 no está en el
+  archivo, pero el 8 de marzo tiene entradas, que sumadas a las del 3 de agosto dan un domingo normal.
+- **Variables (13, todas del calendario):** día de la semana, fin de semana, mes, día del mes, época del año (seno y coseno
+  del día del año), semana del mes, feriado, feriado puente, día no laborable, día pegado a un feriado, vacaciones de invierno
+  y año. Se conocen de antemano, incluso los feriados que se decretan con poco tiempo (como el del 9 de noviembre de 2026 por
+  la visita del Papa), así que se puede pronosticar cualquier fecha futura.
+- **Objetivo:** el logaritmo de las entradas del día, para que el error sea relativo.
+- **Modelos (clases 6 y 8):** Random Forest (500 árboles) y XGBoost (800 árboles de profundidad 4), contra una referencia
+  ingenua: el mismo día de la semana del año anterior.
+- **Validación hacia adelante con origen móvil:** se entrena con el pasado y se mide en los cuatro meses siguientes, que el
+  modelo no vio. Dos veces ({" y ".join(PR['periodos_prueba'])}), siempre con al menos un año de historia; los tres se
+  miden en los mismos días. Nunca se usan fechas futuras para entrenar.
+
+| Período de prueba | Modelo | MAPE | MAE (entradas por día) | Error del total |
+|---|---|---|---|---|
+{{tabla_pron}}
+
+**Elección: {_el}**, el de menor error promedio: MAPE de {n(_m, 1)} %, contra {n(_mo, 1)} % de {_otro} y {n(_mi, 1)} % de la
+referencia (su error es el {n(100 * _m / _mi)} % del de la referencia). El error del total del período va de
+{" a ".join(_sg(v) + " %" for v in _tot_el)} según el período: con menos de dos años de historia (y sin marzo de 2025), el
+modelo capta solo en parte los cambios de nivel de un año a otro, así que conviene leer cada mes como un rango. Lo que más pesa
+es {_top3}. El intervalo del 80 % sale de dos modelos XGBoost de cuantiles (10 y 90).
+
+| Mes | Día hábil promedio | Rango probable (80 %) | Mismo mes, un año antes | Variación |
+|---|---|---|---|---|
+{{tabla_mens}}
+
+**Lectura para el negocio.** El día hábil promedio baja de {n(PR['pax_habil_primer_mes'] / 1e3)} mil en {PR['primer_mes_nombre']} a
+{n(PR['pax_habil_mes_minimo'] / 1e3)} mil en {PR['mes_minimo_nombre']} ({n(_min_pct)} %): el verano es el momento para el mantenimiento
+y las instalaciones, y los días previos a los de más gente, para reforzar la carga de efectivo. Las {PR['estaciones_sin_link']}
+estaciones sin un Link a distancia caminable van a recibir unas {n(PR['pax_habil_estaciones_sin_link'])} entradas por día hábil.
+{f"Entre las 7 y las 10 de un día hábil entra el {n(100 * PR['parte_pico_manana'])} % de la gente del día. " if "parte_pico_manana" in PR else ""}Los
+molinetes cuentan entradas al subte, no extracciones: son un indicador del flujo de gente cerca de las estaciones, no de la
+demanda de efectivo.
+"""
+    pron_seccion = pron_seccion.replace("{tabla_pron}", tabla_pron).replace("{tabla_mens}", tabla_mens)
+
 fig_red = ("\n![Ejemplo en San Cristóbal: el Link más cercano está a unos 400 m en línea recta y a más de 600 m caminando](figuras/ejemplo_caminando.png)\n" if cam and (RAIZ / "docs/figuras/ejemplo_caminando.png").exists() else "")
 
 texto = f"""# Informe técnico · ¿Dónde faltan cajeros Link en CABA?
@@ -127,7 +211,7 @@ Este informe se genera a partir de los resultados del pipeline (`python docs/_co
 - Con **20 cajeros** en las ubicaciones óptimas, Link suma **{n(R['nuevos_20_exacto'])} vecinos** y pasa al
   **{n(100 * R['cobertura_link_con_20'], 1)} %**. La diferencia con Banelco baja de {n(dif_ini)} a {n(dif_fin)} puntos{igualar_txt}. Al promedio
   nacional de {n(3242)} extracciones por terminal por mes (BCRA, 2025), son unas **{n(20 * 3242)} operaciones mensuales**.
-- El modelo se entrega como una **app** que la gerencia puede usar con su listado actual de cajeros.
+{pron_resumen}- El modelo se entrega como una **app** que la gerencia puede usar con su listado actual de cajeros.
 
 ---
 
@@ -165,14 +249,14 @@ ubicada es un costo fijo con poco uso.
 | Cajeros automáticos ({n(R['ubicaciones'])} ubicaciones, {n(R['terminales'])} terminales) | GCBA · BA Data | ≈2017 | Oferta por red y banco |
 | Censo 2022 por radio censal (3.820 radios) | INDEC | 2022 | Residentes, NBI, edad, educación, internet |
 | Molinetes del subte ({R['estaciones']} estaciones) | SBASE · BA Data | 2025 | Entradas por estación y hora |
-| Relevamiento de usos del suelo (417.764 parcelas) | GCBA · BA Data | 2022-2024 | Comercio, oficinas, vivienda |
+{pron_datos}| Relevamiento de usos del suelo (417.764 parcelas) | GCBA · BA Data | 2022-2024 | Comercio, oficinas, vivienda |
 | OpenStreetMap (≈29 mil puntos y red peatonal) | Colaboradores de OSM | 2026 | Comercios, estaciones, calles |
 | Barrios | GCBA · BA Data | vigente | Límites |
 
 **Calidad de datos (DAMA).** El listado de cajeros da bien en completitud (97 %), validez (100 %), unicidad (98,9 %: 14 duplicados por ubicación y banco) y consistencia (96,9 %), pero falla en **oportunidad**: el 31 %
 de las ubicaciones está a nombre de bancos que dejaron de operar con ese nombre entre 2017 y 2024 (Citibank, BBVA Banco
 Francés, Santander Río, HSBC). Lo tratamos como una foto de ≈2017. El censo por radio cubre el 99,2 % de la población oficial.
-Los molinetes cubren 335 de los 365 días de 2025. El CSV de usos del suelo no trae coordenadas, así que se tomaron del shapefile.
+A los molinetes de 2025 les falta marzo y, del 1 al 12 de agosto, una parte de los registros trae la fecha invertida (ver 4.7). El CSV de usos del suelo no trae coordenadas, así que se tomaron del shapefile.
 OpenStreetMap está incompleto para cajeros ({R['cajeros_osm_2026']} contra {n(R['ubicaciones'])}).
 
 **Hallazgos del EDA** (cinco tipos de análisis exploratorio, `notebooks/01_calidad_y_eda.ipynb`):
@@ -198,7 +282,7 @@ OpenStreetMap está incompleto para cajeros ({R['cajeros_osm_2026']} contra {n(R
 ## 4. Modelado
 
 Seguimos los cuatro niveles de análisis de la materia: el EDA es el **descriptivo**; los modelos de esta sección son el
-**predictivo** (4.1 y 4.2) y el **diagnóstico** que lo explica (4.3); la segmentación y la optimización son el
+**predictivo** (4.1 y 4.2 en el espacio, 4.7 en el tiempo) y el **diagnóstico** que lo explica (4.3); la segmentación y la optimización son el
 **prescriptivo** (4.4 a 4.6).
 
 ### 4.1 Regresión: ¿cuántas terminales le corresponden a cada zona? (`notebooks/02_machine_learning.ipynb`)
@@ -302,7 +386,7 @@ Con los molinetes 2025 ({n(R['pax_subte_habil'])} entradas por día hábil), los
 **{R['hora_pico_tarde']}:00**. Un K-Means sobre la forma de la curva horaria de cada estación separa estaciones de **origen** (pico a la
 mañana, barrios) y de **destino** (pico a la tarde, centro). {R['estaciones'] - R['estaciones_sin_link']} de {R['estaciones']}
 estaciones ya tienen un Link a menos de 500 m; {robustez_txt}: el faltante grande está en los barrios, no en el transporte.
-
+{pron_seccion}
 ## 5. Evaluación
 
 - **Generalización (regresión):** D² espacial = {n(R['d2_espacial_promedio'], 2)} ± {n(R['d2_espacial_desvio'], 2)} entre grupos de
@@ -314,7 +398,7 @@ estaciones ya tienen un Link a menos de 500 m; {robustez_txt}: el faltante grand
   ciudad (p = {n(R['p_valor_cajeros_nuevos'], 3)}, Monte Carlo). El AUC de la brecha es {n(R['auc_validacion'], 2)} y el de la probabilidad
   del clasificador, {n(val.loc['Probabilidad de cajero (clasificador)', 'AUC'], 2)}, contra {n(val.loc['Solo residentes', 'AUC'], 2)} de usar solo la
   población. Es una evidencia a favor, pero modesta, por la cantidad de casos.
-- **Robustez:** {robustez_txt}. El goloso queda a menos del {n(R['goloso_max_diferencia_pct'], 1)} % del óptimo exacto, y medir
+{pron_eval}- **Robustez:** {robustez_txt}. El goloso queda a menos del {n(R['goloso_max_diferencia_pct'], 1)} % del óptimo exacto, y medir
   con otra regla de conexión a la red cambia la cobertura en poco más de un punto.
 
 **Limitaciones.**
@@ -324,6 +408,8 @@ estaciones ya tienen un Link a menos de 500 m; {robustez_txt}: el faltante grand
   mercado entero desatiende (la optimización por cobertura cubre ese caso).
 - OpenStreetMap varía en completitud entre barrios.
 - Los feriados en día de semana cuentan como hábiles en el promedio horario.
+- La serie diaria del subte tiene menos de dos años (sin marzo de 2025): con más años, el pronóstico aprendería mejor la
+  estacionalidad. No anticipa paros, lluvias ni eventos.
 - Las distancias se miden desde el centro de cada hexágono y la red peatonal no tiene en cuenta semáforos, pendientes ni
   la percepción de seguridad de cada cuadra.
 
@@ -334,7 +420,7 @@ App en Streamlit con mapas de deck.gl (`streamlit run app/app.py`). Funciona sin
 - predicción por zona: para cada barrio, cuántas terminales tiene y cuántas le corresponden, el porqué de cada zona (SHAP)
   y las oportunidades del clasificador;
 - simulador de N cajeros (exacto o goloso, distancia caminando o en línea recta, con o sin pasajeros por franja horaria);
-- demanda por hora;
+- demanda por hora y pronóstico de entradas al subte para los próximos seis meses;
 - tipos de zona;
 - carga del listado propio de cajeros, que recalcula cobertura y ubicaciones.
 
@@ -342,7 +428,9 @@ Una terminal nueva que alcance el promedio nacional suma unas 3.242 extracciones
 promedio de julio 2025). El ingreso por operación es un dato interno: la app lo recibe como parámetro.
 
 **Próximos pasos:**
-- pronosticar la demanda de paso día por día con la serie 2022-2026 de los molinetes (`notebooks/05_pronostico_subte.ipynb`);
+- sumar más años de molinetes al pronóstico (el notebook 00c los baja cuando el catálogo de BA Data responde) y variables
+  de clima y eventos;
+- reportar a BA Data el error de fechas del archivo de molinetes de 2025;
 - correr el modelo con el listado actual y las transacciones por terminal;
 - sumar restricciones de costo y de seguridad por sitio a la optimización;
 - validar la hipótesis horaria (carga de efectivo antes de los picos) con transacciones por hora.
@@ -365,7 +453,9 @@ problema, eligió las fuentes y los métodos, y revisó el código y los resulta
 - Fayyad, U., Piatetsky-Shapiro, G. y Smyth, P. (1996). From data mining to knowledge discovery in databases. *AI Magazine*, 17(3).
 - Friedman, J. (2001). Greedy function approximation: a gradient boosting machine. *Annals of Statistics*, 29(5).
 - Huangfu, Q. y Hall, J. (2018). Parallelizing the dual revised simplex method. *Mathematical Programming Computation*, 10, 119-142.
+- Hyndman, R. y Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3.ª ed.). OTexts.
 - INDEC (2024). *Censo Nacional de Población, Hogares y Viviendas 2022*, base por radio censal.
+- Koenker, R. y Bassett, G. (1978). Regression quantiles. *Econometrica*, 46(1), 33-50.
 - Lundberg, S. y Lee, S.-I. (2017). A unified approach to interpreting model predictions. *NeurIPS 2017*.
 - Lundberg, S. et al. (2020). From local explanations to global understanding with explainable AI for trees. *Nature Machine Intelligence*, 2, 56-67.
 - McCullagh, P. y Nelder, J. (1989). *Generalized Linear Models* (2.ª ed.). Chapman & Hall.

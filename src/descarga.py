@@ -749,7 +749,11 @@ def recursos_molinetes(anios) -> dict[int, list[str]]:
 
 
 def _fecha(texto: str):
-    """'1/2/2024' es 1 de febrero (día primero); '2024-02-01' es ISO. pandas confunde la segunda con dayfirst."""
+    """
+    '1/2/2024' es 1 de febrero (día primero); '2024-02-01' es ISO. pandas confunde la segunda con dayfirst.
+    Ojo: en el archivo de molinetes de 2025, parte del 1 al 12 de agosto viene como mes/día con el mismo texto
+    ('08/04/2025'), así que no se puede corregir acá; se detecta después con pronostico.fechas_cruzadas.
+    """
     texto = str(texto).strip()
     if re.match(r"^\d{4}-\d{1,2}-\d{1,2}", texto):
         return pd.to_datetime(texto[:10], format="%Y-%m-%d", errors="coerce")

@@ -1,0 +1,14 @@
+variable,importancia,nombre
+dia_semana,0.357291676612507,Día de la semana
+fin_de_semana,0.3462954098221435,Fin de semana
+feriado,0.17395907089890247,Feriado
+dia_anio_cos,0.049153947603733136,Época del año (coseno)
+mes,0.036472840224600005,Mes
+dia_anio_sin,0.014851089808222402,Época del año (seno)
+dia_mes,0.009221843571323034,Día del mes
+puente,0.007117744710963469,Feriado puente
+anio,0.001856200727840859,Año
+semana_mes,0.0017340002637944527,Semana del mes
+vacaciones_invierno,0.001524585308262845,Vacaciones de invierno
+pegado_feriado,0.0005215904477068241,Día pegado a un feriado
+no_laborable,0.0,Día no laborable

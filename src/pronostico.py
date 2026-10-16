@@ -2,7 +2,8 @@
 pronostico.py
 -------------
 Análisis predictivo en el tiempo: cuánta gente va a entrar al subte cada día en los próximos
-meses, a partir de la serie diaria de los molinetes (BA Data, 2022 a 2026).
+meses, a partir de la serie diaria de los molinetes (BA Data; los años que publique el catálogo,
+hoy de enero de 2025 a agosto de 2026).
 
 Para Red Link: anticipar la demanda de paso para planificar la carga de efectivo y el
 mantenimiento de los cajeros cerca de las estaciones (Gerencia Técnica).
@@ -13,9 +14,10 @@ semana, mes, día del año, feriados y feriados puente), comparados con una refe
 pasado y se evalúa en meses posteriores que el modelo no vio; nunca se usan fechas futuras
 para entrenar.
 
-Los días con muy pocos pasajeros para su día de la semana (paros, cortes o datos faltantes) se
-marcan como anomalías: no se usan para entrenar ni para medir el error, porque no son
-predecibles con el calendario.
+Los días con muy pocos pasajeros para su día de la semana (paros, cortes o datos faltantes), con
+demasiados (registros repetidos) o con la fecha mal cargada en el archivo de origen se marcan como
+anomalías: no se usan para entrenar ni para medir el error, porque no son predecibles con el
+calendario.
 """
 
 from __future__ import annotations
@@ -33,13 +35,19 @@ SEMILLA = 42
 ARCHIVO_DIARIO = "subte-diario-estacion.parquet"
 ARCHIVO_HORA = "subte-hora-red.parquet"
 VARIABLES = ["dia_semana", "fin_de_semana", "mes", "dia_mes", "dia_anio_sin", "dia_anio_cos", "semana_mes",
-             "feriado", "puente", "no_laborable", "pegado_feriado", "anio"]
+             "feriado", "puente", "no_laborable", "pegado_feriado", "vacaciones_invierno", "anio"]
 NOMBRES = {
     "dia_semana": "Día de la semana", "fin_de_semana": "Fin de semana", "mes": "Mes", "dia_mes": "Día del mes",
     "dia_anio_sin": "Época del año (seno)", "dia_anio_cos": "Época del año (coseno)", "semana_mes": "Semana del mes",
     "feriado": "Feriado", "puente": "Feriado puente", "no_laborable": "Día no laborable",
-    "pegado_feriado": "Día pegado a un feriado", "anio": "Año",
+    "pegado_feriado": "Día pegado a un feriado", "vacaciones_invierno": "Vacaciones de invierno", "anio": "Año",
 }
+# Receso escolar de invierno en CABA (calendario escolar de cada año)
+VACACIONES_INVIERNO = {2025: ("2025-07-21", "2025-08-01"), 2026: ("2026-07-20", "2026-07-31")}
+# Días que en los datos se comportan como feriado (o que son feriado solo en la Ciudad) y que el paquete `holidays`
+# no trae. El 9/11/2026 (visita del Papa León XIV) es feriado nacional y ya viene en el paquete; el 10 lo es en CABA.
+FERIADOS_EXTRA = {"2025-10-10": "Día del Respeto a la Diversidad Cultural (trasladado al viernes)",
+                  "2026-11-10": "Visita del Papa León XIV (feriado en la Ciudad de Buenos Aires)"}
 
 
 def hay_serie(base: Path = DIR_BASE) -> bool:
@@ -60,7 +68,7 @@ MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto
 
 
 def nombre_mes(fecha) -> str:
-    return f"{MESES[fecha.month - 1]} {fecha.year}"
+    return f"{MESES[fecha.month - 1]} de {fecha.year}"
 
 
 def _sin_pruebas(diario: pd.DataFrame) -> pd.DataFrame:
@@ -74,31 +82,90 @@ def serie_red(diario: pd.DataFrame) -> pd.Series:
     return s.reindex(pd.date_range(s.index.min(), s.index.max(), freq="D")).rename("pasajeros")
 
 
-def marcar_anomalias(s: pd.Series, umbral: float = 0.5) -> pd.Series:
+def _relacion_con_tipico(s: pd.Series, excluir: np.ndarray) -> pd.Series:
     """
-    Verdadero en los días sin dato o con menos de la mitad de los pasajeros típicos de ese día de la
-    semana en las 8 semanas alrededor (paros, cortes de servicio o archivos incompletos).
+    Pasajeros del día sobre la mediana del mismo día de la semana en las 8 semanas alrededor. Para la mediana no se
+    usan los días excluidos (feriados) ni los casi vacíos (menos del 30 % de un día igual).
     """
+    dia = s.index.dayofweek
+    base = s.where(~excluir)
+    mediana_dia = base.groupby(dia).transform("median")
+    base = base.where(base > 0.3 * mediana_dia)
     tipico = pd.Series(index=s.index, dtype=float)
     for d in range(7):
-        sub = s[s.index.dayofweek == d]
+        sub = base[dia == d]
         tipico.loc[sub.index] = sub.rolling(9, center=True, min_periods=3).median()
-    feriados = feriados_ar(s.index)
-    es_feriado = feriados["tipo"].reindex(s.index).notna()
-    bajo = s < umbral * tipico
-    return s.isna() | (bajo & ~es_feriado)
+    return s / tipico.fillna(mediana_dia)
+
+
+def fechas_cruzadas(s: pd.Series, desvio: float = 0.15, minimo: int = 4) -> pd.DatetimeIndex:
+    """
+    Busca meses en los que una parte de los registros trae la fecha como mes/día y se leyó como día/mes. Si eso le pasa
+    al mes M, los días 1 a 12 de M quedan con pasajeros de menos y el día M de los otros meses, con pasajeros de más
+    ("08/04/2025" es el 4 de agosto, pero leído como día/mes cae el 8 de abril). Se marca el mes cuando la mediana de los
+    días 1 a 12 queda más de un 15 % abajo de lo típico y la del día M de los otros meses, más de un 15 % arriba. El día
+    M de M no cambia: se lee igual de las dos formas. En los molinetes de 2025 lo encuentra en agosto (22 días).
+    """
+    fer = feriados_ar(s.index)["tipo"].reindex(s.index).notna().to_numpy()
+    r = _relacion_con_tipico(s, fer).where(~fer)
+    fechas = []
+    for anio in sorted(set(s.index.year)):
+        for m in range(1, 13):
+            bajos = pd.DatetimeIndex([pd.Timestamp(anio, m, d) for d in range(1, 13) if d != m])
+            altos = pd.DatetimeIndex([pd.Timestamp(anio, d, m) for d in range(1, 13) if d != m])
+            rb, ra = r.reindex(bajos).dropna(), r.reindex(altos).dropna()
+            if len(rb) >= minimo and len(ra) >= minimo and rb.median() < 1 - desvio and ra.median() > 1 + desvio:
+                fechas += list(bajos) + list(altos)
+    return pd.DatetimeIndex(sorted(set(fechas)))
+
+
+def marcar_anomalias(s: pd.Series, bajo: float = 0.5, alto: float = 1.25) -> pd.Series:
+    """
+    Verdadero en los días sin dato, en los de fecha mal cargada (fechas_cruzadas) y en los que se apartan mucho de un
+    día igual: menos de la mitad (paros, cortes, archivos incompletos) o más de 1,25 veces (registros duplicados) que
+    la mediana del mismo día de la semana en las 8 semanas alrededor. Los feriados no cuentan como anomalía por tener
+    poca gente: el modelo los aprende.
+    """
+    fer = feriados_ar(s.index)["tipo"].reindex(s.index).notna().to_numpy()
+    cruzada = s.index.isin(fechas_cruzadas(s))
+    r = _relacion_con_tipico(s, fer | cruzada)
+    return s.isna() | cruzada | ((r < bajo) & ~fer) | (r > alto)
+
+
+def tipico_dia(s: pd.Series, anomalia: pd.Series) -> pd.Series:
+    """Mediana de los días normales del mismo día de la semana en las 8 semanas alrededor (para mostrar desvíos)."""
+    base = s.where(~anomalia.to_numpy())
+    tipico = pd.Series(index=s.index, dtype=float)
+    for d in range(7):
+        sub = base[s.index.dayofweek == d]
+        tipico.loc[sub.index] = sub.rolling(9, center=True, min_periods=3).median()
+    return tipico
 
 
 def feriados_ar(fechas) -> pd.DataFrame:
-    """Feriados nacionales de Argentina (paquete `holidays`), con su tipo."""
+    """
+    Feriados de Argentina (paquete `holidays`) con su tipo: feriado, puente (con fines turísticos) o no laborable
+    (Jueves Santo). Se suman el 24 y el 31 de diciembre, que en el subte se comportan como feriado, y los
+    traslados que el paquete no trae.
+    """
     import holidays
 
-    anios = sorted({d.year for d in pd.DatetimeIndex(fechas)} | {max(pd.DatetimeIndex(fechas)).year + 1})
+    fechas = pd.DatetimeIndex(fechas)
+    anios = list(range(fechas.min().year - 1, fechas.max().year + 2))
     filas = []
     for d, nombre in holidays.Argentina(years=anios).items():
-        n = nombre.lower()
-        tipo = "puente" if "turístic" in n else "no_laborable" if "jueves santo" in n else "feriado"
+        partes = [p.strip().lower() for p in nombre.split(";")]
+        if any("turístic" not in p and "jueves santo" not in p for p in partes):
+            tipo = "feriado"
+        elif any("turístic" in p for p in partes):
+            tipo = "puente"
+        else:
+            tipo = "no_laborable"
         filas.append({"fecha": pd.Timestamp(d), "nombre": nombre, "tipo": tipo})
+    for anio in anios:
+        filas += [{"fecha": pd.Timestamp(f"{anio}-12-24"), "nombre": "Nochebuena", "tipo": "feriado"},
+                  {"fecha": pd.Timestamp(f"{anio}-12-31"), "nombre": "Fin de año", "tipo": "feriado"}]
+    filas += [{"fecha": pd.Timestamp(f), "nombre": n, "tipo": "feriado"} for f, n in FERIADOS_EXTRA.items()]
     return pd.DataFrame(filas).drop_duplicates("fecha").set_index("fecha").sort_index()
 
 
@@ -108,8 +175,10 @@ def calendario(fechas) -> pd.DataFrame:
     tipo = fer["tipo"].reindex(fechas)
     cualquiera = tipo.notna().to_numpy()
     # un día hábil pegado a un feriado (antes o después) suele tener menos gente
-    pegado = (pd.Series(cualquiera, index=fechas).shift(1, fill_value=False)
-              | pd.Series(cualquiera, index=fechas).shift(-1, fill_value=False)).to_numpy() & ~cualquiera
+    pegado = ((fechas - pd.Timedelta(days=1)).isin(fer.index) | (fechas + pd.Timedelta(days=1)).isin(fer.index)) & ~cualquiera
+    vacaciones = np.zeros(len(fechas), dtype=int)
+    for desde, hasta in VACACIONES_INVIERNO.values():
+        vacaciones |= ((fechas >= pd.Timestamp(desde)) & (fechas <= pd.Timestamp(hasta))).astype(int)
     doy = fechas.dayofyear.to_numpy()
     return pd.DataFrame({
         "dia_semana": fechas.dayofweek,
@@ -123,6 +192,7 @@ def calendario(fechas) -> pd.DataFrame:
         "puente": (tipo == "puente").astype(int).to_numpy(),
         "no_laborable": (tipo == "no_laborable").astype(int).to_numpy(),
         "pegado_feriado": (pegado & (fechas.dayofweek < 5)).astype(int),
+        "vacaciones_invierno": vacaciones,
         "anio": fechas.year,
     }, index=fechas)
 
@@ -147,11 +217,15 @@ def modelos() -> dict:
     }
 
 
-def ingenuo_anio_anterior(s: pd.Series, fechas) -> np.ndarray:
-    """El mismo día de la semana de hace 52 semanas (364 días). Si ese día fue anómalo, la mediana de su mes y día."""
+def ingenuo_anio_anterior(s: pd.Series, anomalia: pd.Series, fechas) -> np.ndarray:
+    """
+    El mismo día de la semana de hace 52 semanas (364 días). Si ese día fue anómalo o falta, la mediana de los días
+    normales de ese mes y día de la semana del año anterior; si tampoco hay, queda vacío.
+    """
     fechas = pd.DatetimeIndex(fechas)
-    atras = s.reindex(fechas - pd.Timedelta(days=364)).to_numpy()
-    ref = s.dropna()
+    normal = s.where(~anomalia.to_numpy())
+    atras = normal.reindex(fechas - pd.Timedelta(days=364)).to_numpy()
+    ref = normal.dropna()
     respaldo = ref.groupby([ref.index.year, ref.index.month, ref.index.dayofweek]).median()
     out = []
     for f, v in zip(fechas, atras):
@@ -178,41 +252,56 @@ def metricas(real: np.ndarray, pred: np.ndarray) -> dict:
             "error del total (%)": float((p.sum() - r.sum()) / r.sum() * 100), "días evaluados": int(ok.sum())}
 
 
-def cortes_validacion(fin, meses: int = 6) -> list[tuple[str, str, str]]:
-    """
-    Los dos períodos de prueba más recientes, de `meses` meses cada uno. Para cada uno se entrena con todo lo
-    anterior: (nombre, último día de entrenamiento, último día de prueba).
-    """
-    fin = pd.Timestamp(fin)
-    c2 = fin + pd.Timedelta(days=1) - pd.DateOffset(months=meses) - pd.Timedelta(days=1)
-    c1 = c2 + pd.Timedelta(days=1) - pd.DateOffset(months=meses) - pd.Timedelta(days=1)
-    nombre = lambda a, b: f"{nombre_mes(a + pd.Timedelta(days=1))} a {nombre_mes(b)}"  # noqa: E731
-    return [(nombre(c1, c2), str(c1.date()), str(c2.date())), (nombre(c2, fin), str(c2.date()), str(fin.date()))]
+def nombre_periodo(desde, hasta) -> str:
+    desde, hasta = pd.Timestamp(desde), pd.Timestamp(hasta)
+    if desde.year == hasta.year:
+        return f"{MESES[desde.month - 1]} a {MESES[hasta.month - 1]} de {hasta.year}"
+    return f"{nombre_mes(desde)} a {nombre_mes(hasta)}"
 
 
-def horizonte(fin) -> pd.Timestamp:
-    """Hasta fin de año y, como mínimo, tres meses después del último dato."""
-    fin = pd.Timestamp(fin)
-    return max(pd.Timestamp(year=fin.year, month=12, day=31), fin + pd.DateOffset(months=3) + pd.offsets.MonthEnd(0))
+def cortes_validacion(s: pd.Series, meses: int = 4, minimo_meses: int = 12, maximo: int = 2) -> list[tuple[str, str, str]]:
+    """
+    Validación hacia adelante con origen móvil: los períodos de prueba más recientes, de `meses` meses cada uno,
+    siempre con al menos `minimo_meses` de historia para entrenar. Devuelve (nombre, último día de entrenamiento,
+    último día de prueba), del más viejo al más nuevo.
+    """
+    datos = s.dropna().index
+    inicio, fin_te = datos.min(), datos.max()
+    cortes = []
+    while len(cortes) < maximo:
+        fin_tr = fin_te + pd.Timedelta(days=1) - pd.DateOffset(months=meses) - pd.Timedelta(days=1)
+        if fin_tr < inicio + pd.DateOffset(months=minimo_meses) - pd.Timedelta(days=1):
+            break
+        cortes.append((nombre_periodo(fin_tr + pd.Timedelta(days=1), fin_te), str(fin_tr.date()), str(fin_te.date())))
+        fin_te = fin_tr
+    return cortes[::-1]
+
+
+def horizonte(fin, meses: int = 6) -> pd.Timestamp:
+    """Último día del pronóstico: seis meses después del último dato."""
+    return pd.Timestamp(fin) + pd.DateOffset(months=meses) + pd.offsets.MonthEnd(0)
 
 
 def validar(s: pd.Series, anomalia: pd.Series, cortes: list[tuple[str, str, str]]) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
-    Validación hacia adelante. Cada corte es (nombre, último día de entrenamiento, último día de prueba).
-    Devuelve las métricas por modelo y corte, y las predicciones día por día.
+    Validación hacia adelante. Para cada corte se entrena hasta el último día de entrenamiento y se predice el
+    período de prueba. Todos los modelos se miden en los mismos días: los normales en los que la referencia
+    ingenua tiene valor. Devuelve las métricas por modelo y corte, y las predicciones día por día.
     """
     filas, preds = [], []
     for nombre, fin_tr, fin_te in cortes:
         fechas = s.index[(s.index > pd.Timestamp(fin_tr)) & (s.index <= pd.Timestamp(fin_te))]
-        evaluables = fechas[~anomalia.reindex(fechas).to_numpy()]
-        real = s.reindex(evaluables).to_numpy()
-        candidatos = {"Mismo día del año anterior": ingenuo_anio_anterior(s, evaluables)}
+        fechas = fechas[~anomalia.reindex(fechas).to_numpy()]
+        candidatos = {"Mismo día del año anterior": ingenuo_anio_anterior(s, anomalia, fechas)}
         for m_nombre, m in modelos().items():
-            candidatos[m_nombre] = predecir(entrenar(s, anomalia, fin_tr, m), evaluables)
+            candidatos[m_nombre] = predecir(entrenar(s, anomalia, fin_tr, m), fechas)
+        comun = np.all([~np.isnan(p) for p in candidatos.values()], axis=0)
+        evaluables = fechas[comun]
+        real = s.reindex(evaluables).to_numpy()
         for m_nombre, p in candidatos.items():
-            filas.append({"período de prueba": nombre, "modelo": m_nombre, **metricas(real, p)})
+            filas.append({"período de prueba": nombre, "modelo": m_nombre, **metricas(real, p[comun])})
             preds.append(pd.DataFrame({"fecha": evaluables, "periodo": nombre, "modelo": m_nombre, "real": real,
-                                       "prediccion": p}))
+                                       "prediccion": p[comun]}))
     return pd.DataFrame(filas), pd.concat(preds, ignore_index=True)
 
 
@@ -247,9 +336,13 @@ def por_mes(s: pd.Series, anomalia: pd.Series, pron: pd.DataFrame) -> pd.DataFra
     return out
 
 
-def importancia(s: pd.Series, anomalia: pd.Series, hasta=None) -> pd.Series:
+def importancia(s: pd.Series, anomalia: pd.Series, modelo_nombre: str = "Random Forest", hasta=None) -> pd.Series:
+    """
+    Importancia de cada variable en el modelo entrenado con toda la serie: cuánto baja el error, en promedio, cada
+    vez que un árbol corta por esa variable (en Random Forest, la reducción de varianza; en XGBoost, la ganancia).
+    """
     hasta = hasta or s.dropna().index.max()
-    m = entrenar(s, anomalia, hasta, modelos()["XGBoost"])
+    m = entrenar(s, anomalia, hasta, modelos()[modelo_nombre])
     imp = pd.Series(m.feature_importances_, index=VARIABLES)
     return (imp / imp.sum()).sort_values(ascending=False)
 
@@ -295,12 +388,12 @@ def resultados(base: Path = DIR_BASE, salida: Path = RAIZ / "data" / "processed"
     s = serie_red(diario)
     anomalia = marcar_anomalias(s)
     fin = s.dropna().index.max()
-    met, _ = validar(s, anomalia, cortes_validacion(fin))
+    met, _ = validar(s, anomalia, cortes_validacion(s))
     promedio = met.groupby("modelo")["MAPE (%)"].mean().sort_values()
     elegido = next(m for m in promedio.index if m != "Mismo día del año anterior")
     pron = pronosticar(s, anomalia, horizonte(fin), elegido)
     mensual = por_mes(s, anomalia, pron)
-    imp = importancia(s, anomalia)
+    imp = importancia(s, anomalia, elegido)
 
     est = por_estacion(diario, anomalia)
     ref = pd.read_csv(salida / "estaciones_subte.csv")
@@ -316,14 +409,20 @@ def resultados(base: Path = DIR_BASE, salida: Path = RAIZ / "data" / "processed"
     imp.rename("importancia").rename_axis("variable").reset_index().assign(
         nombre=lambda d: d["variable"].map(NOMBRES)).to_csv(salida / "pronostico_importancia.csv", index=False)
     est.sort_values("pax_habil_pronostico", ascending=False).to_csv(salida / "pronostico_estaciones.csv", index=False)
+    picos = {}
     if hora is not None:
-        perfil_horario(hora).to_csv(salida / "pronostico_perfil_horario.csv", index=False)
+        perfil = perfil_horario(hora)
+        perfil.to_csv(salida / "pronostico_perfil_horario.csv", index=False)
+        h = perfil[perfil["tipo_dia"] == "hábil"].set_index("hora")["parte"]
+        picos = {"parte_pico_manana": float(h.loc[7:9].sum()), "parte_pico_tarde": float(h.loc[17:19].sum())}
 
     sin_link = est[~est["link_cerca"].astype(bool)]
     ultimo = met[met["período de prueba"] == met["período de prueba"].iloc[-1]].set_index("modelo")
+    minimo = mensual["pronostico"].idxmin()
     resumen = {
         "desde": str(s.dropna().index.min().date()), "hasta": str(fin.date()), "dias": int(s.notna().sum()),
         "dias_anomalos": int((anomalia & s.notna()).sum()), "dias_sin_dato": int(s.isna().sum()),
+        "dias_fecha_cruzada": int((s.index.isin(fechas_cruzadas(s)) & s.notna()).sum()),
         "modelo_elegido": elegido, "mape_promedio": {k: float(v) for k, v in promedio.items()},
         "periodos_prueba": list(met["período de prueba"].unique()),
         "mape_ultimo_periodo": {k: float(v) for k, v in ultimo["MAPE (%)"].items()},
@@ -332,9 +431,17 @@ def resultados(base: Path = DIR_BASE, salida: Path = RAIZ / "data" / "processed"
         "primer_mes_nombre": nombre_mes(primer_mes.to_timestamp()),
         "pax_habil_primer_mes": float(mensual.loc[primer_mes, "pronostico"]),
         "variacion_primer_mes_pct": float(mensual.loc[primer_mes, "variacion_%"]),
-        "estaciones_sin_link": int(len(sin_link)),
+        "mes_minimo_nombre": nombre_mes(minimo.to_timestamp()),
+        "pax_habil_mes_minimo": float(mensual.loc[minimo, "pronostico"]),
+        "mensual": [{"mes": str(p), "nombre": nombre_mes(p.to_timestamp()), "pax_habil": float(f["pronostico"]),
+                     "p10": float(f["p10"]), "p90": float(f["p90"]),
+                     "anio_anterior": None if pd.isna(f["anio_anterior"]) else float(f["anio_anterior"]),
+                     "variacion_pct": None if pd.isna(f["variacion_%"]) else float(f["variacion_%"])}
+                    for p, f in mensual.iterrows()],
+        "estaciones_sin_link": len(sin_link),
         "pax_habil_estaciones_sin_link": float(sin_link["pax_habil_pronostico"].sum()),
         "variable_principal": NOMBRES[imp.index[0]],
+        **picos,
     }
     (salida / "pronostico_resumen.json").write_text(json.dumps(resumen, ensure_ascii=False, indent=2), encoding="utf-8")
     return resumen

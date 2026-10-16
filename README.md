@@ -19,12 +19,13 @@ Cruzamos dónde vive y circula la gente con dónde están los cajeros automátic
 | Zonas sin ningún cajero que deberían tener uno (clasificador) | **254**, con 480.545 vecinos |
 | Modelo de regresión elegido (validación espacial anidada) | Ensamble (Poisson + XGBoost): D² = 0,57, error medio de 4,2 terminales por zona |
 | Clasificador elegido | Random Forest: AUC = 0,84 |
+| Pronóstico del subte (Random Forest, validado en meses que no vio) | erra un 8,0 % por día (repetir el año anterior: 22,2 %); 765 mil entradas por día hábil en septiembre de 2026 y 522 mil en enero de 2027 |
 
 Los cajeros **siguen al comercio, no a los vecinos**. Un modelo de machine learning (árboles, Random Forest y XGBoost,
 validados en comunas que no vieron) estima cuántos cajeros le corresponden a cada zona según su demanda. Hay dos
 oportunidades: **competir** donde la demanda justifica más terminales Link de las que hay (Palermo, Belgrano, Recoleta), y
 **cubrir** los barrios residenciales (Belgrano, Villa Urquiza, Almagro) y el sur (Villa Lugano, Barracas, Villa Soldati),
-donde no hay un Link a distancia caminable. El detalle está en el [informe técnico](docs/informe.md).
+donde no hay un Link a distancia caminable. Un segundo modelo pronostica cuánta gente va a entrar al subte cada día de los próximos seis meses, para planificar la carga de efectivo y el mantenimiento. El detalle está en el [informe técnico](docs/informe.md).
 
 ## Cómo ver la app
 
@@ -82,8 +83,8 @@ Después, abrir `http://localhost:8501` en el navegador. Para correr también lo
 3. *Deploy*. En unos minutos queda una dirección pública para abrir desde cualquier navegador.
 
 La app tiene siete secciones: panorama (mapa 3D de la brecha), predicción por zona (cuántas terminales tiene cada barrio,
-cuántas le corresponden y por qué), simulador de cajeros nuevos, demanda por hora, tipos de zona, "usá tus datos" (cargar el
-listado actual de cajeros) y cómo funciona.
+cuántas le corresponden y por qué), simulador de cajeros nuevos, demanda por hora y pronóstico del subte, tipos de zona,
+"usá tus datos" (cargar el listado actual de cajeros) y cómo funciona.
 
 ![Predicción por zona: Belgrano tiene 30 terminales Link y le corresponden 52; el mapa marca sus zonas y a la derecha está el porqué de la zona elegida](docs/figuras/app_prediccion.png)
 
@@ -92,6 +93,8 @@ listado actual de cajeros) y cómo funciona.
 | Panorama | Demanda por hora |
 |---|---|
 | ![Mapa 3D de la brecha Link por hexágono](docs/figuras/app_panorama.png) | ![Pasajeros del subte por hora y tipo de estación](docs/figuras/app_demanda_hora.png) |
+
+![Pronóstico de entradas al subte para los próximos seis meses, con su intervalo del 80 % y el día hábil promedio de cada mes](docs/figuras/app_pronostico.png)
 
 ## Entregables de la consigna
 
@@ -122,9 +125,10 @@ preguntas probables.
    - **diagnóstico:** valores SHAP, importancia de Gini y coeficientes de la regresión de Poisson;
    - **prescriptivo:** K-Means para los tipos de zona y de estación, y cobertura máxima resuelta de forma exacta
      (programación lineal entera con HiGHS) y con un algoritmo goloso;
-   - **pronóstico:** Random Forest y XGBoost sobre el calendario para la demanda diaria del subte (notebook 05).
-4. **Evaluación:** métricas en comunas no vistas (D² de Poisson, MAE, AUC) y validación temporal con los cajeros que
-   aparecieron en OpenStreetMap después de 2017.
+   - **pronóstico:** Random Forest y XGBoost sobre el calendario para la demanda diaria del subte, validados hacia
+     adelante en meses que no vieron (notebook 05).
+4. **Evaluación:** métricas en comunas no vistas (D² de Poisson, MAE, AUC), MAPE del pronóstico en meses no vistos y
+   validación temporal con los cajeros que aparecieron en OpenStreetMap después de 2017.
 5. **Despliegue:** app de Streamlit con mapas de deck.gl, que funciona sin conexión.
 
 ## Estructura del repositorio
@@ -142,7 +146,7 @@ preguntas probables.
 ├── notebooks/
 │   ├── 00_descarga_datos.ipynb     # baja todas las fuentes (Colab)
 │   ├── 00b_red_peatonal.ipynb      # baja la red de calles (Colab)
-│   ├── 00c_serie_diaria_subte.ipynb # baja la serie diaria del subte 2022-2026 (Colab)
+│   ├── 00c_serie_diaria_subte.ipynb # baja la serie diaria del subte (Colab)
 │   ├── 01_calidad_y_eda.ipynb      # calidad de datos y análisis exploratorio
 │   ├── 02_machine_learning.ipynb   # regresión y clasificación: árboles, Random Forest, XGBoost, SHAP
 │   ├── 03_optimizacion.ipynb       # tipos de zona (K-Means) y dónde sumar cajeros
@@ -158,13 +162,15 @@ preguntas probables.
 ```bash
 pip install -r requirements.txt
 python -m src.pipeline                      # variables, modelos y resultados (≈6 minutos)
+python -m src.pronostico                    # pronóstico del subte (segundos)
 for f in notebooks/_construir/nb0*.py; do python "$f"; done   # regenera los notebooks (textos con los números nuevos)
 python docs/_construir/informe.py && python docs/_construir/readme.py
 ```
 
 Para volver a bajar las fuentes: [00 · Descarga](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00_descarga_datos.ipynb), [00b · Red peatonal](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00b_red_peatonal.ipynb)
 y [00c · Serie diaria del subte](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/00c_serie_diaria_subte.ipynb) en Colab (*Entorno de ejecución → Ejecutar todo*).
-El pronóstico ([05](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/05_pronostico_subte.ipynb)) también corre directo en Colab: si no encuentra la serie, la baja.
+La serie diaria del subte ya está en `data/base/`, así que el pronóstico ([05](https://colab.research.google.com/github/ValentinoDiaz0509/CienciaDeDatos/blob/main/notebooks/05_pronostico_subte.ipynb)) corre
+directo, también en Colab.
 
 ## Fuentes y licencias
 

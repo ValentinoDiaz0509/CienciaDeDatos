@@ -1,0 +1,14 @@
+{
+  "catalogo_molinetes": {
+    "ok": false,
+    "detalle": "ConnectionError: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')) (se usan solo 2025 y 2026)"
+  },
+  "molinetes_2025_1": {
+    "ok": true,
+    "detalle": "01/01/2025 a 31/12/2025, 335 días, 101 estaciones"
+  },
+  "molinetes_2026_1": {
+    "ok": true,
+    "detalle": "02/07/2025 a 31/08/2026, 244 días, 100 estaciones"
+  }
+}

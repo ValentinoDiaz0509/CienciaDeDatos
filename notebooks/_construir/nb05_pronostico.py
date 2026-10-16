@@ -5,6 +5,36 @@ import nbformat as nbf
 
 md, code = nbf.v4.new_markdown_cell, nbf.v4.new_code_cell
 SALIDA = Path(__file__).resolve().parents[1] / "05_pronostico_subte.ipynb"
+RAIZ = Path(__file__).resolve().parents[2]
+_R = RAIZ / "data/processed/pronostico_resumen.json"
+MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre",
+         "diciembre"]
+if _R.exists():   # textos con los números del último pronóstico (python -m src.pronostico)
+    import json
+
+    R = json.loads(_R.read_text(encoding="utf-8"))
+    _n = lambda v, d=0: f"{v:,.{d}f}".replace(",", "X").replace(".", ",").replace("X", ".")  # noqa: E731
+    _f = lambda iso: f"{MESES[int(iso[5:7]) - 1]} de {iso[:4]}"  # noqa: E731
+    _el = R["modelo_elegido"]
+    _m, _i = R["mape_promedio"][_el], R["mape_promedio"]["Mismo día del año anterior"]
+    _t = R["error_total_ultimo_periodo"][_el]
+    PERIODO = f"{_f(R['desde'])} a {_f(R['hasta'])}"
+    TECNICA = (f"con variables de calendario, **{_el}** erra en promedio un **{_n(_m, 1)} %** por día en meses que no vio, "
+               f"contra {_n(_i, 1)} % de la referencia ingenua (el mismo día del año anterior): su error es el "
+               f"{_n(100 * _m / _i)} % del de la referencia. En el total del último período de prueba "
+               f"({R['periodos_prueba'][-1]}) {'sobreestima' if _t >= 0 else 'subestima'} un {_n(abs(_t), 1)} %.")
+    NEGOCIO_MES = (f"Para {R['primer_mes_nombre']} el modelo espera unas **{_n(R['pax_habil_primer_mes'])} entradas por día "
+                   f"hábil** ({'+' if R['variacion_primer_mes_pct'] >= 0 else ''}{_n(R['variacion_primer_mes_pct'], 1)} % "
+                   f"contra un año antes) y para {R['mes_minimo_nombre']}, el mes más bajo, unas "
+                   f"{_n(R['pax_habil_mes_minimo'])}. Las {R['estaciones_sin_link']} estaciones sin un Link cerca van a "
+                   f"recibir unas {_n(R['pax_habil_estaciones_sin_link'])} entradas por día hábil. ")
+    CRUZADAS = R.get("dias_fecha_cruzada", 22)
+else:
+    PERIODO = "los años que publique BA Data"
+    TECNICA = ("con variables de calendario, Random Forest y XGBoost pronostican la demanda diaria con mucho menos error que "
+               "la referencia ingenua, medido hacia adelante en meses que no vieron.")
+    NEGOCIO_MES = ""
+    CRUZADAS = 22
 
 cells = [
     md("""# 05 · Pronóstico: ¿cuánta gente va a pasar por el subte en los próximos meses?
@@ -17,7 +47,7 @@ entrar al subte cada día de los próximos meses. Son las dos caras del análisi
 | | Notebook 02 | Notebook 05 |
 |---|---|---|
 | Pregunta | ¿Cuántos cajeros le corresponden a cada zona? | ¿Cuánta gente va a pasar por las estaciones cada día? |
-| Datos | una foto de la ciudad (censo, usos del suelo, OpenStreetMap) | la serie diaria de los molinetes, 2022 a 2026 (SBASE) |
+| Datos | una foto de la ciudad (censo, usos del suelo, OpenStreetMap) | la serie diaria de los molinetes (SBASE), de """ + PERIODO + """ |
 | Modelos | regresión de conteos: árboles, Random Forest, XGBoost | regresión sobre el calendario: Random Forest y XGBoost |
 | Validación | espacial: comunas que el modelo no vio | hacia adelante: meses que el modelo no vio |
 
@@ -27,8 +57,8 @@ entrar al subte cada día de los próximos meses. Son las dos caras del análisi
   va a haber más gente y en qué días y meses conviene hacer los trabajos.
 - **Gerencia Comercial:** cuánta gente va a pasar por las estaciones que hoy no tienen un Link a distancia caminable.
 
-**Cómo correrlo.** Necesita la serie diaria en `data/base/` (la arma el notebook 00c). En Colab no hace falta nada más:
-si no está, este notebook la baja (tarda entre 20 y 40 minutos la primera vez)."""),
+**Cómo correrlo.** La serie diaria ya está en `data/base/` (la armó el notebook 00c en Colab, a partir de los archivos de
+molinetes de BA Data). Si faltara, en Colab este notebook la baja (tarda entre 20 y 40 minutos)."""),
     code("""# Preparar el entorno: en Colab clona el repo y, si falta, baja la serie diaria
 import json, subprocess, sys, shutil, zipfile
 from pathlib import Path
@@ -78,9 +108,14 @@ print("Serie diaria:", DIR_BASE / pr.ARCHIVO_DIARIO)"""),
     md("""## 1. La serie
 
 Sumamos las entradas de todas las estaciones para tener **pasajeros por día en toda la red**. Antes de modelar marcamos los
-**días anómalos**: los que tienen menos de la mitad de los pasajeros de un día igual en las semanas de alrededor (paros,
-cortes de servicio o archivos incompletos). No se pueden predecir con el calendario, así que no se usan para entrenar ni
-para medir el error. Los feriados no cuentan como anomalía: son justamente lo que el modelo tiene que aprender."""),
+**días anómalos**, que no se pueden predecir con el calendario y por eso no se usan para entrenar ni para medir el error:
+
+- los que tienen **menos de la mitad** de los pasajeros de un día igual en las semanas de alrededor (paros, cortes de
+  servicio, archivos incompletos);
+- los que tienen **más de 1,25 veces** (registros repetidos);
+- los que tienen la **fecha mal cargada** en el archivo de origen (lo explicamos abajo).
+
+Los feriados no cuentan como anomalía: son justamente lo que el modelo tiene que aprender."""),
     code("""diario, hora = pr.cargar(DIR_BASE)
 s = pr.serie_red(diario)
 anomalia = pr.marcar_anomalias(s)
@@ -96,10 +131,48 @@ ax.plot(s.index, s / 1e3, color=e.EJE, linewidth=0.6, label="Pasajeros por día"
 semanal = s.where(~anomalia).rolling(28, center=True, min_periods=14).mean()
 ax.plot(semanal.index, semanal / 1e3, color=e.LINK, linewidth=2.2, label="Promedio de 4 semanas")
 an = s[anomalia & s.notna()]
-ax.scatter(an.index, an / 1e3, s=16, color=e.DIVERGENTE[-2], zorder=3, label="Días anómalos (paros, cortes)")
+ax.scatter(an.index, an / 1e3, s=16, color=e.DIVERGENTE[-2], zorder=3, label="Días anómalos (no se usan)")
 ax.set(title="Entradas al subte por día, toda la red", ylabel="miles de pasajeros")
-ax.legend(loc="upper left"); e.ejes_es(ax, y=0); fig.tight_layout(); fig.savefig(FIG / "pron_serie.png"); plt.show()"""),
-    md("""### Los patrones que tiene que aprender el modelo"""),
+eje_meses(ax, 2); ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=3, frameon=False)
+e.ejes_es(ax, y=0); fig.tight_layout(); fig.savefig(FIG / "pron_serie.png"); plt.show()"""),
+    md("""### Un error en los datos abiertos: fechas con el día y el mes invertidos
+
+Al revisar los días anómalos apareció un patrón: en 2025, **el día 8 de casi todos los meses tiene un tercio más de
+pasajeros** de lo normal, en todas las líneas y en todas las horas por igual, y **del 1 al 12 de agosto falta más o menos
+lo mismo**. La explicación: una parte de los registros de esos días de agosto trae la fecha como mes/día (`08/04/2025`
+es el 4 de agosto) y, leída como día/mes, que es el formato del resto del archivo, cae en el 8 de abril. El 8 de agosto no
+cambia porque se lee igual de las dos formas, y del 13 en adelante no hay confusión posible (no existe el mes 13).
+
+La prueba más clara: **marzo de 2025 no está en el archivo, pero el 8 de marzo tiene entradas**, y sumadas al 3 de agosto
+dan un domingo normal. En 2026 no pasa: sirve de control."""),
+    code("""tipico = pr.tipico_dia(s, anomalia)        # mediana de los días normales iguales en las 8 semanas de alrededor
+cal_s = pr.calendario(s.index)
+feriado_s = cal_s[["feriado", "puente", "no_laborable"]].sum(axis=1) > 0
+pct = 100 * s / tipico
+
+
+def mediana_pct(fechas):
+    fechas = [f for f in fechas if f in pct.index and pd.notna(pct[f]) and not feriado_s[f]]
+    return pct[fechas].median()
+
+
+pd.DataFrame({anio: {"el día 8 de cada mes (menos agosto)": mediana_pct([pd.Timestamp(anio, m, 8) for m in range(1, 13) if m != 8]),
+                     "del 1 al 12 de agosto (menos el 8)": mediana_pct([pd.Timestamp(anio, 8, d) for d in range(1, 13) if d != 8])}
+              for anio in (2025, 2026)}).round(0).rename_axis("% de un día típico")"""),
+    code("""print(f"8 de marzo de 2025 (marzo no está en el archivo): {e.num_es(s['2025-03-08'])} entradas. "
+      f"3 de agosto: {e.num_es(s['2025-08-03'])}. Suma: {e.num_es(s['2025-03-08'] + s['2025-08-03'])}, "
+      f"contra {e.num_es(tipico['2025-08-03'])} de un domingo típico.")
+cruzadas = pr.fechas_cruzadas(s)   # busca el patrón en cualquier mes y año de la serie
+por_mes_c = pd.Series(cruzadas.to_period("M")).value_counts()   # el mes afectado aporta 11 días; los demás, uno
+print("Mes con fechas cruzadas:", ", ".join(pr.nombre_mes(m.to_timestamp()) for m in sorted(por_mes_c[por_mes_c >= 6].index)) or "ninguno")
+print(f"Marcamos como anómalos los {len(cruzadas)} días afectados: no entran ni al entrenamiento ni a la medición.")"""),
+    md("""**Qué hicimos.** No se pueden separar los registros mezclados (la suma por día ya los junta), así que esos """
+       + str(CRUZADAS) + """ días quedan afuera del modelo. No los marcamos a mano: `pr.fechas_cruzadas` busca el patrón en
+cualquier mes y año (días 1 a 12 de un mes con menos gente y el mismo número de día en los otros meses con más), así que si
+se suman años a la serie también los encuentra. Es un hallazgo para reportar a BA Data: quien use el archivo de 2025 sin revisarlo va a ver picos
+de demanda el 8 de cada mes que no existen.
+
+### Los patrones que tiene que aprender el modelo"""),
     code("""cal = pr.calendario(s.index)
 normal = s.where(~anomalia)
 habil = (cal["fin_de_semana"] == 0) & (cal[["feriado", "puente", "no_laborable"]].sum(axis=1) == 0)
@@ -154,10 +227,13 @@ cualquier fecha futura.
 - **Modelos (clases 6 y 8):** **Random Forest** (500 árboles) y **XGBoost** (boosting de 800 árboles poco profundos).
 - **Referencia ingenua:** "el mismo día de la semana del año anterior". Un modelo que no le gane a esto no sirve.
 - **Validación hacia adelante:** se entrena solo con el pasado y se mide en los meses siguientes, que el modelo no vio.
-  Lo hacemos dos veces, con los dos semestres más recientes. Nunca se usan fechas futuras para entrenar: sería hacer
-  trampa, porque en la realidad el futuro no se conoce.
+  Lo hacemos dos veces, con los dos períodos de cuatro meses más recientes y siempre con al menos un año de historia para
+  entrenar (origen móvil). Nunca se usan fechas futuras para entrenar: sería hacer trampa, porque en la realidad el futuro
+  no se conoce.
+- **Comparación justa:** los tres se miden en los mismos días (los normales en los que la referencia tiene valor; por eso
+  marzo, que falta en 2025, no entra en el primer período).
 - **Métricas:** MAPE (error porcentual medio por día), MAE (pasajeros por día) y error del total del período."""),
-    code("""cortes = pr.cortes_validacion(fin)
+    code("""cortes = pr.cortes_validacion(s)
 for nombre, fin_tr, fin_te in cortes:
     print(f"Prueba {nombre}: entrena hasta el {pd.Timestamp(fin_tr):%d/%m/%Y}, mide hasta el {pd.Timestamp(fin_te):%d/%m/%Y}")
 met, preds = pr.validar(s, anomalia, cortes)
@@ -173,27 +249,31 @@ ax.plot(p.index, p[("prediccion", "Mismo día del año anterior")] / 1e3, color=
 ax.plot(p.index, p[("prediccion", elegido)] / 1e3, color=e.LINK, linewidth=1.6,
         label=f"{elegido} (MAPE {e.num_es(met.set_index(['período de prueba', 'modelo']).loc[(ultimo, elegido), 'MAPE (%)'], 1)} %)")
 ax.set(title=f"Validación hacia adelante: {ultimo}, meses que el modelo no vio", ylabel="miles de pasajeros por día")
-eje_meses(ax); ax.legend(loc="lower right"); e.ejes_es(ax, y=0); fig.tight_layout(); fig.savefig(FIG / "pron_validacion.png"); plt.show()
+eje_meses(ax); ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=3, frameon=False)
+e.ejes_es(ax, y=0); fig.tight_layout(); fig.savefig(FIG / "pron_validacion.png"); plt.show()
 m_el = met[met["modelo"] == elegido]["MAPE (%)"].mean()
 m_in = met[met["modelo"] == "Mismo día del año anterior"]["MAPE (%)"].mean()
 print(f"Modelo elegido: {elegido}. Erra en promedio un {e.num_es(m_el, 1)} % por día, contra {e.num_es(m_in, 1)} % de la "
-      f"referencia ingenua: reduce el error a {e.num_es(100 * m_el / m_in)} %.")"""),
-    md("""**Lectura.** Si el modelo erra poco **día por día** y casi nada en el **total del período**, sirve para planificar: el
+      f"referencia ingenua: su error es el {e.num_es(100 * m_el / m_in)} % del de la referencia.")"""),
+    md("""**Lectura.** Si el modelo erra poco **día por día** y poco en el **total del período**, sirve para planificar: el
 error de un día puntual se compensa a lo largo del mes. Los días que más erra suelen ser los que tienen algo que el
-calendario no sabe (lluvia fuerte, un evento, un paro parcial).
+calendario no sabe (lluvia fuerte, un evento, un paro parcial). Random Forest y XGBoost quedan cerca; elegimos el de menor
+error promedio en los dos períodos.
 
 ## 3. Qué aprendió el modelo
 
-Importancia de cada variable en XGBoost (cuánto mejora la predicción cada vez que el modelo la usa para cortar)."""),
-    code("""imp = pr.importancia(s, anomalia)
+Importancia de cada variable en el modelo elegido: cuánto baja el error, en promedio, cada vez que un árbol corta por esa
+variable (la reducción de varianza, que es la versión para regresión de la importancia de Gini de la clase 8). *Día de la
+semana* y *fin de semana* miden casi lo mismo, así que se reparten la importancia."""),
+    code("""imp = pr.importancia(s, anomalia, elegido)
 fig, ax = plt.subplots(figsize=(9, 4.4))
 d = imp.sort_values()
 ax.barh([pr.NOMBRES[v] for v in d.index], d.values, color=e.LINK, height=0.62)
-ax.set(title="XGBoost: qué variables del calendario pesan más", xlabel="importancia (proporción)")
+ax.set(title=f"{elegido}: qué variables del calendario pesan más", xlabel="importancia (proporción)")
 ax.grid(axis="y", visible=False); e.ejes_es(ax, x=2); fig.tight_layout(); fig.savefig(FIG / "pron_importancia.png"); plt.show()"""),
     md("""## 4. Pronóstico
 
-Entrenamos con **toda** la serie y pronosticamos día por día hasta fin de año (como mínimo, tres meses). La banda es un
+Entrenamos con **toda** la serie y pronosticamos día por día los seis meses siguientes al último dato. La banda es un
 **intervalo del 80 %**: lo estimamos con dos modelos XGBoost de cuantiles (10 y 90), que aprenden el rango en el que
 suelen caer los días de cada tipo."""),
     code("""pron = pr.pronosticar(s, anomalia, pr.horizonte(fin), elegido)
@@ -204,9 +284,10 @@ ax.plot(reciente.index, reciente / 1e3, color=e.TINTA_SUAVE, linewidth=1, label=
 ax.fill_between(pron["fecha"], pron["p10"] / 1e3, pron["p90"] / 1e3, color=e.SECUENCIAL[0], label="Intervalo del 80 %")
 ax.plot(pron["fecha"], pron["pronostico"] / 1e3, color=e.LINK, linewidth=1.6, label=f"Pronóstico ({elegido})")
 ax.axvline(fin, color=e.TINTA_SUAVE, linewidth=1, linestyle="--")
-ax.text(fin, ax.get_ylim()[1], " hoy", va="top", fontsize=9, color=e.TINTA_2)
+ax.text(fin, ax.get_ylim()[1], f" último dato publicado ({fin:%d/%m/%Y})", va="top", fontsize=9, color=e.TINTA_2)
 ax.set(title="Pronóstico de entradas al subte por día", ylabel="miles de pasajeros por día")
-eje_meses(ax); ax.legend(loc="lower left"); e.ejes_es(ax, y=0); fig.tight_layout(); fig.savefig(FIG / "pron_pronostico.png"); plt.show()
+eje_meses(ax); ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=3, frameon=False)
+e.ejes_es(ax, y=0); fig.tight_layout(); fig.savefig(FIG / "pron_pronostico.png"); plt.show()
 mensual_p = pr.por_mes(s, anomalia, pron)
 (mensual_p.rename(columns={"pronostico": "día hábil promedio", "p10": "mínimo probable", "p90": "máximo probable",
                            "anio_anterior": "mismo mes, año anterior", "variacion_%": "variación (%)"})
@@ -244,7 +325,7 @@ print(f"Las {res['estaciones_sin_link']} estaciones sin un Link cerca van a reci
         ax.plot(d["hora"], 100 * d["parte"], marker="o", markersize=4, linewidth=2, color=color, label=f"Día {tipo}")
     ax.set(title="Qué parte de las entradas del día ocurre en cada hora (últimos 6 meses)", xlabel="hora",
            ylabel="% de las entradas del día")
-    ax.set_xticks(range(5, 24, 2))
+    ax.set_xticks(range(0, 24))
     ax.legend(); e.ejes_es(ax, y=0); fig.tight_layout(); fig.savefig(FIG / "pron_horario.png"); plt.show()
     h = perfil[perfil["tipo_dia"] == "hábil"].set_index("hora")["parte"]
     print(f"En un día hábil, entre las 7 y las 10 entra el {e.num_es(100 * h.loc[7:9].sum())} % de la gente y entre las 17 y "
@@ -252,11 +333,14 @@ print(f"Las {res['estaciones_sin_link']} estaciones sin un Link cerca van a reci
           f"{e.num_es(res['pax_habil_primer_mes'] * h.loc[7:9].sum())} personas en el pico de la mañana.")"""),
     md("""## 6. Conclusión
 
-- **Técnica:** con variables de calendario, XGBoost y Random Forest pronostican la demanda diaria con un error muy chico
-  frente a la referencia ingenua, medido hacia adelante en meses que no vieron.
-- **Negocio:** la demanda de paso se puede **anticipar**. La Gerencia Técnica puede planificar la carga de efectivo
-  antes de los días de más gente y concentrar el mantenimiento y las instalaciones en los días y meses de menos flujo
-  (fines de semana, feriados y el verano). La Comercial sabe cuánta gente va a pasar por las estaciones sin un Link cerca.
+- **Técnica:** """ + TECNICA + """
+- **Negocio:** la demanda de paso se puede **anticipar**. """ + NEGOCIO_MES + """La Gerencia Técnica puede planificar la
+  carga de efectivo antes de los días de más gente y concentrar el mantenimiento y las instalaciones en los días y meses de
+  menos flujo (fines de semana, feriados y el verano). La Comercial sabe cuánta gente va a pasar por las estaciones sin un
+  Link cerca.
+- **Datos:** la serie va de """ + PERIODO + """ (el catálogo de BA Data no respondió para años anteriores). Al archivo
+  de 2025 le falta marzo y tiene """ + str(CRUZADAS) + """ días con la fecha mal cargada, que encontramos y dejamos afuera.
+  Con más años, el modelo aprendería mejor la estacionalidad; el notebook 00c los baja.
 - **Limitación:** los molinetes cuentan gente que entra al subte, no extracciones. Es un indicador del flujo de personas
   cerca de las estaciones, no de la demanda de efectivo, que es un dato privado de las redes."""),
     code("""if EN_COLAB:   # para pasarle la serie al grupo
