@@ -1,12 +1,12 @@
-"""Genera notebooks/03_demanda_por_hora.ipynb (correr: python notebooks/_construir/nb03_horario.py)."""
+"""Genera notebooks/04_demanda_por_hora.ipynb (correr: python notebooks/_construir/nb04_horario.py)."""
 import sys
 from pathlib import Path
 
 import nbformat as nbf
 
 md, code = nbf.v4.new_markdown_cell, nbf.v4.new_code_cell
-SALIDA = Path(__file__).resolve().parents[1] / "03_demanda_por_hora.ipynb"
-TEXTOS = Path(__file__).resolve().parent / "textos_nb03.py"
+SALIDA = Path(__file__).resolve().parents[1] / "04_demanda_por_hora.ipynb"
+TEXTOS = Path(__file__).resolve().parent / "textos_nb04.py"
 RAIZ = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(RAIZ))
 T = {"RAIZ": RAIZ}
@@ -19,7 +19,7 @@ def texto(clave, defecto=""):
 
 
 cells = [
-    md("""# 03 · Demanda por hora del día
+    md("""# 04 · Demanda por hora del día
 
 **TPO Ciencia de Datos · ¿Dónde faltan cajeros Link en CABA?**
 

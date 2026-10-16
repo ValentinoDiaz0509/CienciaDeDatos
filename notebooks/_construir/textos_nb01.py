@@ -37,7 +37,7 @@ relevamiento es de alrededor de 2017, **unos nueve años**. {_n(_viejos.sum())} 
 actualización reciente porque se actualizan los metadatos, no el relevamiento.
 
 **Qué hacemos con esto:** (1) leemos la oferta como una foto de ≈2017 y lo decimos en la defensa; (2) validamos contra los
-cajeros mapeados en OpenStreetMap en 2026 (notebook 02, §7); (3) la app permite cargar el listado actual, que Red Link sí
+cajeros mapeados en OpenStreetMap en 2026 (notebook 02, §8); (3) la app permite cargar el listado actual, que Red Link sí
 tiene. Las otras cinco dimensiones dan bien (ver la tabla de arriba): los problemas de completitud, unicidad y
 consistencia son menores y no cambian el análisis."""
 

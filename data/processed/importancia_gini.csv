@@ -1,0 +1,15 @@
+variable,importancia,nombre
+actividad_osm_k1,0.16347021514193416,Comercios y servicios (OSM)
+pax_subte_habil_k1,0.15914136786056216,Pasajeros de subte por día hábil
+parcelas_comercio_k1,0.13770358781070793,Parcelas comerciales
+dist_subte_m,0.1277126485563884,Distancia al subte (m)
+parcelas_oficinas_k1,0.12139930956187986,Parcelas de oficinas
+dist_centro_km,0.08475367708775808,Distancia a Plaza de Mayo (km)
+parcelas_residencial_k1,0.04411327511369403,Parcelas residenciales
+poblacion_k1,0.04228162469382359,Residentes en el área
+pct_65_k1,0.03967111875125657,% de 65 años o más
+pct_univ_k1,0.02786290631115533,% con nivel universitario
+tasa_empleo_k1,0.019523057616514145,Tasa de empleo
+pct_sin_internet_k1,0.016735506763839492,% hogares sin internet
+pct_nbi_k1,0.014611638451205942,% hogares con NBI
+estaciones_tren_k1,0.0010200662792800579,Estaciones de tren

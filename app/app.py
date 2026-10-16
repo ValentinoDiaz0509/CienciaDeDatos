@@ -24,6 +24,8 @@ sys.path.insert(0, str(RAIZ))
 
 from src import estilo as e  # noqa: E402
 from src import features as f  # noqa: E402
+from src import graficos_ml as gm  # noqa: E402
+from src import ml  # noqa: E402
 from src import modelos as m  # noqa: E402
 from src import red as rp  # noqa: E402
 
@@ -52,7 +54,12 @@ def cargar():
         "horario": pd.read_csv(PROC / "subte_horario.csv"),
         "perfil": pd.read_csv(PROC / "clusters_perfil.csv"),
         "metricas": pd.read_csv(PROC / "metricas_modelos.csv"),
+        "metricas_clasif": pd.read_csv(PROC / "metricas_clasificacion.csv"),
+        "oob": pd.read_csv(PROC / "oob_vs_validacion.csv"),
         "importancia": pd.read_csv(PROC / "importancia_variables.csv"),
+        "gini": pd.read_csv(PROC / "importancia_gini.csv"),
+        "barrios_pred": pd.read_csv(PROC / "barrios_prediccion.csv", index_col="barrio"),
+        "aportes": pd.read_parquet(PROC / "aportes_hex.parquet").set_index("h3"),
         "comparacion": pd.read_csv(PROC / "goloso_vs_exacto.csv"),
         "cobertura": pd.read_csv(PROC / "cobertura_redes.csv"),
         "barrios": json.loads((BASE / "barrios.geojson").read_text(encoding="utf-8")),
@@ -81,6 +88,9 @@ D = cargar()
 res, resumen, cajeros = D["res"], D["resumen"], D["cajeros"]
 CONJUNTOS = cargar_conjuntos()
 HAY_RED = "dist_link_m_red" in res.columns
+# Valores de las variables del modelo en cada zona (para explicar sus predicciones) y escala común de la brecha
+X_VALORES = res.set_index("h3")[[c for c in D["aportes"].columns if not c.startswith("_")]]
+LIM_BRECHA = float(np.nanquantile(np.abs(res["brecha_link"]), 0.95))
 
 
 def fmt(n: float, dec: int = 0) -> str:
@@ -162,13 +172,81 @@ def con_tips(df: pd.DataFrame, col_dist: str) -> pd.DataFrame:
     return d
 
 
+def estacion_cercana(lat: float, lon: float) -> str:
+    """'a 300 m de Juramento (D)' si hay una estación de subte a menos de 1 km; si no, vacío."""
+    est = D["estaciones"]
+    dist = np.hypot((est["lat"] - lat) * 111_000, (est["lon"] - lon) * 92_000)
+    i = dist.idxmin()
+    if dist[i] > 1_000:
+        return ""
+    return f"a {fmt(max(100, round(dist[i], -2)))} m de {est.loc[i, 'estacion']} ({est.loc[i, 'linea']})"
+
+
+def vista_de(lat: pd.Series, lon: pd.Series, ancho_px: int = 480) -> pdk.ViewState:
+    """Encuadre que muestra todos los puntos (por ejemplo, las zonas de un barrio). deck.gl usa teselas de 512 px."""
+    extension = max(lon.max() - lon.min(), (lat.max() - lat.min()) * 1.21) + 0.006
+    zoom = float(np.clip(np.log2(360 * ancho_px / (512 * 1.2 * extension)), 10.5, 15))
+    return pdk.ViewState(latitude=float(lat.mean()), longitude=float(lon.mean()), zoom=zoom, pitch=0, bearing=0)
+
+
+def grafico_explicacion(t: pd.DataFrame):
+    """Aportes de cada variable a lo que le corresponde a una zona (valores SHAP, como factores multiplicativos)."""
+    import altair as alt
+
+    d = t.copy()
+    d["etiqueta"] = [r["nombre"] if r["variable"] == "resto" else f"{r['nombre']}: {gm.valor_legible(r['variable'], r['valor'])}"
+                     for _, r in d.iterrows()]
+    d["efecto"] = np.select([d["variable"] == "resto", d["aporte_log"] >= 0], ["Resto", "Sube"], "Baja")
+    d["factor_txt"] = "×" + d["factor"].map(lambda v: fmt(v, 2))
+    lim = max(float(d["aporte_log"].abs().max()) * 1.4, float(np.log(1.6)))
+    marcas = [float(np.log(v)) for v in ((0.25, 0.5, 1, 2, 4) if lim > np.log(3) else (0.5, 0.75, 1, 1.5, 2))
+              if abs(np.log(v)) <= lim]
+    x = alt.X("aporte_log:Q", scale=alt.Scale(domain=[-lim, lim]), title="multiplica lo que le corresponde (×1 = no cambia)",
+              axis=alt.Axis(values=marcas, labelExpr="'×' + replace(format(exp(datum.value), '.2~f'), '.', ',')"))
+    y = alt.Y("etiqueta:N", sort=list(d["etiqueta"]), title=None, axis=alt.Axis(labelLimit=340))
+    barras = alt.Chart(d).mark_bar(cornerRadius=3, height=24).encode(
+        x=x, y=y,
+        color=alt.Color("efecto:N", legend=None,
+                        scale=alt.Scale(domain=["Sube", "Baja", "Resto"], range=[e.DIVERGENTE[-2], e.DIVERGENTE[1], e.EJE])),
+        tooltip=[alt.Tooltip("nombre:N", title="Variable"), alt.Tooltip("factor_txt:N", title="Multiplica por")])
+    sube = alt.Chart(d).transform_filter("datum.aporte_log >= 0").mark_text(align="left", dx=5, fontSize=12, color=e.TINTA) \
+        .encode(x=x, y=y, text="factor_txt:N")
+    baja = alt.Chart(d).transform_filter("datum.aporte_log < 0").mark_text(align="right", dx=-5, fontSize=12, color=e.TINTA) \
+        .encode(x=x, y=y, text="factor_txt:N")
+    cero = alt.Chart(pd.DataFrame({"aporte_log": [0.0]})).mark_rule(color=e.TINTA_SUAVE).encode(x=x)
+    return (barras + sube + baja + cero).properties(height=46 * len(d))
+
+
+def grafico_tiene_corresponden(b: pd.DataFrame):
+    """Por barrio: terminales Link que tiene contra las que le corresponden según su demanda."""
+    import altair as alt
+
+    d = b.reset_index()[["barrio", "tiene_link", "corresponden_link", "diferencia_link"]]
+    d["texto"] = d["diferencia_link"].map(lambda v: ("faltan " if v >= 0 else "sobran ") + fmt(abs(v)))
+    d["extremo"] = d[["tiene_link", "corresponden_link"]].max(axis=1)
+    largo = d.melt(id_vars=["barrio"], value_vars=["tiene_link", "corresponden_link"], var_name="serie", value_name="terminales")
+    nombres = {"tiene_link": "Terminales Link que tiene", "corresponden_link": "Le corresponden según su demanda"}
+    largo["serie"] = largo["serie"].map(nombres)
+    y = alt.Y("barrio:N", sort=list(d["barrio"]), title=None)
+    regla = alt.Chart(d).mark_rule(color=e.EJE, strokeWidth=3).encode(
+        y=y, x=alt.X("tiene_link:Q", title="terminales Link"), x2="corresponden_link:Q")
+    puntos = alt.Chart(largo).mark_circle(size=120, opacity=1).encode(
+        y=y, x="terminales:Q",
+        color=alt.Color("serie:N", title=None, legend=alt.Legend(orient="top", labelLimit=400),
+                        scale=alt.Scale(domain=list(nombres.values()), range=[e.TINTA_SUAVE, e.LINK])),
+        tooltip=[alt.Tooltip("barrio:N", title="Barrio"), alt.Tooltip("serie:N", title=" "),
+                 alt.Tooltip("terminales:Q", title="Terminales", format=".0f")])
+    texto = alt.Chart(d).mark_text(align="left", dx=10, fontSize=12, color=e.TINTA).encode(y=y, x="extremo:Q", text="texto:N")
+    return (regla + puntos + texto).properties(height=30 * len(d) + 40)
+
+
 # --------------------------------------------------------------------------
 # Navegación
 # --------------------------------------------------------------------------
 st.sidebar.markdown("### 🏧 Cajeros Link en CABA")
 st.sidebar.caption("Dónde faltan y dónde conviene sumar terminales")
-pagina = st.sidebar.radio("Sección", ["Panorama", "Simulador de expansión", "Demanda por hora", "Tipos de zona",
-                                      "Usá tus datos", "Cómo funciona"], label_visibility="collapsed")
+pagina = st.sidebar.radio("Sección", ["Panorama", "Predicción por zona", "Simulador de expansión", "Demanda por hora",
+                                      "Tipos de zona", "Usá tus datos", "Cómo funciona"], label_visibility="collapsed")
 st.sidebar.divider()
 metodo = st.sidebar.radio("Distancia", ["Caminando por las calles", "En línea recta"] if HAY_RED else ["En línea recta"],
                           help="Caminando usa la red peatonal de OpenStreetMap (algoritmo de Dijkstra). "
@@ -223,23 +301,146 @@ if pagina == "Panorama":
     leyenda([(e.DIVERGENTE[-1], "Faltan terminales Link (más alto = más brecha)"), (e.DIVERGENTE[3], "En equilibrio"),
              (e.DIVERGENTE[0], "Sobran respecto de la demanda"), (e.LINK, "Cajero Link"), (e.BANELCO, "Cajero Banelco")])
 
-    st.subheader("Los 15 barrios con más terminales Link faltantes")
-    por_barrio = (res.groupby("barrio").agg(residentes=("poblacion", "sum"), link=("term_link", "sum"),
-                                            banelco=("term_banelco", "sum"),
-                                            faltan=("brecha_link", lambda s: s.clip(lower=0).sum() / 7))
-                  .sort_values("faltan", ascending=False).head(15))
-    por_barrio["Link cada 10 mil vecinos"] = por_barrio["link"] / por_barrio["residentes"] * 1e4
-    st.dataframe(por_barrio.rename(columns={"residentes": "Residentes", "link": "Terminales Link",
-                                            "banelco": "Terminales Banelco", "faltan": "Terminales Link faltantes"}),
-                 column_config={"Residentes": st.column_config.NumberColumn(format="%d"),
-                                "Terminales Link faltantes": st.column_config.NumberColumn(format="%.0f"),
-                                "Link cada 10 mil vecinos": st.column_config.NumberColumn(format="%.1f")})
-    st.caption("Terminales faltantes: suma de las brechas positivas del barrio, corregida por la superposición de "
-               "las áreas de influencia (cada terminal cuenta en 7 hexágonos).")
+    st.subheader("Los 15 barrios donde a Link le faltan más terminales")
+    bp = D["barrios_pred"].head(15)
+    st.dataframe(pd.DataFrame({
+        "Residentes": bp["residentes"], "Terminales Link que tiene": bp["tiene_link"],
+        "Le corresponden según su demanda": bp["corresponden_link"], "Faltan": bp["diferencia_link"],
+        "Terminales Banelco": bp["tiene_banelco"], "Link cada 10 mil vecinos": bp["tiene_link"] / bp["residentes"] * 1e4})
+        .round({"Residentes": 0}).rename_axis("Barrio"),
+        column_config={"Residentes": st.column_config.NumberColumn(format="%d"),
+                       "Le corresponden según su demanda": st.column_config.NumberColumn(format="%.0f"),
+                       "Faltan": st.column_config.NumberColumn(format="%.0f"),
+                       "Link cada 10 mil vecinos": st.column_config.NumberColumn(format="%.1f")})
+    st.caption(f"Le corresponden: predicción del modelo de machine learning ({resumen['modelo_elegido']}) con la "
+               f"participación de Link en la ciudad ({pct(resumen['cuota_link'])}). El detalle, zona por zona, está en "
+               "**Predicción por zona**.")
 
 
 # --------------------------------------------------------------------------
-# 2. Simulador
+# 2. Predicción por zona (machine learning)
+# --------------------------------------------------------------------------
+elif pagina == "Predicción por zona":
+    st.title("¿Cuántos cajeros le corresponden a cada zona?")
+    st.markdown(
+        "Un modelo de **machine learning** aprendió, con toda la ciudad, cuántas terminales hay en las zonas según su "
+        "demanda (residentes, comercios, oficinas, pasajeros de subte y perfil socioeconómico) y con eso estima cuántas le "
+        "**corresponden** a cada zona. Cada zona la predice un modelo que **no vio su comuna** (validación cruzada "
+        "espacial), así que no se explica con sus propios cajeros.")
+    k1, k2, k3, k4 = st.columns(4)
+    k1.metric("Variación que explica el modelo", pct(resumen["d2_espacial_promedio"]),
+              help=f"D² de Poisson (el R² de los conteos) de {resumen['modelo_elegido']}, promedio de 5 grupos de comunas "
+                   f"que el modelo no vio; varía ±{fmt(100 * resumen['d2_espacial_desvio'])} puntos entre grupos.")
+    k2.metric("Error medio por zona", f"{fmt(resumen['mae_espacial'], 1)} terminales",
+              help="Error absoluto medio (MAE) en comunas no vistas, sobre el área de 400 m de cada zona.")
+    k3.metric("Acierto del clasificador (AUC)", fmt(resumen["auc_clasificador"], 2),
+              help=f"{resumen['clasificador_elegido']}: probabilidad de que una zona con cajero reciba más puntaje que una "
+                   "sin cajero (0,5 = azar; 1 = perfecto). Medido en comunas no vistas.")
+    k4.metric("Oportunidades (zonas sin cajero)", fmt(resumen["zonas_sin_cajero_que_deberian"]),
+              help=f"Zonas sin ningún cajero que, según el clasificador, deberían tener uno. Viven {fmt(resumen['residentes_zonas_sin_cajero_que_deberian'])} personas en ellas.")
+
+    vista_ml = st.radio("Vista", ["Un barrio, zona por zona", "Ranking de barrios", "Oportunidades (clasificación)"],
+                        horizontal=True, label_visibility="collapsed")
+    bp = D["barrios_pred"]
+
+    if vista_ml == "Un barrio, zona por zona":
+        barrio = st.selectbox("Barrio", list(bp.index), help="Ordenados de mayor a menor faltante de terminales Link.")
+        fb = bp.loc[barrio]
+        dif = fb["diferencia_link"]
+        b1, b2, b3, b4 = st.columns(4)
+        b1.metric("Terminales Link que le corresponden", fmt(fb["corresponden_link"]))
+        b2.metric("Terminales Link que tiene", fmt(fb["tiene_link"]))
+        b3.metric("Faltan" if dif >= 0 else "Sobran", fmt(abs(dif)))
+        b4.metric("Todas las redes: le corresponden / tiene", f"{fmt(fb['corresponden_total'])} / {fmt(fb['tiene_total'])}")
+        st.caption(f"{barrio}: {fb['resumen']}.")
+
+        rb = (res[(res["barrio"] == barrio) & res["esperado_link_k1"].notna()]
+              .sort_values("brecha_link", ascending=False).copy())
+        rb["zona"] = np.arange(1, len(rb) + 1)
+        rb["cerca"] = [estacion_cercana(a, o) for a, o in zip(rb["lat"], rb["lon"])]
+        etiquetas = {f"Zona {z.zona} · {'faltan' if z.brecha_link >= 0 else 'sobran'} {fmt(abs(z.brecha_link), 1)} Link"
+                     + (f" · {z.cerca}" if z.cerca else ""): z.h3 for z in rb.itertuples()}
+        izq, der = st.columns([1, 1.15])
+        with der:
+            elegida = st.selectbox("Zona (de mayor a menor faltante)", list(etiquetas))
+            h = etiquetas[elegida]
+            z = rb.set_index("h3").loc[h]
+            subte = (f"entran {fmt(z['pax_subte_habil_k1'])} pasajeros de subte por día hábil" if z["pax_subte_habil_k1"] > 0
+                     else "no hay estaciones de subte")
+            st.markdown(f"**En el área de 400 m alrededor de la zona** le corresponden **{fmt(z['esperado_total_k1'], 1)} "
+                        f"terminales** ({fmt(z['esperado_link_k1'], 1)} de Link) y tiene **{fmt(z['term_total_k1'])}** "
+                        f"({fmt(z['term_link_k1'])} de Link). Viven {fmt(z['poblacion_k1'])} personas, hay "
+                        f"{fmt(z['actividad_osm_k1'])} comercios y {subte}.")
+            if h in D["aportes"].index:
+                st.altair_chart(grafico_explicacion(ml.explicar_zona(D["aportes"], X_VALORES, h, n=5)))
+                st.caption("**Por qué:** cuánto multiplica cada variable lo que le corresponde a la zona, frente a una zona "
+                           "típica de la ciudad (valores SHAP del modelo). ×2 duplica; ×0,5 reduce a la mitad.")
+            if z["term_total"] == 0 and bool(z["deberia_tener_cajero"]):
+                st.success(f"**Oportunidad.** La zona no tiene ningún cajero y el clasificador le da {pct(z['prob_cajero'])} "
+                           "de probabilidad de tenerlo: las zonas con una demanda así suelen tener uno.")
+        with izq:
+            d = con_tips(rb, COL_DIST)
+            d["tip"] = "<b>Zona " + d["zona"].astype(str) + "</b> · " + d["tip"]
+            d["color"] = e.color_divergente(d["brecha_link"], limite=LIM_BRECHA)
+            marco = pdk.Layer("H3HexagonLayer", d[d["h3"] == h][["h3"]], get_hexagon="h3", filled=False, stroked=True,
+                              extruded=False, get_line_color=[11, 11, 11, 255], line_width_min_pixels=3, pickable=False)
+            margen = 0.01
+            caj = cajeros[cajeros["lat"].between(rb["lat"].min() - margen, rb["lat"].max() + margen)
+                          & cajeros["lon"].between(rb["lon"].min() - margen, rb["lon"].max() + margen)]
+            mapa([capa_hex(d), marco, capa_cajeros(caj, radio=18)], alto=560, vista=vista_de(rb["lat"], rb["lon"]))
+            leyenda([(e.DIVERGENTE[-1], "Faltan terminales Link"), (e.DIVERGENTE[0], "Sobran"),
+                     (e.LINK, "Cajero Link"), (e.BANELCO, "Cajero Banelco")])
+
+    elif vista_ml == "Ranking de barrios":
+        st.markdown("Para cada barrio, las terminales Link que **tiene** contra las que le **corresponden** según su demanda: "
+                    "lo que el modelo predice para sus zonas, con la participación de Link en la ciudad "
+                    f"({pct(resumen['cuota_link'])}).")
+        a, b = st.columns([2, 1])
+        cuantos = a.slider("Barrios a mostrar", 5, len(bp), 15)
+        orden = b.radio("Orden", ["Donde más faltan", "Donde más sobran"], horizontal=True)
+        sel = bp.head(cuantos) if orden == "Donde más faltan" else bp.tail(cuantos).iloc[::-1]
+        st.altair_chart(grafico_tiene_corresponden(sel))
+        if orden == "Donde más sobran":
+            st.caption("En el microcentro el modelo marca terminales de más: a esas zonas llega gente de toda la ciudad y del "
+                       "conurbano en colectivo y tren, una demanda que los datos públicos captan solo en parte.")
+        tabla_b = pd.DataFrame({
+            "Link que tiene": bp["tiene_link"], "Link que le corresponden": bp["corresponden_link"],
+            "Faltan (+) / sobran (−) Link": bp["diferencia_link"], "Todas las redes: tiene": bp["tiene_total"],
+            "Todas las redes: le corresponden": bp["corresponden_total"], "Residentes": bp["residentes"],
+            "Comercios": bp["comercios"], "Pasajeros de subte por día": bp["pasajeros_subte"], "Comuna": bp["comuna"]}).round(0)
+        tabla_b.index.name = "Barrio"
+        st.dataframe(tabla_b, column_config={c: st.column_config.NumberColumn(format="%.0f") for c in tabla_b.columns})
+        st.download_button("Descargar la tabla (CSV)", tabla_b.to_csv().encode("utf-8"), "barrios_prediccion.csv", "text/csv")
+
+    else:
+        st.markdown(f"Un segundo modelo, de **clasificación** ({resumen['clasificador_elegido']}), estima la probabilidad de "
+                    "que una zona tenga al menos un cajero de cualquier red según su demanda. Si las zonas parecidas lo "
+                    "tienen y esta no, es una **oportunidad**: hay "
+                    f"**{fmt(resumen['zonas_sin_cajero_que_deberian'])} zonas** así, donde viven "
+                    f"**{fmt(resumen['residentes_zonas_sin_cajero_que_deberian'])} personas**.")
+        d = con_tips(res[res["prob_cajero"].notna()], COL_DIST)
+        oportunidad = d["deberia_tener_cajero"].astype(bool) & (d["term_total"] == 0)
+        d["tip"] = (d["tip"] + "<br/>Probabilidad de tener cajero (clasificador): " + d["prob_cajero"].map(lambda v: pct(v))
+                    + np.where(oportunidad, "<br/><b>Oportunidad</b>", ""))
+        d["color"] = [e.hex_a_rgb(e.SUGERIDO, 235) if o else e.hex_a_rgb(e.TINTA_SUAVE, 150) if t > 0 else e.hex_a_rgb(e.GRILLA, 140)
+                      for o, t in zip(oportunidad, d["term_total"])]
+        mapa([capa_hex(d)], vista=pdk.ViewState(latitude=-34.615, longitude=-58.445, zoom=11.3, pitch=0, bearing=0))
+        leyenda([(e.SUGERIDO, "Oportunidad: debería tener cajero y no tiene"), (e.TINTA_SUAVE, "Tiene al menos un cajero"),
+                 (e.GRILLA, "Sin cajero y sin demanda suficiente")])
+        op = d[oportunidad]
+        st.subheader("Barrios con más oportunidades")
+        st.dataframe(op.groupby("barrio").agg(zonas=("h3", "count"), residentes=("poblacion", "sum")).round(0)
+                     .sort_values(["zonas", "residentes"], ascending=False).head(15).rename_axis("Barrio")
+                     .rename(columns={"zonas": "Zonas sin cajero que deberían tener", "residentes": "Residentes en esas zonas"}),
+                     column_config={"Residentes en esas zonas": st.column_config.NumberColumn(format="%d")})
+        st.caption(f"El clasificador marca tantas zonas como las que hoy tienen cajero (umbral de probabilidad "
+                   f"{fmt(resumen['umbral_clasificador'], 2)}); con ese umbral acierta el {pct(resumen['precision_clasificador'])} "
+                   "de las zonas que marca. Que una zona sea oportunidad no dice qué red la ocupa: la estrategia de cobertura "
+                   "del Simulador la complementa.")
+
+
+# --------------------------------------------------------------------------
+# 3. Simulador
 # --------------------------------------------------------------------------
 elif pagina == "Simulador de expansión":
     st.title("Simulador: ¿dónde poner los próximos cajeros Link?")
@@ -311,7 +512,7 @@ elif pagina == "Simulador de expansión":
 
 
 # --------------------------------------------------------------------------
-# 3. Demanda por hora
+# 4. Demanda por hora
 # --------------------------------------------------------------------------
 elif pagina == "Demanda por hora":
     st.title("Demanda por hora del día")
@@ -350,7 +551,7 @@ elif pagina == "Demanda por hora":
 
 
 # --------------------------------------------------------------------------
-# 4. Tipos de zona
+# 5. Tipos de zona
 # --------------------------------------------------------------------------
 elif pagina == "Tipos de zona":
     st.title("Tipos de zona")
@@ -375,7 +576,7 @@ elif pagina == "Tipos de zona":
 
 
 # --------------------------------------------------------------------------
-# 5. Usá tus datos
+# 6. Usá tus datos
 # --------------------------------------------------------------------------
 elif pagina == "Usá tus datos":
     st.title("Usá tu listado actual de cajeros")
@@ -434,7 +635,7 @@ elif pagina == "Usá tus datos":
 
 
 # --------------------------------------------------------------------------
-# 6. Cómo funciona
+# 7. Cómo funciona
 # --------------------------------------------------------------------------
 else:
     st.title("Cómo funciona")
@@ -446,35 +647,90 @@ else:
             f"caminando ({pct(resumen['cobertura_link'])}) es menor que en línea recta ({pct(resumen['cobertura_link_recta'])})")
     else:
         texto_distancias = "En línea recta"
+    met = D["metricas"]
+    esp = met[met["validación"].str.startswith("espacial")].set_index("modelo")
+    ale = met[met["validación"] == "aleatoria"].set_index("modelo")
     st.markdown(f"""
 **Pregunta.** ¿En qué zonas de CABA hay más demanda que cajeros Link, y dónde conviene sumar terminales?
 
 **Unidad de análisis.** {fmt(resumen['hexagonos'])} hexágonos H3 (resolución 9, ≈{fmt(resumen['area_media_hex_km2'], 2)} km²).
 Un cajero sirve a quien está a pocas cuadras, así que las variables se miden sobre el hexágono y sus 6 vecinos (≈400 m).
 
-**Tres técnicas, cada una con su pregunta:**
-1. **Regresión de conteos (supervisado).** ¿Cuántas terminales tienen las zonas con este perfil de demanda? Comparamos seis
-   modelos y un ensamble con validación cruzada **espacial** (se deja afuera una comuna entera por vez). Ganó
-   **{resumen['modelo_elegido']}** (D² de Poisson = {fmt(resumen['d2_espacial'], 2)}). Con validación aleatoria habría ganado
-   {resumen['modelo_mejor_aleatoria']}: los modelos complejos memorizan la geografía. La **brecha** es lo esperado menos lo que hay,
-   con predicciones fuera de muestra.
-2. **K-Means (no supervisado).** {resumen['k_clusters']} tipos de zona (silueta = {fmt(resumen['silueta'], 2)}); y las estaciones de
-   subte en *origen* y *destino* según su curva horaria.
-3. **Cobertura máxima (optimización).** Programa lineal entero resuelto con HiGHS en menos de un segundo; el algoritmo goloso
-   queda a menos del {fmt(resumen['goloso_max_diferencia_pct'], 1)} % del óptimo.
+**Datos, todos públicos.** Censo 2022 por radio censal (INDEC), cajeros automáticos (BA Data, relevamiento de ≈2017),
+usos del suelo 2022-2024 (BA Data), molinetes del subte 2025 (SBASE), OpenStreetMap (comercios, estaciones de tren,
+cajeros 2026 y red peatonal) y BCRA (extracciones por cajero).
+
+**Cuatro niveles de análisis:**
+1. **Descriptivo.** Dónde están los cajeros, la gente y el flujo del subte.
+2. **Diagnóstico.** Qué hace que una zona tenga más cajeros: valores SHAP, importancia de Gini y coeficientes de la
+   regresión de Poisson.
+3. **Predictivo (machine learning).**
+   - *Regresión:* ¿cuántas terminales le corresponden a cada zona? Comparamos {len(esp)} modelos (de una línea de base a
+     árboles, Random Forest, XGBoost y un ensamble) con **validación cruzada espacial anidada**: se mide siempre en comunas
+     que el modelo no vio, y los hiperparámetros se eligen con GridSearchCV adentro de cada partición. Ganó
+     **{resumen['modelo_elegido']}**: D² de Poisson de {fmt(resumen['d2_espacial_promedio'], 2)} ± {fmt(resumen['d2_espacial_desvio'], 2)}
+     y error medio de {fmt(resumen['mae_espacial'], 1)} terminales por zona. Con validación aleatoria habría ganado
+     {resumen['modelo_mejor_aleatoria']} (D² {fmt(resumen['d2_aleatoria'], 2)}): memoriza la geografía. Su error OOB también es
+     optimista (R² {fmt(resumen['oob_r2_rf'], 2)} contra {fmt(resumen['r2_espacial_rf'], 2)} en comunas no vistas).
+   - *Clasificación:* ¿a la zona le corresponde al menos un cajero? Ganó **{resumen['clasificador_elegido']}**
+     (AUC {fmt(resumen['auc_clasificador'], 2)}): {fmt(resumen['zonas_sin_cajero_que_deberian'])} zonas sin ningún cajero
+     deberían tener uno.
+   - *Validación hacia el futuro:* los {resumen['cajeros_nuevos_osm']} cajeros que aparecen en OpenStreetMap y no estaban en
+     2017 cayeron en el percentil {fmt(100 * resumen['percentil_cajeros_nuevos'])} de la brecha calculada con datos de 2017
+     (p = {fmt(resumen['p_valor_cajeros_nuevos'], 3)}).
+4. **Prescriptivo.** K-Means ({resumen['k_clusters']} tipos de zona, silueta = {fmt(resumen['silueta'], 2)}) y **cobertura
+   máxima**: programa lineal entero resuelto con HiGHS en menos de un segundo; el algoritmo goloso queda a menos del
+   {fmt(resumen['goloso_max_diferencia_pct'], 1)} % del óptimo.
 
 **Distancias.** {texto_distancias}.
 """)
+    st.subheader("Regresión: comparación de modelos")
+    orden = esp.sort_values("D² Poisson (promedio por partición)", ascending=False).index
+    st.dataframe(pd.DataFrame({
+        "D² en comunas no vistas (promedio)": esp.loc[orden, "D² Poisson (promedio por partición)"],
+        "± desvío entre comunas": esp.loc[orden, "D² Poisson (desvío entre particiones)"],
+        "Error medio (terminales por zona)": esp.loc[orden, "MAE"],
+        "D² con validación aleatoria": ale.loc[orden, "D² Poisson (promedio por partición)"]}).rename_axis("Modelo"),
+        column_config={c: st.column_config.NumberColumn(format="%.2f") for c in
+                       ("D² en comunas no vistas (promedio)", "± desvío entre comunas", "Error medio (terminales por zona)",
+                        "D² con validación aleatoria")})
+    st.subheader("Clasificación: comparación de modelos")
+    mc = D["metricas_clasif"]
+    esp_c = mc[mc["validación"].str.startswith("espacial")].set_index("modelo")
+    ale_c = mc[mc["validación"] == "aleatoria"].set_index("modelo")
+    orden_c = esp_c.sort_values("AUC (promedio por partición)", ascending=False).index
+    st.dataframe(pd.DataFrame({
+        "AUC en comunas no vistas (promedio)": esp_c.loc[orden_c, "AUC (promedio por partición)"],
+        "PR-AUC": esp_c.loc[orden_c, "PR-AUC"], "Precisión = recall": esp_c.loc[orden_c, "Precisión"],
+        "AUC con validación aleatoria": ale_c.loc[orden_c, "AUC"]}).rename_axis("Modelo"),
+        column_config={c: st.column_config.NumberColumn(format="%.3f") for c in
+                       ("AUC en comunas no vistas (promedio)", "PR-AUC", "Precisión = recall", "AUC con validación aleatoria")})
+    st.subheader("Qué variables pesan más")
+    imp = (D["importancia"].set_index("nombre")["importancia"].rename("SHAP").to_frame()
+           .join(D["gini"].set_index("nombre")["importancia"].rename("Gini")).rename_axis("Variable"))
+    st.dataframe(imp, column_config={
+        "SHAP": st.column_config.ProgressColumn("SHAP (modelo elegido)", format="%.2f", min_value=0, max_value=float(imp["SHAP"].max())),
+        "Gini": st.column_config.ProgressColumn("Gini (Random Forest)", format="%.2f", min_value=0, max_value=float(imp["Gini"].max()))})
+    st.caption("SHAP: cuánto mueve, en promedio, cada variable la predicción de una zona (escala logarítmica; 0,1 ≈ ±10 %). "
+               "Gini: cuánto ordena cada variable los cortes del Random Forest.")
     c1, c2 = st.columns(2)
     with c1:
-        st.subheader("Comparación de modelos (validación espacial)")
-        esp = D["metricas"][D["metricas"]["validación"].str.startswith("espacial")].drop(columns="validación")
-        st.dataframe(esp.set_index("modelo").sort_values("D² Poisson", ascending=False).round(3))
-        st.subheader("Goloso vs. óptimo exacto")
-        st.dataframe(D["comparacion"][["cajeros", "goloso", "exacto", "diferencia_pct", "seg_exacto"]].round(2), hide_index=True)
+        st.subheader("Error OOB contra comunas no vistas")
+        st.dataframe(D["oob"].rename(columns={"modelo": "Modelo", "métrica": "Métrica", "OOB": "OOB",
+                                              "comunas no vistas": "Comunas no vistas"}),
+                     column_config={c: st.column_config.NumberColumn(format="%.2f") for c in ("OOB", "Comunas no vistas")},
+                     hide_index=True)
+        st.caption("El error OOB usa filas que cada árbol no vio, pero de los mismos barrios: con datos espaciales es optimista.")
     with c2:
-        st.subheader("Qué variables pesan más")
-        st.bar_chart(D["importancia"].set_index("nombre")["importancia"].head(10), horizontal=True, color=e.LINK)
+        st.subheader("Goloso vs. óptimo exacto")
+        st.dataframe(D["comparacion"][["cajeros", "goloso", "exacto", "diferencia_pct", "seg_exacto"]].rename(columns={
+            "cajeros": "Cajeros", "goloso": "Goloso", "exacto": "Exacto", "diferencia_pct": "Dif. %",
+            "seg_exacto": "Segundos"}),
+            column_config={"Goloso": st.column_config.NumberColumn(format="%d"),
+                           "Exacto": st.column_config.NumberColumn(format="%d"),
+                           "Dif. %": st.column_config.NumberColumn(format="%.1f"),
+                           "Segundos": st.column_config.NumberColumn(format="%.2f")}, hide_index=True)
+        st.caption("Vecinos que suman los cajeros nuevos con cada método; segundos que tarda el óptimo exacto.")
     st.markdown("""
 **Limitaciones**
 - El listado abierto de cajeros es un relevamiento de alrededor de 2017 (aparecen bancos que ya no existen con ese nombre).
@@ -482,4 +738,6 @@ Un cajero sirve a quien está a pocas cuadras, así que las variables se miden s
 - No hay datos de transacciones (son privados): la demanda se estima con residentes, comercio y pasajeros.
 - OpenStreetMap no tiene todos los comercios ni todas las sendas; su cobertura puede variar entre barrios.
 - Los feriados que caen en día de semana cuentan como días hábiles en el promedio del subte.
+- Lo que le "corresponde" a una zona sale de cómo están repartidos hoy los cajeros entre zonas con demanda parecida: toma
+  al mercado como referencia, no mide extracciones (son datos privados de las redes).
 """)

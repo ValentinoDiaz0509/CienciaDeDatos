@@ -5,8 +5,13 @@ Corre todo el análisis de punta a punta y deja en data/processed/ lo que usan l
 notebooks, la app y la presentación.
 
     hexagonos.parquet / resultados_hex.parquet   variables, brecha, tipo de zona y distancias
-    metricas_modelos.csv                          6 modelos + ensamble, validación espacial y aleatoria
-    importancia_variables.csv, coeficientes_glm.csv
+    metricas_modelos.csv                          regresión: 6 modelos + ensamble, validación espacial anidada y aleatoria
+    hiperparametros.csv                           hiperparámetros elegidos en cada partición
+    aportes_hex.parquet                           aporte de cada variable a la predicción de cada zona (SHAP)
+    importancia_variables.csv, importancia_gini.csv, coeficientes_glm.csv
+    curva_profundidad.csv, oob_vs_validacion.csv  sobreajuste del árbol y OOB vs. validación espacial
+    metricas_clasificacion.csv, clasificacion_oof.parquet, matriz_confusion.csv   ¿le corresponde un cajero?
+    barrios_prediccion.csv                        terminales que tiene y que le corresponden a cada barrio
     clusters_k.csv, clusters_perfil.csv           K-Means de zonas
     cobertura_redes.csv                           % de vecinos con un cajero de cada red cerca
     recomendaciones.csv                           secuencia golosa de 50 sitios (curva de cobertura)
@@ -30,10 +35,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.base import clone
-from sklearn.inspection import permutation_importance
 
 from . import features as f
 from . import horario as ho
+from . import ml
 from . import modelos as m
 from . import red as rp
 
@@ -42,12 +47,6 @@ DIR_PROC = RAIZ / "data" / "processed"
 N_RECOMENDACIONES = 50
 N_PRINCIPAL = 20
 RADIOS_SIMULADOR = (300, 400, 500, 600, 700, 800)
-
-
-def elegir_modelo(metricas: pd.DataFrame) -> str:
-    """El de mayor D² de Poisson en validación espacial (la métrica adecuada para conteos)."""
-    esp = metricas[metricas["validación"].str.startswith("espacial")]
-    return esp.sort_values("D² Poisson", ascending=False).iloc[0]["modelo"]
 
 
 def _guardar_conjuntos(ruta: Path, conjuntos: dict) -> None:
@@ -86,22 +85,43 @@ def correr(salida: Path = DIR_PROC) -> dict:
         tabla = rp.agregar_distancias_red(tabla, cajeros, red)
     tabla.drop(columns="geometry").to_parquet(salida / "hexagonos.parquet", index=False)
 
-    # 2. Regresión: comparación de modelos y brecha fuera de muestra
+    # 2. Machine learning (predictivo). Regresión: ¿cuántas terminales le corresponden a cada zona?
     X, y, grupos, mascara = m.preparar(tabla)
-    metricas, oof = m.comparar(X, y, grupos)
+    metricas, oof, params, ajustes, _ = ml.comparar_regresion(X, y, grupos)
     metricas.to_csv(salida / "metricas_modelos.csv", index=False)
-    ganador = elegir_modelo(metricas)
+    pd.DataFrame([{"modelo": k, "partición": i + 1, **p} for k, v in params.items() for i, p in enumerate(v)]) \
+        .to_csv(salida / "hiperparametros.csv", index=False)
+    ganador = ml.elegir_regresion(metricas)
     res = m.calcular_brechas(tabla, mascara, oof[ganador])
     cuota_link = res.attrs["cuota_link"]
 
-    final = clone(m.candidatos()[ganador]).fit(X, y)
-    imp = permutation_importance(final, X, y, n_repeats=10, random_state=m.SEMILLA,
-                                 scoring="neg_mean_absolute_error", n_jobs=-1)
-    (pd.DataFrame({"variable": X.columns, "importancia": imp.importances_mean, "desvio": imp.importances_std})
-       .assign(nombre=lambda d: d["variable"].map(m.NOMBRES)).sort_values("importancia", ascending=False)
+    aportes = ml.aportes_fuera_de_muestra(ajustes[ganador], X)
+    aportes.assign(h3=res.loc[mascara, "h3"].to_numpy()).to_parquet(salida / "aportes_hex.parquet")
+    (aportes.drop(columns="_base").abs().mean().rename("importancia").rename_axis("variable").reset_index()
+       .assign(nombre=lambda d: d["variable"].map(ml.NOMBRES)).sort_values("importancia", ascending=False)
        .to_csv(salida / "importancia_variables.csv", index=False))
+    params_rf = ml.params_mas_frecuentes(params["Random Forest"])
+    (ml.importancia_gini(X, y, params_rf).rename("importancia").rename_axis("variable").reset_index()
+       .assign(nombre=lambda d: d["variable"].map(ml.NOMBRES)).to_csv(salida / "importancia_gini.csv", index=False))
     glm = clone(m.candidatos()["Regresión de Poisson (GLM)"]).fit(X, y)
     m.coeficientes_glm(glm, list(X.columns)).to_csv(salida / "coeficientes_glm.csv", index=False)
+    ml.curva_profundidad(X, y, grupos).to_csv(salida / "curva_profundidad.csv", index=False)
+
+    # Clasificación: ¿a esta zona le corresponde al menos un cajero?
+    Xc, yc = ml.preparar_clasificacion(tabla, X, mascara)
+    met_c, oof_c, params_c, _ = ml.comparar_clasificacion(Xc, yc, grupos)
+    met_c.to_csv(salida / "metricas_clasificacion.csv", index=False)
+    pd.DataFrame([{"modelo": k, "partición": i + 1, **p} for k, v in params_c.items() for i, p in enumerate(v)]) \
+        .to_csv(salida / "hiperparametros_clasificacion.csv", index=False)
+    clasificador = ml.elegir_clasificador(met_c)
+    umbral = ml.umbral_tasa_base(yc.to_numpy(), oof_c[clasificador])
+    pd.DataFrame({"h3": res.loc[mascara, "h3"].to_numpy(), "real": yc.to_numpy(), **oof_c}) \
+        .to_parquet(salida / "clasificacion_oof.parquet", index=False)
+    ml.matriz(yc.to_numpy(), oof_c[clasificador], umbral).to_csv(salida / "matriz_confusion.csv")
+    res.loc[mascara, "prob_cajero"] = oof_c[clasificador]
+    res["deberia_tener_cajero"] = res["prob_cajero"] >= umbral
+    oob = ml.oob_vs_validacion(X, y, grupos, Xc, yc, params_rf, ml.params_mas_frecuentes(params_c["Random Forest"]))
+    oob.to_csv(salida / "oob_vs_validacion.csv", index=False)
 
     # 3. Clustering de zonas
     Z = m.matriz_cluster(res, mascara)
@@ -121,6 +141,10 @@ def correr(salida: Path = DIR_PROC) -> dict:
     perfil["terminales_cada_10mil"] = perfil["terminales"] / perfil["residentes"] * 1e4
     perfil["link_cada_10mil"] = perfil["terminales_link"] / perfil["residentes"] * 1e4
     perfil.to_csv(salida / "clusters_perfil.csv")
+
+    barrios_pred = ml.por_barrio(res)
+    barrios_pred["resumen"] = [ml.frase_barrio(r) for _, r in barrios_pred.iterrows()]
+    barrios_pred.to_csv(salida / "barrios_prediccion.csv")
 
     # 4. Cobertura y optimización (caminando si hay red; si no, en línea recta)
     radio = f.RADIO_COBERTURA_M
@@ -183,6 +207,7 @@ def correr(salida: Path = DIR_PROC) -> dict:
         {"puntaje": "Brecha total del modelo (2017)", "AUC": m.auc(val["brecha_total"].to_numpy(), etiqueta.to_numpy())},
         {"puntaje": "Demanda esperada del modelo", "AUC": m.auc(val["esperado_total_k1"].to_numpy(), etiqueta.to_numpy())},
         {"puntaje": "Solo residentes", "AUC": m.auc(val["poblacion_k1"].to_numpy(), etiqueta.to_numpy())},
+        {"puntaje": "Probabilidad de cajero (clasificador)", "AUC": m.auc(val["prob_cajero"].to_numpy(), etiqueta.to_numpy())},
     ])
     validacion["hexagonos_cerca_de_cajero_nuevo"] = int(etiqueta.sum())
     validacion.to_csv(salida / "validacion_temporal.csv", index=False)
@@ -192,6 +217,7 @@ def correr(salida: Path = DIR_PROC) -> dict:
     # 7. Resumen
     esp = metricas[metricas["validación"].str.startswith("espacial")].set_index("modelo")
     ale = metricas[metricas["validación"] == "aleatoria"].set_index("modelo")
+    esp_c = met_c[met_c["validación"].str.startswith("espacial")].set_index("modelo")
     c_usada = cob[cob["metodo"] == metodo].set_index("red")
     c_recta = cob[cob["metodo"] == "línea recta"].set_index("red")
     total = res["poblacion"].sum()
@@ -212,9 +238,26 @@ def correr(salida: Path = DIR_PROC) -> dict:
         "modelo_elegido": ganador,
         "modelo_mejor_aleatoria": ale.sort_values("D² Poisson", ascending=False).index[0],
         "d2_espacial": float(esp.loc[ganador, "D² Poisson"]),
+        "d2_espacial_promedio": float(esp.loc[ganador, "D² Poisson (promedio por partición)"]),
+        "d2_espacial_desvio": float(esp.loc[ganador, "D² Poisson (desvío entre particiones)"]),
         "d2_aleatoria": float(ale.loc[ganador, "D² Poisson"]),
         "mae_espacial": float(esp.loc[ganador, "MAE"]),
         "r2_espacial": float(esp.loc[ganador, "R²"]),
+        "clasificador_elegido": clasificador,
+        "auc_clasificador": float(esp_c.loc[clasificador, "AUC"]),
+        "auc_clasificador_promedio": float(esp_c.loc[clasificador, "AUC (promedio por partición)"]),
+        "pr_auc_clasificador": float(esp_c.loc[clasificador, "PR-AUC"]),
+        "precision_clasificador": float(esp_c.loc[clasificador, "Precisión"]),
+        "recall_clasificador": float(esp_c.loc[clasificador, "Recall"]),
+        "umbral_clasificador": float(umbral),
+        "base_positivos_clasificador": float(yc.mean()),
+        "zonas_sin_cajero_que_deberian": int((res["deberia_tener_cajero"] & (res["term_total"] == 0)).sum()),
+        "residentes_zonas_sin_cajero_que_deberian": float(res.loc[res["deberia_tener_cajero"] & (res["term_total"] == 0), "poblacion"].sum()),
+        "zonas_sin_link_que_deberian": int((res["deberia_tener_cajero"] & (res["term_link"] == 0)).sum()),
+        "oob_r2_rf": float(oob.iloc[0]["OOB"]),
+        "r2_espacial_rf": float(oob.iloc[0]["comunas no vistas"]),
+        "oob_auc_rf": float(oob.iloc[1]["OOB"]),
+        "auc_espacial_rf": float(oob.iloc[1]["comunas no vistas"]),
         "k_clusters": k,
         "silueta": float(ks.set_index("k").loc[k, "silueta"]),
         "cobertura_link": float(c_usada.loc["Link", "pct_residentes"]),
@@ -241,6 +284,7 @@ def correr(salida: Path = DIR_PROC) -> dict:
         "cajeros_osm_2026": int((osm["categoria"] == "cajero").sum()),
         "cajeros_nuevos_osm": int(len(nuevos)),
         "auc_validacion": float(validacion.iloc[0]["AUC"]),
+        "auc_validacion_clasificador": float(validacion.iloc[3]["AUC"]),
         "percentil_cajeros_nuevos": perc.get("percentil_promedio"),
         "p_valor_cajeros_nuevos": perc.get("p_valor"),
         "segundos_pipeline": round(time.time() - t0, 1),

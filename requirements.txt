@@ -10,6 +10,8 @@ h3>=4.0
 
 # Modelos
 scikit-learn>=1.4
+xgboost>=2.0          # boosting (notebook 02); en Linux alcanza con el paquete liviano xgboost-cpu
+holidays>=0.40        # feriados de Argentina para el pronóstico del subte (notebook 05)
 
 # Visualización y app
 matplotlib>=3.8

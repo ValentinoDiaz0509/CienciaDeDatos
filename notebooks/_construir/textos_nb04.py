@@ -1,4 +1,4 @@
-# Textos del notebook 03. Se ejecuta desde nb03_horario.py con RAIZ definido.
+# Textos del notebook 04. Se ejecuta desde nb04_horario.py con RAIZ definido.
 import json
 
 import pandas as pd
@@ -43,7 +43,7 @@ tipos = f"""
 - **{_perf.index[1]}**: {_perf.iloc[1]} estaciones.
 
 Las estaciones de destino se concentran en el centro y los corredores de oficinas; las de origen están en los barrios.
-Es la misma división de la ciudad que aparece en los tipos de zona del notebook 02, pero obtenida con otra fuente y otra
+Es la misma división de la ciudad que aparece en los tipos de zona del notebook 03, pero obtenida con otra fuente y otra
 técnica: un buen chequeo de consistencia."""
 
 cobertura = f"""

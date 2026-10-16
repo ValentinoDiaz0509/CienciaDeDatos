@@ -1,0 +1,21 @@
+modelo,partición,logisticregression__C,max_depth,min_samples_leaf,max_features,min_child_weight,reg_lambda
+Regresión logística,1,0.1,,,,,
+Regresión logística,2,0.1,,,,,
+Regresión logística,3,0.1,,,,,
+Regresión logística,4,0.1,,,,,
+Regresión logística,5,0.1,,,,,
+Árbol de decisión,1,,4.0,20.0,,,
+Árbol de decisión,2,,5.0,50.0,,,
+Árbol de decisión,3,,6.0,50.0,,,
+Árbol de decisión,4,,5.0,20.0,,,
+Árbol de decisión,5,,6.0,50.0,,,
+Random Forest,1,,,20.0,0.33,,
+Random Forest,2,,,20.0,0.5,,
+Random Forest,3,,,10.0,0.5,,
+Random Forest,4,,,20.0,0.33,,
+Random Forest,5,,,10.0,0.5,,
+XGBoost,1,,2.0,,,1.0,10.0
+XGBoost,2,,2.0,,,5.0,10.0
+XGBoost,3,,2.0,,,1.0,10.0
+XGBoost,4,,2.0,,,1.0,10.0
+XGBoost,5,,2.0,,,1.0,10.0

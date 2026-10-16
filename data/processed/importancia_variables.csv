@@ -1,15 +1,15 @@
-variable,importancia,desvio,nombre
-parcelas_residencial_k1,7.652802322812152,0.5050600523481904,Parcelas residenciales
-actividad_osm_k1,1.895187085347827,0.09776446217045986,Comercios y servicios (OSM)
-parcelas_comercio_k1,1.7358175634995825,0.07628961986529742,Parcelas comerciales
-pct_65_k1,0.7356326085730235,0.059232061032018155,% de 65 años o más
-dist_centro_km,0.6384369890846001,0.04729403860293525,Distancia a Plaza de Mayo (km)
-pct_univ_k1,0.5034637370902397,0.0784092340541869,% con nivel universitario
-pax_subte_habil_k1,0.5025913253161587,0.03564796044143758,Pasajeros de subte por día hábil
-poblacion_k1,0.41429356976548515,0.044906059517192856,Residentes en el área
-parcelas_oficinas_k1,0.31876916364196894,0.02140167408347297,Parcelas de oficinas
-pct_nbi_k1,0.23086870669941922,0.02249390701534394,% hogares con NBI
-estaciones_tren_k1,0.00423740264150223,0.00922384397097327,Estaciones de tren
-tasa_empleo_k1,0.0041004690581422755,0.005879960529195241,Tasa de empleo
-pct_sin_internet_k1,0.003566614335670781,0.0043436522799163,% hogares sin internet
-dist_subte_m,-0.0014539606815071604,0.002184222503903795,Distancia al subte (m)
+variable,importancia,nombre
+actividad_osm_k1,0.5614616860443917,Comercios y servicios (OSM)
+parcelas_comercio_k1,0.40427658821608903,Parcelas comerciales
+parcelas_residencial_k1,0.38010973382958807,Parcelas residenciales
+pct_65_k1,0.17327492975744094,% de 65 años o más
+dist_centro_km,0.1728412136270571,Distancia a Plaza de Mayo (km)
+parcelas_oficinas_k1,0.1554754992436866,Parcelas de oficinas
+pax_subte_habil_k1,0.13806614634041853,Pasajeros de subte por día hábil
+poblacion_k1,0.09000653503467924,Residentes en el área
+pct_univ_k1,0.0801519990941822,% con nivel universitario
+dist_subte_m,0.06340787909032673,Distancia al subte (m)
+pct_nbi_k1,0.057959098897813054,% hogares con NBI
+pct_sin_internet_k1,0.04412481311132282,% hogares sin internet
+tasa_empleo_k1,0.03208672044921648,Tasa de empleo
+estaciones_tren_k1,0.012244725563825023,Estaciones de tren

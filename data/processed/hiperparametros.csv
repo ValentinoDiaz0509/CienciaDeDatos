@@ -1,0 +1,36 @@
+modelo,partición,poissonregressor__alpha,max_depth,min_samples_leaf,max_features,min_child_weight,reg_lambda,xgb__max_depth,xgb__min_child_weight,xgb__reg_lambda
+Línea de base (promedio),1,,,,,,,,,
+Línea de base (promedio),2,,,,,,,,,
+Línea de base (promedio),3,,,,,,,,,
+Línea de base (promedio),4,,,,,,,,,
+Línea de base (promedio),5,,,,,,,,,
+Poisson solo con población,1,,,,,,,,,
+Poisson solo con población,2,,,,,,,,,
+Poisson solo con población,3,,,,,,,,,
+Poisson solo con población,4,,,,,,,,,
+Poisson solo con población,5,,,,,,,,,
+Regresión de Poisson (GLM),1,0.1,,,,,,,,
+Regresión de Poisson (GLM),2,0.0001,,,,,,,,
+Regresión de Poisson (GLM),3,0.0001,,,,,,,,
+Regresión de Poisson (GLM),4,0.1,,,,,,,,
+Regresión de Poisson (GLM),5,0.001,,,,,,,,
+Árbol de decisión (CART),1,,6.0,10.0,,,,,,
+Árbol de decisión (CART),2,,4.0,40.0,,,,,,
+Árbol de decisión (CART),3,,6.0,10.0,,,,,,
+Árbol de decisión (CART),4,,5.0,20.0,,,,,,
+Árbol de decisión (CART),5,,3.0,10.0,,,,,,
+Random Forest,1,,,5.0,0.33,,,,,
+Random Forest,2,,,5.0,0.5,,,,,
+Random Forest,3,,,5.0,0.33,,,,,
+Random Forest,4,,,5.0,0.5,,,,,
+Random Forest,5,,,5.0,0.33,,,,,
+XGBoost,1,,2.0,,,5.0,10.0,,,
+XGBoost,2,,4.0,,,1.0,1.0,,,
+XGBoost,3,,2.0,,,5.0,10.0,,,
+XGBoost,4,,4.0,,,5.0,10.0,,,
+XGBoost,5,,2.0,,,20.0,1.0,,,
+Ensamble (Poisson + XGBoost),1,,,,,,,2.0,5.0,10.0
+Ensamble (Poisson + XGBoost),2,,,,,,,4.0,1.0,1.0
+Ensamble (Poisson + XGBoost),3,,,,,,,4.0,1.0,1.0
+Ensamble (Poisson + XGBoost),4,,,,,,,4.0,5.0,10.0
+Ensamble (Poisson + XGBoost),5,,,,,,,2.0,20.0,1.0

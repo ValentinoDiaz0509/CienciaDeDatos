@@ -1,0 +1,3 @@
+modelo,métrica,OOB,comunas no vistas
+Random Forest (regresión),R²,0.8037406984924494,0.2947388105740193
+Random Forest (clasificación),AUC,0.8520481537829561,0.8382424670370279
