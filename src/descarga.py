@@ -26,6 +26,7 @@ import argparse
 import csv
 import io
 import json
+import re
 import sys
 import time
 import unicodedata
@@ -712,6 +713,146 @@ def procesar_pesados() -> None:
             with open(uso_csv, "rb") as f:  # muestra para revisar el formato
                 (DIR_RAW / "usos-suelo-2022-2024-muestra.csv").write_bytes(b"\n".join(f.read(2_000_000).splitlines()[:2000]))
         print(f"   {'OK' if ESTADO['usos_suelo_parquet'][0] else 'FALLÓ'}: {ESTADO['usos_suelo_parquet'][1]}")
+
+
+# --------------------------------------------------------------------------
+# Serie diaria del subte (para el pronóstico)
+# --------------------------------------------------------------------------
+API_MOLINETES = "https://data.buenosaires.gob.ar/api/3/action/package_show?id=subte-viajes-molinetes"
+MOLINETES_CONOCIDOS = {
+    2025: [f"{BA}/subte-viajes-molinetes/resource/0d689701-9efd-4644-85d0-f6a1504509f1/download"],
+    2026: [f"{BA}/subte-viajes-molinetes/resource/f4689712-8698-43ab-9e02-559d03245cb0/download"],
+}
+
+
+def recursos_molinetes(anios) -> dict[int, list[str]]:
+    """
+    Año -> URLs de los archivos de molinetes. Se consultan en el catálogo de BA Data (API de
+    CKAN); si el catálogo no responde, quedan los dos años que ya conocemos (2025 y 2026).
+    """
+    urls = {a: list(MOLINETES_CONOCIDOS.get(a, [])) for a in anios}
+    try:
+        r = _SESION.get(API_MOLINETES, timeout=60)
+        r.raise_for_status()
+        for rec in r.json()["result"]["resources"]:
+            texto = f"{rec.get('name', '')} {rec.get('description', '')} {rec.get('url', '')}"
+            encontrados = {int(a) for a in re.findall(r"(20[12][0-9])", texto)}
+            formato = (rec.get("format") or "").lower()
+            if len(encontrados) == 1 and formato in {"zip", "csv", ""}:
+                anio = encontrados.pop()
+                if anio in urls and rec.get("url") and rec["url"] not in urls[anio]:
+                    urls[anio].append(rec["url"])
+        ESTADO["catalogo_molinetes"] = (True, ", ".join(f"{a}: {len(u)} archivo(s)" for a, u in urls.items()))
+    except Exception as e:
+        ESTADO["catalogo_molinetes"] = (False, f"{type(e).__name__}: {e} (se usan solo 2025 y 2026)")
+    return {a: u for a, u in urls.items() if u}
+
+
+def _fecha(texto: str):
+    """'1/2/2024' es 1 de febrero (día primero); '2024-02-01' es ISO. pandas confunde la segunda con dayfirst."""
+    texto = str(texto).strip()
+    if re.match(r"^\d{4}-\d{1,2}-\d{1,2}", texto):
+        return pd.to_datetime(texto[:10], format="%Y-%m-%d", errors="coerce")
+    return pd.to_datetime(texto.split(" ")[0], dayfirst=True, errors="coerce")
+
+
+def _abrir_csvs(ruta: Path):
+    """Devuelve funciones que abren cada CSV del archivo (zip, zip anidado o CSV suelto)."""
+    if zipfile.is_zipfile(ruta):
+        z = zipfile.ZipFile(ruta)
+        return [(nombre, (lambda n=nombre, c=cont: c.open(n))) for nombre, cont in _csvs_en_zip(z)]
+    return [(ruta.name, lambda: open(ruta, "rb"))]
+
+
+def serie_diaria(ruta: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Resume un archivo de molinetes (pasajeros cada 15 minutos por molinete) a:
+      - pasajeros por día, línea y estación;
+      - pasajeros por día y hora en toda la red.
+    """
+    por_estacion, por_hora = [], []
+    for nombre, abrir in _abrir_csvs(ruta):
+        with abrir() as f:
+            formato = _detectar_formato(f.read(50_000))
+        with abrir() as f:
+            for chunk in _leer_csv(f, *formato, chunksize=500_000):
+                chunk.columns = _normalizar_columnas(chunk.columns)
+                cols = list(chunk.columns)
+                c_fecha, c_desde = _buscar(cols, "fecha"), _buscar(cols, "desde", "hora")
+                c_linea, c_est = _buscar(cols, "linea"), _buscar(cols, "estacion")
+                c_total = _buscar(cols, "pax_total", "total")
+                if not all([c_fecha, c_desde, c_linea, c_est]):
+                    raise ValueError(f"no reconozco las columnas de {nombre}: {cols}")
+                if c_total:
+                    total = pd.to_numeric(chunk[c_total], errors="coerce")
+                else:
+                    pax = [c for c in cols if c.startswith("pax")]
+                    total = chunk[pax].apply(pd.to_numeric, errors="coerce").sum(axis=1)
+                df = pd.DataFrame({
+                    "fecha": chunk[c_fecha].str.strip(),
+                    "linea": chunk[c_linea].str.strip().str.upper(),
+                    "estacion": chunk[c_est].str.strip(),
+                    "hora": pd.to_numeric(chunk[c_desde].str.extract(r"(\d{1,2}):\d{2}")[0], errors="coerce"),
+                    "pasajeros": total,
+                }).dropna(subset=["pasajeros"])
+                por_estacion.append(df.groupby(["fecha", "linea", "estacion"], as_index=False)["pasajeros"].sum())
+                por_hora.append(df.dropna(subset=["hora"]).groupby(["fecha", "hora"], as_index=False)["pasajeros"].sum())
+    est = pd.concat(por_estacion).groupby(["fecha", "linea", "estacion"], as_index=False)["pasajeros"].sum()
+    hora = pd.concat(por_hora).groupby(["fecha", "hora"], as_index=False)["pasajeros"].sum()
+    fechas = {f: _fecha(f) for f in set(est["fecha"]) | set(hora["fecha"])}
+    for d in (est, hora):
+        d["fecha"] = d["fecha"].map(fechas)
+        d.dropna(subset=["fecha"], inplace=True)
+    hora["hora"] = hora["hora"].astype(int)
+    return est, hora
+
+
+def descargar_serie_subte(anios=range(2022, 2027)) -> Path:
+    """
+    Baja los molinetes de varios años, los resume por día y arma data/serie_subte.zip con:
+      subte-diario-estacion.parquet  fecha, linea, estacion, pasajeros
+      subte-hora-red.parquet         fecha, hora, pasajeros (toda la red)
+    """
+    DIR_RAW.mkdir(parents=True, exist_ok=True)
+    partes_est, partes_hora = [], []
+    for anio, urls in recursos_molinetes(list(anios)).items():
+        for k, url in enumerate(urls):
+            destino = DIR_RAW / f"molinetes-{anio}-{k + 1}.dat"
+            clave = f"molinetes_{anio}_{k + 1}"
+            print(f"→ Molinetes {anio} ({k + 1}/{len(urls)})")
+            ok, detalle = (True, "ya estaba") if destino.exists() else descargar([url], destino)
+            if not ok:
+                ESTADO[clave] = (False, detalle)
+                print(f"   FALLÓ la descarga: {detalle}")
+                continue
+            try:
+                est, hora = serie_diaria(destino)
+                partes_est.append(est)
+                partes_hora.append(hora)
+                ESTADO[clave] = (True, f"{est['fecha'].min():%d/%m/%Y} a {est['fecha'].max():%d/%m/%Y}, "
+                                       f"{est['fecha'].nunique()} días, {est['estacion'].nunique()} estaciones")
+            except Exception as e:
+                ESTADO[clave] = (False, f"{type(e).__name__}: {e}")
+                try:
+                    muestra_de_zip(destino, DIR_RAW / f"molinetes-{anio}-{k + 1}-muestra.csv")
+                except Exception:
+                    pass
+            print(f"   {'OK' if ESTADO[clave][0] else 'FALLÓ'}: {ESTADO[clave][1]}")
+    if not partes_est:
+        raise RuntimeError("No se pudo procesar ningún año de molinetes")
+    est = pd.concat(partes_est).groupby(["fecha", "linea", "estacion"], as_index=False)["pasajeros"].sum()
+    hora = pd.concat(partes_hora).groupby(["fecha", "hora"], as_index=False)["pasajeros"].sum()
+    est.to_parquet(DIR_RAW / "subte-diario-estacion.parquet", index=False)
+    hora.to_parquet(DIR_RAW / "subte-hora-red.parquet", index=False)
+    destino = RAIZ / "data" / "serie_subte.zip"
+    with zipfile.ZipFile(destino, "w", compression=zipfile.ZIP_DEFLATED) as z:
+        for nombre in ["subte-diario-estacion.parquet", "subte-hora-red.parquet"]:
+            z.write(DIR_RAW / nombre, arcname=nombre)
+        z.writestr("estado_serie_subte.json", json.dumps(
+            {k: {"ok": ok, "detalle": det} for k, (ok, det) in ESTADO.items()}, ensure_ascii=False, indent=2))
+    print(f"Serie diaria: {est['fecha'].min():%d/%m/%Y} a {est['fecha'].max():%d/%m/%Y} · {est['fecha'].nunique()} días")
+    print(f"Zip listo: {destino} ({destino.stat().st_size / 1e6:.1f} MB)")
+    return destino
 
 
 # --------------------------------------------------------------------------
